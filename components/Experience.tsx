@@ -7,26 +7,31 @@ const Experience: React.FC = () => {
     company: 'V2V EdTech LLP',
     duration: 'Current Position',
     location: 'Kalyan',
-    description: 'Leading and mentoring 200+ interns across technical domains, helping them develop skills and grow their careers.',
+    description: 'Leading and mentoring 200+ interns across technical domains, specializing in Data Analysis and providing comprehensive technical support.',
     responsibilities: [
-      'Mentoring 200+ interns in web development and AI',
+      'Mentoring 200+ interns in web development, AI, and Data Analysis',
+      'Providing technical support and guidance to interns',
       'Conducting code reviews and feedback sessions',
-      'Organizing workshops and technical sessions',
+      'Specializing in Data Analysis mentoring and training',
+      'Developing and maintaining task submission portal',
       'Providing career guidance and progress tracking'
     ],
-    achievements: [
-      '200+ interns successfully mentored',
-      'Developed comprehensive training programs',
-      'Created industry-relevant projects'
-    ]
+    // achievements: [
+    //   '200+ interns successfully mentored across multiple domains',
+    //   'Developed comprehensive Data Analysis training programs',
+    //   'Created and deployed task submission portal for streamlined workflow',
+    //   'Established technical support system for intern assistance',
+    //   'Designed industry-relevant projects and assignments'
+    // ],
+    
   };
 
   const skills = [
-    'Technical Mentoring',
-    'Code Review',
-    'Project Management',
-    'Team Leadership',
-    'Training & Development'
+     'Data Analysis Mentoring',
+      'Technical Support',
+      'Portal Development',
+      'Team Leadership',
+      'Training & Development'
   ];
 
   return (
@@ -41,9 +46,7 @@ const Experience: React.FC = () => {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
               Professional Experience
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-              Shaping the future through mentorship and education
-            </p>
+            
           </div>
 
           {/* Main Experience Card */}
@@ -128,7 +131,7 @@ const Experience: React.FC = () => {
                   </div>
 
                   {/* Achievements */}
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
+                  {/* <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-6 border border-blue-200">
                     <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                       <Award className="w-5 h-5 mr-2 text-blue-600" />
                       Key Achievements
@@ -141,7 +144,7 @@ const Experience: React.FC = () => {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
 
                 {/* Skills */}
