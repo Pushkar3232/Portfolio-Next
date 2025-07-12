@@ -44,12 +44,25 @@ export const metadata: Metadata = {
     siteName: 'Pushkar Shinde Portfolio',
     images: [
       {
-        url: 'app/favicon.ico',
+        url: '/og-image.jpg', // This should be your main profile/portfolio image
         width: 1200,
         height: 630,
+        alt: 'Pushkar Shinde - Full Stack Developer Portfolio',
+      },
+      {
+        url: '/og-image-square.jpg', // Optional: square version for some platforms
+        width: 1200,
+        height: 1200,
         alt: 'Pushkar Shinde - Full Stack Developer',
       },
     ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Pushkar Shinde - Full Stack Developer & Software Engineer',
+    description: 'Experienced Full Stack Developer specializing in React, Next.js, Node.js, and modern web technologies.',
+    images: ['/og-image.jpg'],
+    creator: '@your_twitter_handle', // Replace with your Twitter handle
   },
   robots: {
     index: true,
@@ -63,21 +76,12 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code',
+    google: 'your-google-verification-code', // Add your actual Google verification code
   },
   icons: {
-    icon: [
-      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
-      { url: '/favicon.ico', sizes: 'any' }
-    ],
-    apple: [
-      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
-    ],
-    other: [
-      { rel: 'icon', url: '/icon-192x192.png', sizes: '192x192', type: 'image/png' },
-      { rel: 'icon', url: '/icon-512x512.png', sizes: '512x512', type: 'image/png' },
-    ],
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/apple-touch-icon.png',
   },
 }
 
@@ -89,11 +93,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        {/* Additional favicon links for better browser support */}
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        {/* Primary favicon */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
         
         {/* Additional SEO meta tags */}
@@ -113,6 +116,7 @@ export default function RootLayout({
               "jobTitle": "Full Stack Developer",
               "description": "Experienced Full Stack Developer specializing in React, Next.js, Node.js, and modern web technologies",
               "url": "https://pushkarshinde.in",
+              "image": "https://pushkarshinde.in/og-image.jpg",
               "sameAs": [
                 "https://www.linkedin.com/in/pushkarshinde6/",
                 "https://github.com/Pushkar3232/"
@@ -145,6 +149,27 @@ export default function RootLayout({
               "author": {
                 "@type": "Person",
                 "name": "Pushkar Shinde"
+              }
+            })
+          }}
+        />
+
+        {/* Professional Profile Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ProfilePage",
+              "dateCreated": new Date().toISOString(),
+              "dateModified": new Date().toISOString(),
+              "mainEntity": {
+                "@type": "Person",
+                "name": "Pushkar Shinde",
+                "alternateName": "Pushkar Amar Shinde",
+                "description": "Full Stack Developer & Software Engineer",
+                "image": "https://pushkarshinde.in/og-image.jpg",
+                "url": "https://pushkarshinde.in"
               }
             })
           }}
