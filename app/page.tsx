@@ -18,7 +18,7 @@ export default function Home() {
       <Skills />
       <Experience />
       <Education />
-      {/* Uncomment when available */}
+      
       <Projects />
       <Contact />
       <Footer />

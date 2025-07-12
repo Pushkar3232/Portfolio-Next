@@ -15,7 +15,8 @@ const Footer: React.FC = () => {
     { name: 'Skills', href: '#skills' },
     { name: 'Projects', href: '#projects' },
     { name: 'Experience', href: '#experience' },
-    { name: 'Contact', href: '#contact' }
+    { name: 'Contact', href: '#contact' },
+    { name: 'Chat with AI', href: '/chatbot' },
   ];
 
   const socialLinks = [

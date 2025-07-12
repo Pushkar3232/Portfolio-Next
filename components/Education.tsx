@@ -175,13 +175,7 @@ const Education: React.FC = () => {
                 ))}
               </div>
 
-              {/* Additional Note */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-xl border border-gray-200">
-                <p className="text-gray-600 text-sm">
-                  <span className="font-semibold text-gray-900">Note:</span> Continuously updating skills - 
-                  more certificates earned regularly
-                </p>
-              </div>
+              
             </div>
           </div>
 
