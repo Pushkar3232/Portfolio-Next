@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: 'your-google-verification-code', // Add your actual Google verification code
+    google: 'nL7ExTHwkt8e6J4GDZAMXJQmXUhn_VCort89FNljb3U', // Add your actual Google verification code
   },
   icons: {
     icon: '/favicon.ico',
