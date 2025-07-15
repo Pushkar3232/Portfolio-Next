@@ -109,12 +109,11 @@ const Hero = () => {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 <a
-                  href="/resume.pdf"
-                  download
+                  href="/chatbot"
                   className="px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2"
                 >
-                  <Download className="w-5 h-5" />
-                  <span>Download Resume</span>
+                  
+                  <span>Chat with AI</span>
                 </a>
               </div>
 
@@ -154,9 +153,7 @@ const Hero = () => {
                     {/* Placeholder for Photo */}
                     <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                       <div className="text-center">
-                        <div className="w-24 h-24 bg-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center">
-                          <span className="text-3xl font-bold text-gray-600">PS</span>
-                        </div>
+                        
                         <img 
                       src="2ed.jpg" 
                       alt="Pushkar Shinde" 

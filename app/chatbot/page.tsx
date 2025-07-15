@@ -368,7 +368,7 @@ const ChatbotPage = () => {
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask me about Pushkar's experience, skills, projects, or anything else..."
+            placeholder="Type Here"
             className="w-full px-6 py-4 pr-14 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none max-h-32 min-h-[56px] shadow-sm bg-white text-gray-900 placeholder-gray-500"
             disabled={isBotTyping}
             rows={1}

@@ -28,7 +28,7 @@ const Skills: React.FC = () => {
 
   const allTechnologies = [
     'Python', 'React', 'TypeScript', 'Firebase', 'MongoDB', 'FastAPI', 
-    'Langchain', 'TailwindCSS', 'DeepSeek R1', 'Vector DB', 'Next.js', 'GenAI'
+    'Langchain', 'TailwindCSS', 'Vector DB', 'Next.js', 'GenAI'
   ];
 
   return (
@@ -82,7 +82,7 @@ const Skills: React.FC = () => {
           </div>
 
           {/* Special Focus */}
-          <div className="text-center">
+          {/* <div className="text-center">
             <div className="inline-block bg-gray-50 rounded-2xl p-8 border border-gray-200 shadow-lg">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 🎯 Primary Focus
@@ -94,7 +94,7 @@ const Skills: React.FC = () => {
                 Building intelligent solutions and next-generation AI applications
               </p>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>
