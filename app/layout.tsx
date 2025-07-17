@@ -119,6 +119,7 @@ export default function RootLayout({
               "jobTitle": ["Full Stack Developer", "ML Engineer", "GenAI Engineer"],
               "description": "Full Stack Developer & ML Engineer specializing in Python, React, AI/ML, GenAI, and LangChain. Building intelligent solutions that simplify the world through software.",
               "url": "https://pushkarshinde.in",
+              "mainEntityOfPage": "https://pushkarshinde.in",
               "image": "https://pushkarshinde.in/og-image.jpg",
               "sameAs": [
                 "https://github.com/Pushkar3232/"
@@ -143,12 +144,20 @@ export default function RootLayout({
               "hasOccupation": {
                 "@type": "Occupation",
                 "name": "Full Stack Developer & ML Engineer",
-                "occupationLocation": {
-                  "@type": "Place",
-                  "address": {
-                    "@type": "PostalAddress",
-                    "addressCountry": "IN"
+                "description": "Developing full-stack applications and machine learning solutions using Python, React, and AI technologies",
+                "estimatedSalary": {
+                  "@type": "MonetaryAmount",
+                  "currency": "INR",
+                  "value": {
+                    "@type": "QuantitativeValue",
+                    "minValue": 500000,
+                    "maxValue": 1500000,
+                    "unitText": "YEAR"
                   }
+                },
+                "occupationLocation": {
+                  "@type": "Country",
+                  "name": "India"
                 },
                 "skills": [
                   "Python", "React", "TypeScript", "Firebase", "FastAPI", 
@@ -156,9 +165,6 @@ export default function RootLayout({
                   "Vector Databases", "GenAI Applications"
                 ]
               }
-
-
-
             })
           }}
         />
