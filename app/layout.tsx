@@ -143,13 +143,20 @@ export default function RootLayout({
               "hasOccupation": {
                 "@type": "Occupation",
                 "name": "Full Stack Developer & ML Engineer",
-                "occupationLocation": "India",
+                "occupationLocation": {
+                  "@type": "Place",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "addressCountry": "IN"
+                  }
+                },
                 "skills": [
                   "Python", "React", "TypeScript", "Firebase", "FastAPI", 
                   "MongoDB", "Machine Learning", "Deep Learning", "LangChain", 
                   "Vector Databases", "GenAI Applications"
                 ]
               }
+
 
 
             })
