@@ -1,8 +1,0 @@
-// app/robots.txt (Create this file in your public folder)
-User-agent: *
-Allow: /
-Disallow: /api/
-Disallow: /_next/
-Disallow: /admin/
-
-Sitemap: https://pushkarshinde.in/sitemap.xml

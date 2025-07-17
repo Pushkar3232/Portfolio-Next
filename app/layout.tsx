@@ -66,13 +66,7 @@ export const metadata: Metadata = {
       },
     ],
   },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Pushkar Shinde - Full Stack Developer | ML Engineer | GenAI Engineer',
-    description: 'Full Stack Developer & ML Engineer specializing in Python, React, AI/ML, GenAI, and LangChain. Building intelligent solutions.',
-    images: ['/og-image.jpg'],
-   
-  },
+ 
   robots: {
     index: true,
     follow: true,
@@ -149,16 +143,15 @@ export default function RootLayout({
               "hasOccupation": {
                 "@type": "Occupation",
                 "name": "Full Stack Developer & ML Engineer",
-                "occupationLocation": {
-                  "@type": "Place",
-                  "name": "India"
-                },
+                "estimatedSalary": "Not disclosed",
+                "occupationLocation": "India",
                 "skills": [
                   "Python", "React", "TypeScript", "Firebase", "FastAPI", 
                   "MongoDB", "Machine Learning", "Deep Learning", "LangChain", 
                   "Vector Databases", "GenAI Applications"
                 ]
               }
+
             })
           }}
         />

@@ -13,7 +13,7 @@ const Projects: React.FC = () => {
       liveUrl: null,
       isPrivate: false,
       icon: <Lock className="w-6 h-6" />,
-      image: 'p1.png'
+      image: 'p1.avif'
     },
     {
       title: 'V2V Interns Portal',
@@ -24,7 +24,7 @@ const Projects: React.FC = () => {
       liveUrl: null, // Live but not accessible
       isPrivate: false,
       icon: <Users className="w-6 h-6" />,
-      image: 'p2.png'
+      image: 'p2.avif'
     },
     {
       title: 'Dynamic Portfolio Builder',
@@ -35,7 +35,7 @@ const Projects: React.FC = () => {
       liveUrl: 'https://evofolio.netlify.app/',
       isPrivate: false,
       icon: <Zap className="w-6 h-6" />,
-      image: 'p3.png'
+      image: 'p3.avif'
     }
   ];
 
@@ -66,6 +66,7 @@ const Projects: React.FC = () => {
                     src={project.image} 
                     alt={project.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
                   />
                   
                   <div className="absolute top-4 left-4 text-white drop-shadow-lg">
