@@ -1,11 +1,19 @@
 // components/Contact.tsx
-
 "use client";
 import React, { useState } from 'react';
 import { Mail, Send, Github, Linkedin, CheckCircle, AlertCircle } from 'lucide-react';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+
+interface FormData {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     subject: '',
@@ -28,9 +36,14 @@ const Contact: React.FC = () => {
     setSubmitStatus('idle');
 
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Add message to Firestore
+      await addDoc(collection(db, 'messages'), {
+        ...formData,
+        timestamp: serverTimestamp(),
+        read: false
+      });
       
+      // Reset form
       setFormData({
         name: '',
         email: '',
@@ -39,6 +52,7 @@ const Contact: React.FC = () => {
       });
       setSubmitStatus('success');
     } catch (error) {
+      console.error('Error sending message:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -130,7 +144,7 @@ const Contact: React.FC = () => {
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-8">Send a Message</h3>
               
-              <div className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
@@ -229,7 +243,7 @@ const Contact: React.FC = () => {
                     <span>Something went wrong. Please try again later.</span>
                   </div>
                 )}
-              </div>
+              </form>
             </div>
           </div>
         </div>

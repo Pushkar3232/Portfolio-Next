@@ -62,11 +62,7 @@ const Hero = () => {
             {/* Left Column - Content */}
             <div className="space-y-8">
               
-              {/* Professional Badge */}
-              <div className="inline-flex items-center space-x-2 px-4 py-2 bg-blue-50 rounded-full border border-blue-100">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <span className="text-sm font-medium text-gray-700">Available for opportunities</span>
-              </div>
+              
 
               {/* Main Heading */}
               <div>

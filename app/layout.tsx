@@ -55,12 +55,6 @@ export const metadata: Metadata = {
       {
         url: '/og-image.jpg',
         width: 1200,
-        height: 630,
-        alt: 'Pushkar Shinde - Full Stack Developer & ML Engineer Portfolio',
-      },
-      {
-        url: '/og-image-square.jpg',
-        width: 1200,
         height: 1200,
         alt: 'Pushkar Shinde - Full Stack Developer & ML Engineer',
       },
