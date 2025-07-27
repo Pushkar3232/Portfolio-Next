@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { 
   Mail, 
-  MarkAsUnread,
   LogOut,
   Search,
   Filter,
