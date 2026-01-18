@@ -30,17 +30,45 @@ const Experience: React.FC = () => {
       orderBy('order', 'asc')
     );
 
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-      const experiencesData: ExperienceData[] = [];
-      querySnapshot.forEach((doc) => {
-        experiencesData.push({
-          id: doc.id,
-          ...doc.data()
-        } as ExperienceData);
-      });
-      setExperiences(experiencesData);
-      setLoading(false);
-    });
+    const unsubscribe = onSnapshot(
+      q, 
+      (querySnapshot) => {
+        const experiencesData: ExperienceData[] = [];
+        querySnapshot.forEach((doc) => {
+          experiencesData.push({
+            id: doc.id,
+            ...doc.data()
+          } as ExperienceData);
+        });
+        setExperiences(experiencesData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error fetching experiences:', error);
+        // If index error, try simpler query without orderBy
+        if (error.code === 'failed-precondition') {
+          const simpleQuery = query(
+            collection(db, 'experiences'),
+            where('isActive', '==', true)
+          );
+          onSnapshot(simpleQuery, (querySnapshot) => {
+            const experiencesData: ExperienceData[] = [];
+            querySnapshot.forEach((doc) => {
+              experiencesData.push({
+                id: doc.id,
+                ...doc.data()
+              } as ExperienceData);
+            });
+            // Sort on client side
+            experiencesData.sort((a, b) => a.order - b.order);
+            setExperiences(experiencesData);
+            setLoading(false);
+          });
+        } else {
+          setLoading(false);
+        }
+      }
+    );
 
     return () => unsubscribe();
   }, []);
@@ -106,19 +134,19 @@ const Experience: React.FC = () => {
               
               <div className="relative z-10">
                 {/* Header Section with Image and Title */}
-                <div className="grid lg:grid-cols-4 gap-8 border-b border-gray-100 pb-8 mb-8">
+                <div className="grid lg:grid-cols-3 gap-8 border-b border-gray-100 pb-8 mb-8">
                   {/* Professional Image */}
                   <div className="lg:col-span-1 flex justify-center lg:justify-start">
-                    <div className="relative group">
-                      <div className="w-full max-w-xs h-48 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300">
+                    <div className="relative group w-full">
+                      <div className="w-full bg-gray-50 rounded-2xl overflow-hidden shadow-lg transform hover:scale-105 transition-transform duration-300">
                         {experience.imageUrl ? (
                           <img 
                             src={experience.imageUrl} 
                             alt={`${experience.role} at ${experience.company}`}
-                            className="w-full h-full object-cover object-center"
+                            className="w-full h-auto"
                           />
                         ) : (
-                          <div className="w-full h-full flex items-center justify-center">
+                          <div className="w-full h-64 flex items-center justify-center">
                             <Building className="w-16 h-16 text-gray-400" />
                           </div>
                         )}
@@ -127,7 +155,7 @@ const Experience: React.FC = () => {
                   </div>
 
                   {/* Title and Company Info */}
-                  <div className="lg:col-span-3 space-y-6">
+                  <div className="lg:col-span-2 space-y-6">
                     <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
                       <div className="mb-4 md:mb-0">
                         <h3 className="text-3xl font-bold text-gray-900 mb-2">{experience.role}</h3>
@@ -135,9 +163,6 @@ const Experience: React.FC = () => {
                           <Building className="w-5 h-5 mr-2" />
                           {experience.company}
                         </p>
-                      </div>
-                      <div className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
-                        Active
                       </div>
                     </div>
                     

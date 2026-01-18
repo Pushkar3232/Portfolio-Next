@@ -22,7 +22,8 @@ import {
   Settings,
   Bell,
   MoreVertical,
-  RefreshCw
+  RefreshCw,
+  Building
 } from 'lucide-react';
 
 interface Message {
@@ -140,28 +141,40 @@ const AdminDashboard: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
         
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               <div className="flex items-center">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
                   <Mail className="w-5 h-5 text-white" />
                 </div>
                 <div className="ml-3">
-                  <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
+                  <h1 className="text-xl font-bold text-slate-900">Admin Dashboard</h1>
+                  <p className="text-xs text-slate-500 mt-0.5">Portfolio Management</p>
                 </div>
               </div>
-              <Link 
-  href="/admin/education"
-  className="flex items-center px-4 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
->
-  <GraduationCap className="w-4 h-4 mr-2" />
-  Manage Education
-</Link>
+              
+              {/* Navigation Links */}
+              <div className="hidden md:flex items-center space-x-2 ml-8 border-l border-slate-200 pl-8">
+                <Link 
+                  href="/admin/education"
+                  className="flex items-center px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+                >
+                  <GraduationCap className="w-4 h-4 mr-2" />
+                  Education
+                </Link>
+                <Link 
+                  href="/admin/experience"
+                  className="flex items-center px-4 py-2.5 text-sm font-medium text-slate-700 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-all duration-200"
+                >
+                  <Building className="w-4 h-4 mr-2" />
+                  Experience
+                </Link>
+              </div>
             </div>
             
             <div className="flex items-center space-x-4">
@@ -199,45 +212,48 @@ const AdminDashboard: React.FC = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+          <div className="group bg-white rounded-2xl p-6 border border-slate-200 hover:shadow-xl hover:border-blue-200 transition-all duration-300">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Total Messages</p>
-                <p className="text-3xl font-bold text-gray-900 mt-2">{totalMessages}</p>
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Messages</p>
+                <p className="text-4xl font-bold text-slate-900">{totalMessages}</p>
+                <p className="text-sm text-slate-500 mt-2">All time</p>
               </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
-                <MessageCircle className="w-6 h-6 text-blue-600" />
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <MessageCircle className="w-7 h-7 text-white" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+          <div className="group bg-white rounded-2xl p-6 border border-slate-200 hover:shadow-xl hover:border-orange-200 transition-all duration-300">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Unread Messages</p>
-                <p className="text-3xl font-bold text-orange-600 mt-2">{unreadCount}</p>
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Unread Messages</p>
+                <p className="text-4xl font-bold text-orange-600">{unreadCount}</p>
+                <p className="text-sm text-slate-500 mt-2">Needs attention</p>
               </div>
-              <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
-                <Mail className="w-6 h-6 text-orange-600" />
+              <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <Mail className="w-7 h-7 text-white" />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300">
+          <div className="group bg-white rounded-2xl p-6 border border-slate-200 hover:shadow-xl hover:border-green-200 transition-all duration-300">
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-gray-600 uppercase tracking-wider">Read Messages</p>
-                <p className="text-3xl font-bold text-green-600 mt-2">{readCount}</p>
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Read Messages</p>
+                <p className="text-4xl font-bold text-green-600">{readCount}</p>
+                <p className="text-sm text-slate-500 mt-2">Completed</p>
               </div>
-              <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-green-600" />
+              <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                <CheckCircle className="w-7 h-7 text-white" />
               </div>
             </div>
           </div>
         </div>
 
         {/* Search and Filter Bar */}
-        <div className="bg-white rounded-2xl p-6 border border-gray-200 mb-8">
+        <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm mb-8">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -246,7 +262,7 @@ const AdminDashboard: React.FC = () => {
                 placeholder="Search messages by name, email, subject, or content..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-slate-50 focus:bg-white transition-all duration-200"
               />
             </div>
             
@@ -256,7 +272,7 @@ const AdminDashboard: React.FC = () => {
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as 'all' | 'unread' | 'read')}
-                  className="pl-10 pr-8 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white min-w-[140px]"
+                  className="pl-10 pr-8 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 appearance-none bg-slate-50 hover:bg-white transition-all duration-200 min-w-[140px] font-medium"
                 >
                   <option value="all">All Messages</option>
                   <option value="unread">Unread</option>
@@ -275,8 +291,8 @@ const AdminDashboard: React.FC = () => {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Messages List */}
           <div className="xl:col-span-2">
-            <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+              <div className="px-6 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-gray-900">
                     Messages ({filteredMessages.length})

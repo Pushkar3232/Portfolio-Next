@@ -101,17 +101,17 @@ const ExperienceAdmin: React.FC = () => {
     if (!file) return;
 
     setUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', 'portfolio_uploads'); // Create this preset in Cloudinary dashboard
-    formData.append('cloud_name', 'dzli7gxtt');
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+    uploadFormData.append('upload_preset', 'portfolio_uploads'); // Create this preset in Cloudinary dashboard
+    uploadFormData.append('cloud_name', 'dzli7gxtt');
 
     try {
       const response = await fetch(
         `https://api.cloudinary.com/v1_1/dzli7gxtt/image/upload`,
         {
           method: 'POST',
-          body: formData,
+          body: uploadFormData,
         }
       );
       const data = await response.json();
@@ -323,61 +323,83 @@ const ExperienceAdmin: React.FC = () => {
         </div>
 
         {/* Experience Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {experiences.map((exp) => (
             <div
               key={exp.id}
               className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
             >
-              <div className="flex justify-between items-start mb-4">
-                <div className="flex items-center space-x-3">
-                  {exp.imageUrl && (
-                    <img
-                      src={exp.imageUrl}
-                      alt={exp.role}
-                      className="w-16 h-16 rounded-lg object-cover"
-                    />
+              {/* Header with Status */}
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">{exp.role}</h3>
+                  <p className="text-blue-600 font-semibold text-lg flex items-center">
+                    <Building className="w-4 h-4 mr-2" />
+                    {exp.company}
+                  </p>
+                </div>
+                <button
+                  onClick={() => toggleActive(exp)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                    exp.isActive
+                      ? 'bg-green-100 text-green-700'
+                      : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
+                  {exp.isActive ? 'Active' : 'Inactive'}
+                </button>
+              </div>
+
+              {/* Main Content Grid */}
+              <div className="grid md:grid-cols-3 gap-6 mb-6">
+                {/* Image */}
+                <div className="md:col-span-1">
+                  {exp.imageUrl ? (
+                    <div className="relative group">
+                      <img
+                        src={exp.imageUrl}
+                        alt={exp.role}
+                        className="w-full h-48 rounded-xl object-cover shadow-md"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-full h-48 rounded-xl bg-gray-100 flex items-center justify-center">
+                      <Building className="w-12 h-12 text-gray-400" />
+                    </div>
                   )}
-                  <div>
-                    <h3 className="text-xl font-bold text-gray-900">{exp.role}</h3>
-                    <p className="text-blue-600 font-semibold">{exp.company}</p>
+                </div>
+
+                {/* Details */}
+                <div className="md:col-span-2 space-y-4">
+                  <div className="flex flex-wrap gap-2">
+                    <div className="flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      {exp.duration}
+                    </div>
+                    <div className="flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-2 rounded-lg">
+                      <MapPin className="w-4 h-4 mr-2" />
+                      {exp.location}
+                    </div>
                   </div>
-                </div>
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => toggleActive(exp)}
-                    className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                      exp.isActive
-                        ? 'bg-green-100 text-green-700'
-                        : 'bg-gray-100 text-gray-600'
-                    }`}
-                  >
-                    {exp.isActive ? 'Active' : 'Inactive'}
-                  </button>
-                </div>
-              </div>
 
-              <div className="flex flex-wrap gap-2 mb-3">
-                <div className="flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg">
-                  <Calendar className="w-4 h-4 mr-1" />
-                  {exp.duration}
-                </div>
-                <div className="flex items-center text-sm text-gray-600 bg-gray-50 px-3 py-1 rounded-lg">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {exp.location}
-                </div>
-              </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">{exp.description}</p>
 
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">{exp.description}</p>
-
-              <div className="mb-4">
-                <div className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                  <Target className="w-4 h-4 mr-1" />
-                  Responsibilities ({exp.responsibilities.length})
-                </div>
-                <div className="flex items-center text-sm font-medium text-gray-700 mb-2">
-                  <Sparkles className="w-4 h-4 mr-1" />
-                  Skills ({exp.skills.length})
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-blue-50 rounded-lg p-3">
+                      <div className="flex items-center text-sm font-medium text-blue-700 mb-1">
+                        <Target className="w-4 h-4 mr-1" />
+                        Responsibilities
+                      </div>
+                      <p className="text-2xl font-bold text-blue-900">{exp.responsibilities.length}</p>
+                    </div>
+                    <div className="bg-purple-50 rounded-lg p-3">
+                      <div className="flex items-center text-sm font-medium text-purple-700 mb-1">
+                        <Sparkles className="w-4 h-4 mr-1" />
+                        Skills
+                      </div>
+                      <p className="text-2xl font-bold text-purple-900">{exp.skills.length}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
