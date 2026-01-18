@@ -158,7 +158,7 @@ const EducationAdmin: React.FC = () => {
   const handleSaveCertificate = async () => {
     try {
       if (editingCert) {
-        await updateDoc(doc(db, 'certificates', editingCert.id!), certForm);
+        await updateDoc(doc(db, 'certificates', editingCert.id!), { ...certForm });
       } else {
         await addDoc(collection(db, 'certificates'), certForm);
       }
