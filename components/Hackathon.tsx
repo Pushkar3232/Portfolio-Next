@@ -121,20 +121,20 @@ const Hackathon: React.FC = () => {
                 className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100"
               >
                 {/* Image Section */}
-                <div className="relative h-56 bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-xl group">
+                <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-xl group flex items-center justify-center max-h-52">
                   <img
                     src={hackathon.imageUrl}
                     alt={hackathon.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 ease-out"
+                    className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
                   
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
                   {/* Achievement Badge */}
-                  <div className="absolute top-3 right-3 transform transition-all duration-300 group-hover:scale-105">
-                    <div className="flex items-center gap-1.5 px-4 py-2 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-white rounded-full text-xs font-bold shadow-lg backdrop-blur-sm border border-white/20">
-                      <Award className="w-4 h-4" />
+                  <div className="absolute top-2.5 right-2.5 transform transition-all duration-300 group-hover:scale-105">
+                    <div className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-yellow-400 via-yellow-500 to-orange-500 text-white rounded-full text-xs font-bold shadow-md backdrop-blur-sm border border-white/20">
+                      <Award className="w-3.5 h-3.5" />
                       {hackathon.achievement}
                     </div>
                   </div>
@@ -245,7 +245,7 @@ const Hackathon: React.FC = () => {
                           className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded-lg transition-all"
                         >
                           <FileText className="w-3.5 h-3.5" />
-                          <span className="hidden sm:inline">Cert</span>
+                          <span className="hidden sm:inline">Certificate</span>
                         </a>
                       )}
                     </div>
