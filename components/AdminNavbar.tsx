@@ -11,11 +11,12 @@ import {
   Building, 
   LayoutDashboard, 
   LogOut,
-  User
+  User,
+  Trophy
 } from 'lucide-react';
 
 interface AdminNavbarProps {
-  currentPage: 'dashboard' | 'education' | 'experience';
+  currentPage: 'dashboard' | 'education' | 'experience' | 'hackathon';
   title: string;
   subtitle: string;
 }
@@ -43,6 +44,7 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ currentPage, title, subtitle 
               <div className="w-9 h-9 bg-gray-900 rounded-lg flex items-center justify-center">
                 {currentPage === 'education' && <GraduationCap className="w-5 h-5 text-white" />}
                 {currentPage === 'experience' && <Building className="w-5 h-5 text-white" />}
+                {currentPage === 'hackathon' && <Trophy className="w-5 h-5 text-white" />}
                 {currentPage === 'dashboard' && <LayoutDashboard className="w-5 h-5 text-white" />}
               </div>
               <div>
@@ -87,6 +89,18 @@ const AdminNavbar: React.FC<AdminNavbarProps> = ({ currentPage, title, subtitle 
               >
                 <Building className="w-4 h-4 mr-2" />
                 Experience
+              </Link>
+              
+              <Link 
+                href="/admin/hackathon"
+                className={`flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+                  currentPage === 'hackathon'
+                    ? 'bg-gray-100 text-gray-900'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                <Trophy className="w-4 h-4 mr-2" />
+                Hackathon
               </Link>
             </nav>
           </div>
