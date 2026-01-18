@@ -65,6 +65,7 @@ const Hero = () => {
               
 
               {/* Main Heading */}
+              <br /><br /><br />
               <div>
                 <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
                   <span className="block">

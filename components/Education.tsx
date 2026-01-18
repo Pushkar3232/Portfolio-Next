@@ -1,57 +1,69 @@
-import React from 'react';
+// components/Education.tsx
+"use client"
+import React, { useState, useEffect } from 'react';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 import { GraduationCap, Award, BookOpen, Calendar, ExternalLink, Trophy } from 'lucide-react';
 
-const Education: React.FC = () => {
-  const education = {
-    degree: 'Diploma in Computer Engineering',
-    status: 'Recently Graduated',
-    institution: 'Technical Institute',
-    year: '2025',
-    description: 'Comprehensive program covering software development and engineering principles.'
-  };
+interface EducationData {
+  id: string;
+  degree: string;
+  status: string;
+  institution: string;
+  year: string;
+  description: string;
+}
 
-  const certificates = [
-    {
-      title: "Maths and Statistics for AI",
-      provider: "CodeBasics",
-      date: "26/1/2025",
-      image: "/images/Skill/Maths for AI.jpg",
-      credentialUrl: "https://codebasics.io/certificate/CB-63-491529",
-      category: "AI/ML"
-    },
-    {
-      title: "Introduction to Large Language Models",
-      provider: "LinkedIn Learning",
-      date: "22/2/2025",
-      image: "/images/Skill/Introduction to Large Language Models.jpg",
-      credentialUrl: "https://www.linkedin.com/learning/certificates/9bbc571a842663a0cd3f70a5b552ffd72294b0922eecdd7c6da0484cf3226d32",
-      category: "AI/ML"
-    },
-    {
-      title: "Generative AI vs. Traditional AI",
-      provider: "LinkedIn Learning",
-      date: "23/2/2025",
-      image: "/images/Skill/Generative AI vs. Traditional AI.jpg",
-      credentialUrl: "https://www.linkedin.com/learning/certificates/e277172a1fdee20b33dd7dd2a4370bbaddbb5c9fc7409d0805c67e31da0fce52",
-      category: "AI/ML"
-    },
-    {
-      title: "Generative AI: Working with Large Language Models",
-      provider: "LinkedIn Learning",
-      date: "25/2/2025",
-      image: "/images/Skill/Generative AI Working with Large Language.jpg",
-      credentialUrl: "https://www.linkedin.com/learning/certificates/977524b5d18a86fd0a17653cc7c37c73c49d70d068242a4dd93ed1311523526a?trk=share_certificate",
-      category: "AI/ML"
-    },
-    {
-      title: "Leading Your Team Through Change",
-      provider: "LinkedIn Learning",
-      date: "25/2/2025",
-      image: "/images/Skill/Leading Your Team Through Change.jpg",
-      credentialUrl: "https://www.linkedin.com/learning/certificates/d0ce5e8cf5b24c9e2e29c5e7be3f848e5c9ed2052d76e489b95a19eeaf236fc4?trk=share_certificate",
-      category: "Leadership"
-    }
-  ];
+interface Certificate {
+  id: string;
+  title: string;
+  provider: string;
+  date: string;
+  image: string;
+  credentialUrl: string;
+  category: string;
+}
+
+const Education: React.FC = () => {
+  const [educationData, setEducationData] = useState<EducationData[]>([]);
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch Education Data
+    const educationQuery = query(
+      collection(db, 'education'),
+      orderBy('year', 'desc')
+    );
+    
+    const unsubEducation = onSnapshot(educationQuery, (snapshot) => {
+      const data: EducationData[] = [];
+      snapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() } as EducationData);
+      });
+      setEducationData(data);
+    });
+
+    // Fetch Certificates
+    const certQuery = query(
+      collection(db, 'certificates'),
+      orderBy('date', 'desc')
+    );
+    
+    const unsubCerts = onSnapshot(certQuery, (snapshot) => {
+      const data: Certificate[] = [];
+      snapshot.forEach((doc) => {
+        data.push({ id: doc.id, ...doc.data() } as Certificate);
+      });
+      setCertificates(data);
+      setLoading(false);
+    });
+
+    return () => {
+      unsubEducation();
+      unsubCerts();
+    };
+  }, []);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -75,6 +87,24 @@ const Education: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <section id="education" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-center min-h-[400px]">
+            <div className="flex flex-col items-center space-y-4">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-blue-500 border-t-transparent"></div>
+              <p className="text-gray-600 font-medium">Loading education data...</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const aiMlCertCount = certificates.filter(c => c.category === 'AI/ML').length;
+  const latestYear = educationData.length > 0 ? educationData[0].year : new Date().getFullYear();
+
   return (
     <section id="education" className="py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -97,27 +127,38 @@ const Education: React.FC = () => {
                 Education
               </h3>
               
-              <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
-                <div className="flex items-start space-x-4">
-                  <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center">
-                    <GraduationCap className="w-6 h-6 text-white" />
+              <div className="space-y-4">
+                {educationData.length === 0 ? (
+                  <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 text-center">
+                    <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">No education entries yet</p>
                   </div>
-                  <div className="flex-1">
-                    <h4 className="text-xl font-bold text-gray-900 mb-2">
-                      {education.degree}
-                    </h4>
-                    <p className="text-gray-900 font-medium mb-2">
-                      {education.institution}
-                    </p>
-                    <div className="flex items-center text-gray-600 mb-4">
-                      <Calendar className="w-4 h-4 mr-2" />
-                      <span className="text-sm">{education.status} • {education.year}</span>
+                ) : (
+                  educationData.map((edu) => (
+                    <div key={edu.id} className="bg-white rounded-2xl p-8 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center flex-shrink-0">
+                          <GraduationCap className="w-6 h-6 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="text-xl font-bold text-gray-900 mb-2">
+                            {edu.degree}
+                          </h4>
+                          <p className="text-gray-900 font-medium mb-2">
+                            {edu.institution}
+                          </p>
+                          <div className="flex items-center text-gray-600 mb-4">
+                            <Calendar className="w-4 h-4 mr-2" />
+                            <span className="text-sm">{edu.status} • {edu.year}</span>
+                          </div>
+                          <p className="text-gray-600 text-sm leading-relaxed">
+                            {edu.description}
+                          </p>
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-gray-600 text-sm leading-relaxed">
-                      {education.description}
-                    </p>
-                  </div>
-                </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -129,53 +170,58 @@ const Education: React.FC = () => {
               </h3>
               
               <div className="space-y-4">
-                {certificates.map((cert, index) => (
-                  <div 
-                    key={index}
-                    className="bg-white rounded-xl p-5 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 hover:border-gray-300"
-                  >
-                    <div className="flex items-start space-x-4">
-                      <div className="flex-shrink-0">
-                        <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getCategoryColor(cert.category)}`}>
-                          {getCategoryIcon(cert.category)}
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-start justify-between mb-2">
-                          <h4 className="font-semibold text-gray-900 mb-1 line-clamp-2">
-                            {cert.title}
-                          </h4>
-                          <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(cert.category)} flex items-center gap-1`}>
+                {certificates.length === 0 ? (
+                  <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-200 text-center">
+                    <Award className="w-12 h-12 text-gray-400 mx-auto mb-3" />
+                    <p className="text-gray-500">No certificates yet</p>
+                  </div>
+                ) : (
+                  certificates.map((cert) => (
+                    <div 
+                      key={cert.id}
+                      className="bg-white rounded-xl p-5 shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 hover:border-gray-300"
+                    >
+                      <div className="flex items-start space-x-4">
+                        <div className="flex-shrink-0">
+                          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${getCategoryColor(cert.category)}`}>
                             {getCategoryIcon(cert.category)}
-                            {cert.category}
                           </div>
                         </div>
-                        <p className="text-gray-600 text-sm mb-2">
-                          {cert.provider}
-                        </p>
-                        <div className="flex items-center justify-between">
-                          <span className="text-gray-500 text-xs flex items-center">
-                            <Calendar className="w-3 h-3 mr-1" />
-                            {cert.date}
-                          </span>
-                          <a
-                            href={cert.credentialUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:scale-105"
-                          >
-                            <Award className="w-3 h-3 mr-1" />
-                            View Certificate
-                            <ExternalLink className="w-3 h-3 ml-1" />
-                          </a>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-start justify-between mb-2">
+                            <h4 className="font-semibold text-gray-900 mb-1 line-clamp-2">
+                              {cert.title}
+                            </h4>
+                            <div className={`px-2 py-1 rounded-full text-xs font-medium border ${getCategoryColor(cert.category)} flex items-center gap-1 ml-2`}>
+                              {getCategoryIcon(cert.category)}
+                              {cert.category}
+                            </div>
+                          </div>
+                          <p className="text-gray-600 text-sm mb-2">
+                            {cert.provider}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <span className="text-gray-500 text-xs flex items-center">
+                              <Calendar className="w-3 h-3 mr-1" />
+                              {cert.date}
+                            </span>
+                            <a
+                              href={cert.credentialUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-lg transition-all duration-200 hover:shadow-md hover:scale-105"
+                            >
+                              <Award className="w-3 h-3 mr-1" />
+                              View Certificate
+                              <ExternalLink className="w-3 h-3 ml-1" />
+                            </a>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
-
-              
             </div>
           </div>
 
@@ -185,21 +231,21 @@ const Education: React.FC = () => {
               <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Trophy className="w-6 h-6 text-blue-600" />
               </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">5+</h4>
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">{certificates.length}+</h4>
               <p className="text-gray-600">Recent Certifications</p>
             </div>
             <div className="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
               <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <BookOpen className="w-6 h-6 text-green-600" />
               </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">AI/ML</h4>
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">{aiMlCertCount > 0 ? 'AI/ML' : 'Tech'}</h4>
               <p className="text-gray-600">Specialization Focus</p>
             </div>
             <div className="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
               <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <GraduationCap className="w-6 h-6 text-purple-600" />
               </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">2025</h4>
+              <h4 className="text-2xl font-bold text-gray-900 mb-2">{latestYear}</h4>
               <p className="text-gray-600">Most Recent Year</p>
             </div>
           </div>

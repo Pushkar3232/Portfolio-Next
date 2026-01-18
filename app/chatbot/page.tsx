@@ -65,7 +65,7 @@ const ChatbotPage = () => {
     setInput("");
 
     try {
-      const response = await fetch("https://llm-api-w0wl.onrender.com/api/data", {
+      const response = await fetch("https://llmapi-production-bc95.up.railway.app/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
