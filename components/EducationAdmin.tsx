@@ -113,7 +113,7 @@ const EducationAdmin: React.FC = () => {
     try {
       if (editingEducation) {
         // Update existing
-        await updateDoc(doc(db, 'education', editingEducation.id!), educationForm);
+        await updateDoc(doc(db, 'education', editingEducation.id!), { ...educationForm });
       } else {
         // Add new
         await addDoc(collection(db, 'education'), educationForm);
