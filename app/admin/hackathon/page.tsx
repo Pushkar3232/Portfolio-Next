@@ -42,8 +42,11 @@ interface Hackathon {
   achievement: string;
   technologies: string[];
   teamSize: string;
+  teamName?: string;
+  teamLogo?: string;
   imageUrl: string;
   projectUrl?: string;
+  certificateUrl?: string;
   isActive: boolean;
   order: number;
   timestamp: any;
@@ -67,8 +70,11 @@ const HackathonAdmin: React.FC = () => {
     achievement: '',
     technologies: [''],
     teamSize: '',
+    teamName: '',
+    teamLogo: '',
     imageUrl: '',
     projectUrl: '',
+    certificateUrl: '',
     isActive: true,
     order: 0
   });
@@ -130,6 +136,39 @@ const HackathonAdmin: React.FC = () => {
     }
   };
 
+  const handleTeamLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+    uploadFormData.append('upload_preset', 'portfolio_uploads');
+    uploadFormData.append('cloud_name', 'dzli7gxtt');
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dzli7gxtt/image/upload`,
+        {
+          method: 'POST',
+          body: uploadFormData,
+        }
+      );
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+      
+      setFormData(prev => ({ ...prev, teamLogo: data.secure_url }));
+    } catch (error) {
+      console.error('Error uploading team logo:', error);
+      alert('Failed to upload team logo: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleAddTechnology = () => {
     setFormData(prev => ({
       ...prev,
@@ -163,8 +202,11 @@ const HackathonAdmin: React.FC = () => {
         achievement: hackathon.achievement,
         technologies: hackathon.technologies,
         teamSize: hackathon.teamSize,
+        teamName: hackathon.teamName || '',
+        teamLogo: hackathon.teamLogo || '',
         imageUrl: hackathon.imageUrl,
         projectUrl: hackathon.projectUrl || '',
+        certificateUrl: hackathon.certificateUrl || '',
         isActive: hackathon.isActive,
         order: hackathon.order
       });
@@ -179,8 +221,11 @@ const HackathonAdmin: React.FC = () => {
         achievement: '',
         technologies: [''],
         teamSize: '',
+        teamName: '',
+        teamLogo: '',
         imageUrl: '',
         projectUrl: '',
+        certificateUrl: '',
         isActive: true,
         order: hackathons.length
       });
@@ -486,6 +531,47 @@ const HackathonAdmin: React.FC = () => {
                   />
                 </div>
                 <div>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Team Name</label>
+                  <input
+                    type="text"
+                    value={formData.teamName}
+                    onChange={(e) => setFormData({ ...formData, teamName: e.target.value })}
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Code Warriors"
+                  />
+                </div>
+              </div>
+
+              {/* Team Logo Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Team Logo
+                </label>
+                <div className="flex items-center space-x-4">
+                  {formData.teamLogo && (
+                    <img
+                      src={formData.teamLogo}
+                      alt="Team Logo"
+                      className="w-16 h-16 rounded-lg object-cover border-2 border-gray-200"
+                    />
+                  )}
+                  <label className="flex items-center px-4 py-2 bg-gray-50 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
+                    <Upload className="w-4 h-4 mr-2" />
+                    {uploading ? 'Uploading...' : 'Upload Team Logo'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleTeamLogoUpload}
+                      className="hidden"
+                      disabled={uploading}
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Project and Certificate URLs */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
                   <label className="block text-sm font-semibold text-gray-800 mb-2">Project URL</label>
                   <input
                     type="url"
@@ -493,6 +579,16 @@ const HackathonAdmin: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, projectUrl: e.target.value })}
                     className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
                     placeholder="https://github.com/..."
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Certificate URL</label>
+                  <input
+                    type="url"
+                    value={formData.certificateUrl}
+                    onChange={(e) => setFormData({ ...formData, certificateUrl: e.target.value })}
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="https://certificate-link..."
                   />
                 </div>
               </div>
