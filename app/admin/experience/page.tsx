@@ -7,23 +7,21 @@ import { auth, db } from '../../../lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Link from 'next/link';
+import AdminNavbar from '../../../components/AdminNavbar';
 import { 
-  Building, 
-  LogOut,
   Plus,
   Edit2,
   Trash2,
   Save,
   X,
   Upload,
-
   MapPin,
   Calendar,
   Users,
   Target,
   Sparkles,
-  ArrowLeft,
-  Loader2
+  Loader2,
+  Building
 } from 'lucide-react';
 
 interface Experience {
@@ -86,15 +84,6 @@ const ExperienceAdmin: React.FC = () => {
       return () => unsubscribe();
     }
   }, [user, loading, router]);
-
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      router.push('/admin/login');
-    } catch (error) {
-      console.error('Sign out error:', error);
-    }
-  };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -272,38 +261,11 @@ const ExperienceAdmin: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-4">
-              <Link 
-                href="/admin/dashboard"
-                className="flex items-center text-gray-600 hover:text-gray-900"
-              >
-                <ArrowLeft className="w-5 h-5 mr-2" />
-                Back to Dashboard
-              </Link>
-              <div className="flex items-center">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                  <Building className="w-5 h-5 text-white" />
-                </div>
-                <div className="ml-3">
-                  <h1 className="text-xl font-bold text-gray-900">Experience Management</h1>
-                </div>
-              </div>
-            </div>
-            
-            <button
-              onClick={handleSignOut}
-              className="flex items-center px-3 py-2 text-sm text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200"
-            >
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </button>
-          </div>
-        </div>
-      </header>
+      <AdminNavbar 
+        currentPage="experience" 
+        title="Experience Management" 
+        subtitle="Manage your work history" 
+      />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -327,7 +289,7 @@ const ExperienceAdmin: React.FC = () => {
           {experiences.map((exp) => (
             <div
               key={exp.id}
-              className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300"
+              className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Header with Status */}
               <div className="flex justify-between items-start mb-6">
@@ -435,7 +397,7 @@ const ExperienceAdmin: React.FC = () => {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
             <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
               <h3 className="text-xl font-bold text-gray-900">
                 {editingExperience ? 'Edit Experience' : 'Add New Experience'}
@@ -476,43 +438,46 @@ const ExperienceAdmin: React.FC = () => {
               {/* Basic Info */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Role *</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Role *</label>
                   <input
                     type="text"
                     value={formData.role}
                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Senior Software Engineer"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Company *</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Company *</label>
                   <input
                     type="text"
                     value={formData.company}
                     onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Google Inc."
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Duration *</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Duration *</label>
                   <input
                     type="text"
                     value={formData.duration}
                     onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="e.g., Current Position or Jan 2020 - Dec 2023"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Jan 2020 - Present"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Location *</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Location *</label>
                   <input
                     type="text"
                     value={formData.location}
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., San Francisco, CA"
                     required
                   />
                 </div>
@@ -520,12 +485,13 @@ const ExperienceAdmin: React.FC = () => {
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">Description *</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                  placeholder="Brief description of your role and achievements..."
                   required
                 />
               </div>
@@ -533,11 +499,11 @@ const ExperienceAdmin: React.FC = () => {
               {/* Responsibilities */}
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium text-gray-700">Responsibilities</label>
+                  <label className="block text-sm font-semibold text-gray-800">Responsibilities</label>
                   <button
                     type="button"
                     onClick={handleAddResponsibility}
-                    className="text-sm text-blue-600 hover:text-blue-700"
+                    className="text-sm font-medium text-blue-600 hover:text-blue-700"
                   >
                     + Add Responsibility
                   </button>
@@ -549,8 +515,8 @@ const ExperienceAdmin: React.FC = () => {
                         type="text"
                         value={resp}
                         onChange={(e) => handleResponsibilityChange(index, e.target.value)}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter responsibility"
+                        className="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                        placeholder="e.g., Led a team of 5 developers"
                       />
                       {formData.responsibilities.length > 1 && (
                         <button
@@ -569,11 +535,11 @@ const ExperienceAdmin: React.FC = () => {
               {/* Skills */}
               <div>
                 <div className="flex justify-between items-center mb-2">
-                  <label className="block text-sm font-medium text-gray-700">Skills</label>
+                  <label className="block text-sm font-semibold text-gray-800">Skills</label>
                   <button
                     type="button"
                     onClick={handleAddSkill}
-                    className="text-sm text-blue-600 hover:text-blue-700"
+                    className="text-sm font-medium text-blue-600 hover:text-blue-700"
                   >
                     + Add Skill
                   </button>
@@ -585,8 +551,8 @@ const ExperienceAdmin: React.FC = () => {
                         type="text"
                         value={skill}
                         onChange={(e) => handleSkillChange(index, e.target.value)}
-                        className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                        placeholder="Enter skill"
+                        className="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                        placeholder="e.g., React.js, Node.js"
                       />
                       {formData.skills.length > 1 && (
                         <button
@@ -611,15 +577,16 @@ const ExperienceAdmin: React.FC = () => {
                     onChange={(e) => setFormData({ ...formData, isActive: e.target.checked })}
                     className="w-4 h-4 text-blue-600 rounded focus:ring-2 focus:ring-blue-500"
                   />
-                  <label className="ml-2 text-sm text-gray-700">Active</label>
+                  <label className="ml-2 text-sm font-semibold text-gray-800">Active (Show on portfolio)</label>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Order</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Display Order</label>
                   <input
                     type="number"
                     value={formData.order}
                     onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="0"
                     min="0"
                   />
                 </div>

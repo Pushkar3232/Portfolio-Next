@@ -1,6 +1,7 @@
 // components/EducationAdmin.tsx
 "use client";
 import React, { useState, useEffect } from 'react';
+import AdminNavbar from './AdminNavbar';
 import { 
   collection, 
   addDoc, 
@@ -210,15 +211,21 @@ const EducationAdmin: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      <AdminNavbar 
+        currentPage="education" 
+        title="Education Management" 
+        subtitle="Manage your education and certifications" 
+      />
+
+      <div className="max-w-7xl mx-auto p-8">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Education Management</h1>
           <p className="text-gray-600">Manage your education and certifications</p>
         </div>
 
         {/* Education Section */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-8">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center">
               <GraduationCap className="w-6 h-6 mr-3" />
@@ -241,54 +248,54 @@ const EducationAdmin: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Degree</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Degree</label>
                   <input
                     type="text"
                     value={educationForm.degree}
                     onChange={(e) => setEducationForm({ ...educationForm, degree: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Diploma in Computer Engineering"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Bachelor of Computer Science"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Status</label>
                   <input
                     type="text"
                     value={educationForm.status}
                     onChange={(e) => setEducationForm({ ...educationForm, status: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Recently Graduated"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Graduated, In Progress"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Institution</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Institution</label>
                   <input
                     type="text"
                     value={educationForm.institution}
                     onChange={(e) => setEducationForm({ ...educationForm, institution: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., Technical Institute"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Stanford University"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Year</label>
                   <input
                     type="text"
                     value={educationForm.year}
                     onChange={(e) => setEducationForm({ ...educationForm, year: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., 2025"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., 2020-2024"
                   />
                 </div>
               </div>
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <label className="block text-sm font-semibold text-gray-800 mb-2">Description</label>
                 <textarea
                   value={educationForm.description}
                   onChange={(e) => setEducationForm({ ...educationForm, description: e.target.value })}
                   rows={3}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="Brief description of the program..."
+                  className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                  placeholder="Brief description of your studies and achievements..."
                 />
               </div>
               <div className="flex space-x-3">
@@ -351,7 +358,7 @@ const EducationAdmin: React.FC = () => {
         </div>
 
         {/* Certificates Section */}
-        <div className="bg-white rounded-2xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center">
               <Award className="w-6 h-6 mr-3" />
@@ -374,41 +381,41 @@ const EducationAdmin: React.FC = () => {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Title</label>
                   <input
                     type="text"
                     value={certForm.title}
                     onChange={(e) => setCertForm({ ...certForm, title: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Certificate title"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., AWS Certified Solutions Architect"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Provider</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Provider</label>
                   <input
                     type="text"
                     value={certForm.provider}
                     onChange={(e) => setCertForm({ ...certForm, provider: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="e.g., LinkedIn Learning"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Amazon Web Services"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Date</label>
                   <input
                     type="text"
                     value={certForm.date}
                     onChange={(e) => setCertForm({ ...certForm, date: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="DD/MM/YYYY"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., Jan 2024"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Category</label>
                   <select
                     value={certForm.category}
                     onChange={(e) => setCertForm({ ...certForm, category: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white font-medium"
                   >
                     <option value="AI/ML">AI/ML</option>
                     <option value="Leadership">Leadership</option>
@@ -417,23 +424,23 @@ const EducationAdmin: React.FC = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Image URL</label>
                   <input
                     type="text"
                     value={certForm.image}
                     onChange={(e) => setCertForm({ ...certForm, image: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="/images/cert.jpg"
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="e.g., /certificates/aws-cert.jpg"
                   />
                 </div>
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Credential URL</label>
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Credential URL</label>
                   <input
                     type="url"
                     value={certForm.credentialUrl}
                     onChange={(e) => setCertForm({ ...certForm, credentialUrl: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://..."
+                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
+                    placeholder="https://www.credential-verify.com/..."
                   />
                 </div>
               </div>
