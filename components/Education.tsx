@@ -38,7 +38,7 @@ interface Certificate {
 // Certificate image header component
 const CertificateImage = ({ image, title }: { image: string; title: string }) => {
   return (
-    <div className="flex flex-1 w-full h-full min-h-[8rem] rounded-xl overflow-hidden bg-gray-100">
+    <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
       {image ? (
         <img
           src={image}
@@ -76,8 +76,7 @@ const Education: React.FC = () => {
 
     // Fetch Certificates
     const certQuery = query(
-      collection(db, 'certificates'),
-      orderBy('date', 'desc')
+      collection(db, 'certificates')
     );
     
     const unsubCerts = onSnapshot(certQuery, (snapshot) => {
@@ -85,7 +84,25 @@ const Education: React.FC = () => {
       snapshot.forEach((doc) => {
         data.push({ id: doc.id, ...doc.data() } as Certificate);
       });
-      setCertificates(data);
+      
+      // Sort certificates by date (newest first)
+      // Handles formats like "22/2/2025", "07/03/2025" (DD/MM/YYYY)
+      const sortedData = data.sort((a, b) => {
+        const parseDate = (dateStr: string) => {
+          // Handle DD/MM/YYYY format
+          const parts = dateStr.split('/');
+          if (parts.length === 3) {
+            const day = parseInt(parts[0]);
+            const month = parseInt(parts[1]) - 1; // months are 0-indexed
+            const year = parseInt(parts[2]);
+            return new Date(year, month, day);
+          }
+          return new Date(0);
+        };
+        return parseDate(b.date).getTime() - parseDate(a.date).getTime();
+      });
+      
+      setCertificates(sortedData);
       setLoading(false);
     });
 
