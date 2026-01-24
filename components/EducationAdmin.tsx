@@ -23,7 +23,10 @@ import {
   X,
   Calendar,
   BookOpen,
-  Trophy
+  Trophy,
+  Upload,
+  Loader2,
+  Image as ImageIcon
 } from 'lucide-react';
 
 interface EducationData {
@@ -53,6 +56,7 @@ const EducationAdmin: React.FC = () => {
   const [editingEducation, setEditingEducation] = useState<EducationData | null>(null);
   const [editingCert, setEditingCert] = useState<Certificate | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
 
   const [educationForm, setEducationForm] = useState<EducationData>({
     degree: '',
@@ -197,6 +201,40 @@ const EducationAdmin: React.FC = () => {
     });
     setEditingCert(null);
     setShowCertForm(false);
+  };
+
+  // Cloudinary image upload handler
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    const uploadFormData = new FormData();
+    uploadFormData.append('file', file);
+    uploadFormData.append('upload_preset', 'portfolio_uploads');
+    uploadFormData.append('cloud_name', 'dzli7gxtt');
+
+    try {
+      const response = await fetch(
+        `https://api.cloudinary.com/v1_1/dzli7gxtt/image/upload`,
+        {
+          method: 'POST',
+          body: uploadFormData,
+        }
+      );
+      const data = await response.json();
+      
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+      
+      setCertForm(prev => ({ ...prev, image: data.secure_url }));
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Failed to upload image: ' + (error instanceof Error ? error.message : 'Unknown error'));
+    } finally {
+      setUploading(false);
+    }
   };
 
   if (isLoading) {
@@ -419,19 +457,51 @@ const EducationAdmin: React.FC = () => {
                   >
                     <option value="AI/ML">AI/ML</option>
                     <option value="Leadership">Leadership</option>
+                    <option value="Cloud">Cloud</option>
                     <option value="Development">Development</option>
                     <option value="Other">Other</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-800 mb-2">Image URL</label>
-                  <input
-                    type="text"
-                    value={certForm.image}
-                    onChange={(e) => setCertForm({ ...certForm, image: e.target.value })}
-                    className="w-full px-4 py-2.5 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white placeholder-gray-500"
-                    placeholder="e.g., /certificates/aws-cert.jpg"
-                  />
+                  <label className="block text-sm font-semibold text-gray-800 mb-2">Certificate Image</label>
+                  <div className="space-y-3">
+                    {certForm.image && (
+                      <div className="relative w-full h-32 rounded-lg overflow-hidden border-2 border-gray-200">
+                        <img
+                          src={certForm.image}
+                          alt="Certificate preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setCertForm({ ...certForm, image: '' })}
+                          className="absolute top-2 right-2 p-1.5 bg-red-500 hover:bg-red-600 text-white rounded-full transition-colors"
+                        >
+                          <X className="w-3 h-3" />
+                        </button>
+                      </div>
+                    )}
+                    <label className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-colors">
+                      {uploading ? (
+                        <div className="flex items-center text-blue-600">
+                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                          <span className="font-medium">Uploading...</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center text-gray-600">
+                          <Upload className="w-5 h-5 mr-2" />
+                          <span className="font-medium">{certForm.image ? 'Change Image' : 'Upload Image'}</span>
+                        </div>
+                      )}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        disabled={uploading}
+                      />
+                    </label>
+                  </div>
                 </div>
                 <div className="md:col-span-2">
                   <label className="block text-sm font-semibold text-gray-800 mb-2">Credential URL</label>
@@ -471,33 +541,44 @@ const EducationAdmin: React.FC = () => {
               </div>
             ) : (
               certificates.map((cert) => (
-                <div key={cert.id} className="bg-gray-50 rounded-xl p-5 border border-gray-200">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-semibold text-gray-900 flex-1">{cert.title}</h3>
-                    <div className="flex space-x-2 ml-2">
-                      <button
-                        onClick={() => startEditCertificate(cert)}
-                        className="p-1.5 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteCertificate(cert.id!)}
-                        className="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
+                <div key={cert.id} className="bg-gray-50 rounded-xl overflow-hidden border border-gray-200">
+                  {cert.image && (
+                    <div className="w-full h-32 bg-gray-200">
+                      <img
+                        src={cert.image}
+                        alt={cert.title}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                  </div>
-                  <p className="text-gray-600 text-sm mb-2">{cert.provider}</p>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-gray-500 flex items-center">
-                      <Calendar className="w-3 h-3 mr-1" />
-                      {cert.date}
-                    </span>
-                    <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full font-medium">
-                      {cert.category}
-                    </span>
+                  )}
+                  <div className="p-5">
+                    <div className="flex justify-between items-start mb-3">
+                      <h3 className="font-semibold text-gray-900 flex-1">{cert.title}</h3>
+                      <div className="flex space-x-2 ml-2">
+                        <button
+                          onClick={() => startEditCertificate(cert)}
+                          className="p-1.5 bg-blue-100 hover:bg-blue-200 text-blue-600 rounded-lg transition-colors"
+                        >
+                          <Edit2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteCertificate(cert.id!)}
+                          className="p-1.5 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg transition-colors"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-gray-600 text-sm mb-2">{cert.provider}</p>
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-gray-500 flex items-center">
+                        <Calendar className="w-3 h-3 mr-1" />
+                        {cert.date}
+                      </span>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-600 rounded-full font-medium">
+                        {cert.category}
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))
