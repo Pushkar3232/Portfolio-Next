@@ -7,10 +7,16 @@ export const metadata: Metadata = {
     default: 'Pushkar Shinde - Full Stack Developer | ML Engineer | GenAI Engineer',
     template: '%s | Pushkar Shinde'
   },
-  description: 'Pushkar Shinde - Full Stack Developer & ML Engineer specializing in Python, React, TypeScript, AI/ML, GenAI, and LangChain. Building intelligent solutions that simplify the world through software.',
+  description: 'Hi, I am Pushkar Shinde - Full Stack Developer & ML Engineer from India. I specialize in Python, React, TypeScript, AI/ML, GenAI, and LangChain. Building intelligent solutions that simplify the world through software.',
   keywords: [
+    'Pushkar',
     'Pushkar Shinde',
     'Pushkar Amar Shinde',
+    'pushkar shinde',
+    'pushkar developer',
+    'pushkar portfolio',
+    'pushkar ml engineer',
+    'pushkar ai developer',
     'Full Stack Developer',
     'ML Engineer',
     'GenAI Engineer',
@@ -30,9 +36,11 @@ export const metadata: Metadata = {
     'Portfolio',
     'Software Engineer',
     'Web Developer',
-    'Artificial Intelligence'
+    'Artificial Intelligence',
+    'India Developer',
+    'Indian Software Engineer'
   ],
-  authors: [{ name: 'Pushkar Shinde' }],
+  authors: [{ name: 'Pushkar Shinde', url: 'https://pushkarshinde.in' }],
   creator: 'Pushkar Shinde',
   publisher: 'Pushkar Shinde',
   formatDetection: {
@@ -49,24 +57,40 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://pushkarshinde.in',
     title: 'Pushkar Shinde - Full Stack Developer | ML Engineer | GenAI Engineer',
-    description: 'Full Stack Developer & ML Engineer specializing in Python, React, AI/ML, GenAI, and LangChain. Building intelligent solutions that simplify the world through software.',
+    description: 'Hi, I am Pushkar Shinde! Full Stack Developer & ML Engineer specializing in Python, React, AI/ML, GenAI, and LangChain. Building intelligent solutions that simplify the world through software.',
     siteName: 'Pushkar Shinde Portfolio',
     images: [
       {
-        url: '/og-image.jpg',
+        url: 'https://pushkarshinde.in/og-image.jpg',
         width: 1200,
-        height: 1200,
+        height: 630,
         alt: 'Pushkar Shinde - Full Stack Developer & ML Engineer',
+        type: 'image/jpeg',
+      },
+      {
+        url: 'https://pushkarshinde.in/photo.png',
+        width: 400,
+        height: 400,
+        alt: 'Pushkar Shinde Profile Photo',
+        type: 'image/png',
       },
     ],
   },
- 
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Pushkar Shinde - Full Stack Developer | ML Engineer | GenAI Engineer',
+    description: 'Hi, I am Pushkar Shinde! Full Stack Developer & ML Engineer specializing in Python, React, AI/ML, GenAI, and LangChain.',
+    images: ['https://pushkarshinde.in/og-image.jpg'],
+    creator: '@pushkarshinde',
+  },
   robots: {
     index: true,
     follow: true,
+    nocache: false,
     googleBot: {
       index: true,
       follow: true,
+      noimageindex: false,
       'max-video-preview': -1,
       'max-image-preview': 'large',
       'max-snippet': -1,
@@ -76,9 +100,32 @@ export const metadata: Metadata = {
     google: 'nL7ExTHwkt8e6J4GDZAMXJQmXUhn_VCort89FNljb3U',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
     shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
+    other: [
+      {
+        rel: 'mask-icon',
+        url: '/favicon.svg',
+      },
+    ],
+  },
+  category: 'technology',
+  classification: 'Portfolio Website',
+  referrer: 'origin-when-cross-origin',
+  other: {
+    'mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'apple-mobile-web-app-title': 'Pushkar Shinde',
+    'application-name': 'Pushkar Shinde Portfolio',
+    'msapplication-TileColor': '#000000',
+    'msapplication-config': '/browserconfig.xml',
   },
 }
 
@@ -101,6 +148,30 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         
+        {/* WhatsApp & Social Media Preview */}
+        <meta property="og:image:secure_url" content="https://pushkarshinde.in/og-image.jpg" />
+        <meta property="og:image:type" content="image/jpeg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:locale:alternate" content="en_IN" />
+        
+        {/* Additional Social Tags */}
+        <meta name="author" content="Pushkar Shinde" />
+        <meta name="copyright" content="Pushkar Shinde" />
+        <meta name="subject" content="Portfolio of Pushkar Shinde - Full Stack Developer & ML Engineer" />
+        <meta name="url" content="https://pushkarshinde.in" />
+        <meta name="identifier-URL" content="https://pushkarshinde.in" />
+        <meta name="coverage" content="Worldwide" />
+        <meta name="distribution" content="Global" />
+        <meta name="rating" content="General" />
+        <meta name="revisit-after" content="7 days" />
+        
+        {/* Geo Tags for Local SEO */}
+        <meta name="geo.region" content="IN" />
+        <meta name="geo.placename" content="India" />
+        <meta name="ICBM" content="20.5937, 78.9629" />
+        
         {/* Structured Data for Person */}
         <script
           type="application/ld+json"
@@ -108,16 +179,33 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Person",
+              "@id": "https://pushkarshinde.in/#person",
               "name": "Pushkar Shinde",
-              "alternateName": "Pushkar Amar Shinde",
+              "givenName": "Pushkar",
+              "familyName": "Shinde",
+              "alternateName": ["Pushkar Amar Shinde", "Pushkar", "pushkar shinde"],
               "jobTitle": ["Full Stack Developer", "ML Engineer", "GenAI Engineer"],
               "description": "Full Stack Developer & ML Engineer specializing in Python, React, AI/ML, GenAI, and LangChain. Building intelligent solutions that simplify the world through software.",
               "url": "https://pushkarshinde.in",
-              "mainEntityOfPage": "https://pushkarshinde.in",
-              "image": "https://pushkarshinde.in/og-image.jpg",
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://pushkarshinde.in"
+              },
+              "image": {
+                "@type": "ImageObject",
+                "url": "https://pushkarshinde.in/og-image.jpg",
+                "width": 1200,
+                "height": 630,
+                "caption": "Pushkar Shinde - Full Stack Developer & ML Engineer"
+              },
               "sameAs": [
-                "https://github.com/Pushkar3232/"
+                "https://github.com/Pushkar3232/",
+                "https://www.linkedin.com/in/pushkarshinde/"
               ],
+              "nationality": {
+                "@type": "Country",
+                "name": "India"
+              },
               "knowsAbout": [
                 "Python",
                 "React",
@@ -139,16 +227,6 @@ export default function RootLayout({
                 "@type": "Occupation",
                 "name": "Full Stack Developer & ML Engineer",
                 "description": "Developing full-stack applications and machine learning solutions using Python, React, and AI technologies",
-                "estimatedSalary": {
-                  "@type": "MonetaryAmount",
-                  "currency": "INR",
-                  "value": {
-                    "@type": "QuantitativeValue",
-                    "minValue": 500000,
-                    "maxValue": 1500000,
-                    "unitText": "YEAR"
-                  }
-                },
                 "occupationLocation": {
                   "@type": "Country",
                   "name": "India"
@@ -170,19 +248,25 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebSite",
+              "@id": "https://pushkarshinde.in/#website",
               "name": "Pushkar Shinde Portfolio",
-              "alternateName": "Pushkar Shinde - AI Developer Portfolio",
+              "alternateName": ["Pushkar Shinde", "Pushkar Portfolio", "Pushkar Developer Portfolio"],
               "url": "https://pushkarshinde.in",
               "description": "Portfolio website of Pushkar Shinde - Full Stack Developer, ML Engineer & GenAI Engineer",
+              "inLanguage": "en-US",
               "author": {
+                "@type": "Person",
+                "@id": "https://pushkarshinde.in/#person"
+              },
+              "publisher": {
+                "@type": "Person",
+                "@id": "https://pushkarshinde.in/#person"
+              },
+              "copyrightHolder": {
                 "@type": "Person",
                 "name": "Pushkar Shinde"
               },
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": "https://pushkarshinde.in/search?q={search_term_string}",
-                "query-input": "required name=search_term_string"
-              }
+              "copyrightYear": 2024
             })
           }}
         />
@@ -194,21 +278,50 @@ export default function RootLayout({
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "ProfilePage",
-              "dateCreated": new Date().toISOString(),
-              "dateModified": new Date().toISOString(),
+              "@id": "https://pushkarshinde.in/#profilepage",
+              "dateCreated": "2024-01-01T00:00:00Z",
+              "dateModified": "2026-01-24T00:00:00Z",
               "mainEntity": {
                 "@type": "Person",
-                "name": "Pushkar Shinde",
-                "alternateName": "Pushkar Amar Shinde",
-                "description": "Full Stack Developer, ML Engineer & GenAI Engineer - Building intelligent solutions",
-                "image": "https://pushkarshinde.in/og-image.jpg",
-                "url": "https://pushkarshinde.in",
-                "worksFor": {
-                  "@type": "Organization",
-                  "name": "V2V EdTech LLP",
-                  "description": "First job as Mentor"
-                }
+                "@id": "https://pushkarshinde.in/#person"
               }
+            })
+          }}
+        />
+
+        {/* BreadcrumbList for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://pushkarshinde.in"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "About Pushkar Shinde",
+                  "item": "https://pushkarshinde.in/#about"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 3,
+                  "name": "Projects",
+                  "item": "https://pushkarshinde.in/#projects"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 4,
+                  "name": "Contact",
+                  "item": "https://pushkarshinde.in/#contact"
+                }
+              ]
             })
           }}
         />

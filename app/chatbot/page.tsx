@@ -3,40 +3,58 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Send, User, Bot, Menu, X, Home, Copy, Check, MessageCircle, Sparkles } from "lucide-react";
+import { Send, User, Bot, Copy, Check, RefreshCw, AlertTriangle, ArrowLeft } from "lucide-react";
+
+interface Message {
+  sender: "user" | "bot";
+  text: string;
+  isError?: boolean;
+}
 
 const ChatbotPage = () => {
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<Message[]>([
     { 
       sender: "bot", 
-      text: "Hello! 👋 I'm Pushkar's AI assistant, trained on his comprehensive portfolio data. I can help you learn about his professional experience, technical skills, projects, and achievements. What would you like to know?" 
+      text: "Hello! 👋 I'm Pushkar's AI assistant. Ask me anything about his experience, skills, or projects!"
     },
   ]);
   const [input, setInput] = useState("");
   const [isBotTyping, setIsBotTyping] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [serverStatus, setServerStatus] = useState<"online" | "offline" | "checking" | "cold">("checking");
+  const [retryCount, setRetryCount] = useState(0);
+  const [lastFailedPrompt, setLastFailedPrompt] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
-  // Function to format Markdown-like text into HTML
+  useEffect(() => {
+    checkServerStatus();
+  }, []);
+
+  const checkServerStatus = async () => {
+    setServerStatus("checking");
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      
+      const response = await fetch("https://llmapi-production-bc95.up.railway.app/health", {
+        method: "GET",
+        signal: controller.signal,
+      });
+      
+      clearTimeout(timeoutId);
+      setServerStatus(response.ok ? "online" : "cold");
+    } catch {
+      setServerStatus("cold");
+    }
+  };
+
   const formatText = (text: string) => {
     let formattedText = text;
-
-    // Convert newlines to <br /> (excluding code blocks)
     formattedText = formattedText.replace(/\n(?![\s\S]*?```)/g, "<br />");
-
-    // Convert **bold** to <strong>bold</strong>
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
-
-    // Convert *italic* to <em>italic</em>
     formattedText = formattedText.replace(/\*(.*?)\*/g, "<em>$1</em>");
-
-    // Convert * item to <ul><li>item</li></ul> (unordered list)
     formattedText = formattedText.replace(/^\* (.+)$/gm, "<ul><li>$1</li></ul>");
-
-    // Convert numbered lists (e.g., 1. item) to <ol><li>item</li></ol>
     formattedText = formattedText.replace(/^(\d+)\. (.+)$/gm, "<ol><li>$2</li></ol>");
-
     return formattedText;
   };
 
@@ -50,67 +68,102 @@ const ChatbotPage = () => {
     }
   };
 
+  const handleRetry = () => {
+    if (lastFailedPrompt) {
+      setInput(lastFailedPrompt);
+      setMessages(prev => prev.filter((_, idx) => idx !== prev.length - 1));
+      setLastFailedPrompt(null);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
     const userInput = input.trim();
-
-    // Append the user message
     setMessages((prev) => [...prev, { sender: "user", text: userInput }]);
-    // Append an empty bot message as a placeholder
     setMessages((prev) => [...prev, { sender: "bot", text: "" }]);
-
     setIsBotTyping(true);
     setInput("");
+    setRetryCount(0);
 
-    try {
-      const response = await fetch("https://llmapi-production-bc95.up.railway.app/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt: userInput }),
-      });
+    const makeRequest = async (attempt: number): Promise<boolean> => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 60000);
 
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+        const response = await fetch("https://llmapi-production-bc95.up.railway.app/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt: userInput }),
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const resultText = await response.text();
+        const formattedResponse = formatText(resultText);
+
+        setMessages((prevMessages) => {
+          const lastIndex = prevMessages.length - 1;
+          const updatedMessages = [...prevMessages];
+          updatedMessages[lastIndex] = {
+            ...updatedMessages[lastIndex],
+            text: formattedResponse,
+            isError: false,
+          };
+          return updatedMessages;
+        });
+
+        setServerStatus("online");
+        return true;
+      } catch (error: unknown) {
+        console.error(`Attempt ${attempt} failed:`, error);
+        
+        const isAbortError = error instanceof Error && error.name === 'AbortError';
+        
+        if (attempt < 2 && !isAbortError) {
+          setRetryCount(attempt + 1);
+          setMessages((prevMessages) => {
+            const lastIndex = prevMessages.length - 1;
+            const updatedMessages = [...prevMessages];
+            updatedMessages[lastIndex] = {
+              ...updatedMessages[lastIndex],
+              text: `⏳ Server is waking up... Retry ${attempt + 1}/2`,
+              isError: false,
+            };
+            return updatedMessages;
+          });
+          await new Promise(resolve => setTimeout(resolve, 3000));
+          return makeRequest(attempt + 1);
+        }
+        
+        return false;
       }
+    };
 
-      // Get the complete response as text
-      const resultText = await response.text();
+    const success = await makeRequest(0);
 
-      // Format text before updating the bot response
-      const formattedResponse = formatText(resultText);
-
-      // Update the last bot message with the formatted response
+    if (!success) {
+      setLastFailedPrompt(userInput);
+      setServerStatus("cold");
       setMessages((prevMessages) => {
         const lastIndex = prevMessages.length - 1;
         const updatedMessages = [...prevMessages];
         updatedMessages[lastIndex] = {
           ...updatedMessages[lastIndex],
-          text: formattedResponse,
+          text: "The server is currently starting up. This usually takes 30-60 seconds. Please try again in a moment.",
+          isError: true,
         };
         return updatedMessages;
       });
-    } catch (error) {
-      console.error("Error fetching bot response:", error);
-
-      setMessages((prevMessages) => {
-        const lastIndex = prevMessages.length - 1;
-        const updatedMessages = [...prevMessages];
-        updatedMessages[lastIndex] = {
-          ...updatedMessages[lastIndex],
-          text: "I apologize, but I'm experiencing technical difficulties. Please try again in a moment.",
-        };
-        return updatedMessages;
-      });
-    } finally {
-      setIsBotTyping(false);
     }
+
+    setIsBotTyping(false);
   };
 
-  // Auto-scroll to the bottom when messages update
   useEffect(() => {
     if (messages.length > 1) {
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -118,296 +171,251 @@ const ChatbotPage = () => {
   }, [messages]);
 
   const suggestedQuestions = [
-    {
-      text: "Tell me about Pushkar's professional experience",
-      icon: "💼"
-    },
-    {
-      text: "What are his core technical skills?",
-      icon: "⚡"
-    },
-    {
-      text: "Show me his most recent projects",
-      icon: "🚀"
-    },
-    {
-      text: "What technologies does he specialize in?",
-      icon: "💻"
-    }
+    { text: "Tell me about Pushkar's experience", icon: "💼" },
+    { text: "What are his technical skills?", icon: "⚡" },
+    { text: "Show me his recent projects", icon: "🚀" },
+    { text: "What technologies does he use?", icon: "💻" }
   ];
 
   return (
-    <div className="h-screen bg-gradient-to-br from-gray-50 to-white flex overflow-hidden">
-      {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} fixed inset-y-0 left-0 z-50 w-80 bg-white/95 backdrop-blur-xl border-r border-gray-200/50 shadow-2xl transition-transform duration-300 ease-in-out lg:relative lg:translate-x-0`}>
-        <div className="flex flex-col h-full">
-          {/* Sidebar Header */}
-          <div className="p-6 border-b border-gray-200/50">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h2 className="text-xl font-bold text-gray-900">Pushkar AI</h2>
-                  <p className="text-sm text-gray-500">Portfolio Assistant</p>
-                </div>
-              </div>
-              <button
-                onClick={() => setIsSidebarOpen(false)}
-                className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-          </div>
+    <div className="h-screen bg-white flex flex-col overflow-hidden">
+      {/* Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
+        <div className="absolute inset-0" style={{
+          backgroundImage: `radial-gradient(circle at 25% 25%, #f1f5f9 0%, transparent 50%), 
+                           radial-gradient(circle at 75% 75%, #e2e8f0 0%, transparent 50%)`,
+          backgroundSize: '100px 100px'
+        }}></div>
+      </div>
 
-          {/* Navigation */}
-          <div className="flex-1 p-6">
-            <nav className="space-y-2">
-              <Link
-                href="/"
-                className="flex items-center space-x-3 p-4 rounded-xl hover:bg-gray-100 transition-all duration-200 group"
-              >
-                <Home className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                <span className="text-gray-700 group-hover:text-gray-900 font-medium">Back to Portfolio</span>
-              </Link>
-              
-              <div className="pt-6">
-                <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Quick Actions</h3>
-                <button className="w-full flex items-center space-x-3 p-4 rounded-xl hover:bg-gray-100 transition-all duration-200 group text-left">
-                  <MessageCircle className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
-                  <span className="text-gray-700 group-hover:text-gray-900 font-medium">New Conversation</span>
-                </button>
-              </div>
-            </nav>
+      {/* Header */}
+      <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-4 flex items-center justify-between relative z-10">
+        <div className="flex items-center space-x-3">
+          <Link
+            href="/"
+            className="flex items-center space-x-2 p-2 -ml-2 hover:bg-gray-100 rounded-lg transition-colors group"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-600 group-hover:text-blue-600 transition-colors" />
+            <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900 hidden sm:inline">Back to Portfolio</span>
+          </Link>
+        </div>
+        
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gray-900 rounded-lg flex items-center justify-center">
+            <Bot className="w-5 h-5 text-white" />
           </div>
-
-          {/* Sidebar Footer */}
-          <div className="p-6 border-t border-gray-200/50">
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl">
-              <div className="text-center">
-                <div className="flex items-center justify-center space-x-2 mb-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-sm font-medium text-gray-700">AI Assistant Online</span>
-                </div>
-                <p className="text-xs text-gray-500">Built with ❤️ by Pushkar</p>
-              </div>
+          <div className="hidden sm:block">
+            <h1 className="text-lg font-bold text-gray-900">Pushk<span className="text-blue-600">a</span>r AI</h1>
+            <div className="flex items-center space-x-2">
+              <div className={`w-2 h-2 rounded-full ${
+                serverStatus === 'online' ? 'bg-green-500 animate-pulse' :
+                serverStatus === 'cold' ? 'bg-yellow-500' :
+                'bg-gray-400'
+              }`}></div>
+              <p className="text-xs text-gray-500">
+                {serverStatus === 'online' ? 'Ready' : 
+                 serverStatus === 'cold' ? 'Warming up' : 
+                 serverStatus === 'checking' ? 'Connecting...' : 'Offline'}
+              </p>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        {/* Header */}
-        <header className="bg-white/80 backdrop-blur-xl border-b border-gray-200/50 px-6 py-4 flex items-center justify-between shadow-sm">
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={() => setIsSidebarOpen(true)}
-              className="lg:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
-            >
-              <Menu className="w-5 h-5 text-gray-600" />
-            </button>
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Bot className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">Pushkar's AI Assistant</h1>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                  <p className="text-sm text-gray-500">Online & Ready to Help</p>
+        <div className="w-20"></div>
+      </header>
+
+      {/* Chat Area */}
+      <div className="flex-1 overflow-hidden flex flex-col relative z-10">
+        <div className="flex-1 overflow-y-auto px-4 md:px-6 py-6">
+          <div className="max-w-3xl mx-auto space-y-6">
+            {/* Welcome Screen */}
+            {messages.length === 1 && (
+              <div className="text-center py-8 md:py-12">
+                <div className="w-16 h-16 bg-gray-900 rounded-xl flex items-center justify-center mx-auto mb-6">
+                  <Bot className="w-8 h-8 text-white" />
                 </div>
-              </div>
-            </div>
-          </div>
-          
-          <div className="hidden md:flex items-center space-x-2 text-sm text-gray-500">
-            <span>Powered by AI</span>
-            <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-            <span>Real-time responses</span>
-          </div>
-        </header>
-
-        {/* Chat Area */}
-        <div className="flex-1 overflow-hidden flex flex-col">
-          {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto px-6 py-8">
-            <div className="max-w-4xl mx-auto space-y-8">
-              {messages.length === 1 && (
-                <div className="text-center py-16">
-                  <div className="relative mb-8">
-                    <div className="w-20 h-20 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center mx-auto shadow-2xl">
-                      <Bot className="w-10 h-10 text-white" />
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                      <div className="w-2 h-2 bg-white rounded-full"></div>
+                <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  Hi, I&apos;m Pushk<span className="text-blue-600">a</span>r&apos;s AI
+                </h2>
+                <p className="text-gray-500 mb-8 max-w-md mx-auto">
+                  Ask me about his experience, skills, projects, or anything else!
+                </p>
+                
+                {/* Server Status Warning */}
+                {serverStatus === 'cold' && (
+                  <div className="mb-8 p-4 bg-yellow-50 border border-yellow-200 rounded-xl max-w-md mx-auto">
+                    <div className="flex items-start space-x-3">
+                      <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                      <div className="text-left">
+                        <p className="text-sm font-medium text-yellow-800">Server is starting up</p>
+                        <p className="text-xs text-yellow-600 mt-1">First response may take 30-60 seconds.</p>
+                      </div>
                     </div>
                   </div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-4">Welcome to Pushkar's AI Assistant</h2>
-                  <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-                    I'm here to help you learn about Pushkar's professional journey, technical expertise, and project portfolio. 
-                    Ask me anything!
-                  </p>
-                  
-                  {/* Suggested Questions */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
-                    {suggestedQuestions.map((question, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setInput(question.text)}
-                        className="group p-6 text-left bg-white hover:bg-gray-50 rounded-2xl border border-gray-200 hover:border-blue-200 transition-all duration-200 shadow-sm hover:shadow-md"
-                      >
-                        <div className="flex items-start space-x-4">
-                          <span className="text-2xl">{question.icon}</span>
-                          <div className="flex-1">
-                            <p className="text-gray-700 group-hover:text-gray-900 font-medium leading-relaxed">
-                              {question.text}
-                            </p>
-                          </div>
+                )}
+                
+                {/* Suggested Questions */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto">
+                  {suggestedQuestions.map((question, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setInput(question.text)}
+                      className="group p-4 text-left bg-white hover:bg-gray-50 rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <span className="text-xl">{question.icon}</span>
+                        <p className="text-sm text-gray-700 group-hover:text-gray-900">
+                          {question.text}
+                        </p>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Messages */}
+            {messages.map((msg, idx) => (
+              <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                <div className={`flex max-w-[85%] md:max-w-[75%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
+                  {/* Avatar */}
+                  <div className={`flex-shrink-0 ${msg.sender === "user" ? "ml-3" : "mr-3"}`}>
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                      msg.sender === "user" 
+                        ? "bg-blue-600" 
+                        : "bg-gray-900"
+                    }`}>
+                      {msg.sender === "user" ? (
+                        <User className="w-4 h-4 text-white" />
+                      ) : (
+                        <Bot className="w-4 h-4 text-white" />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Message Content */}
+                  <div className={`flex-1 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
+                    <div className={`inline-block px-4 py-3 rounded-2xl ${
+                      msg.sender === "user"
+                        ? "bg-blue-600 text-white rounded-br-md"
+                        : msg.isError 
+                          ? "bg-red-50 text-red-800 border border-red-200 rounded-bl-md"
+                          : "bg-gray-100 text-gray-800 rounded-bl-md"
+                    }`}>
+                      {msg.isError && (
+                        <div className="flex items-center space-x-2 mb-2">
+                          <AlertTriangle className="w-4 h-4 text-red-500" />
+                          <span className="text-xs font-medium text-red-600">Connection Issue</span>
                         </div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {messages.map((msg, idx) => (
-                <div key={idx} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`flex max-w-4xl ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
-                    {/* Avatar */}
-                    <div className={`flex-shrink-0 ${msg.sender === "user" ? "ml-4" : "mr-4"}`}>
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-md ${
-                        msg.sender === "user" 
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700" 
-                          : "bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600"
-                      }`}>
-                        {msg.sender === "user" ? (
-                          <User className="w-5 h-5 text-white" />
-                        ) : (
-                          <Bot className="w-5 h-5 text-white" />
+                      )}
+                      <div
+                        className="text-sm leading-relaxed"
+                        dangerouslySetInnerHTML={{ __html: msg.text }}
+                      />
+                    </div>
+                    
+                    {/* Actions for Bot Messages */}
+                    {msg.sender === "bot" && msg.text && !isBotTyping && (
+                      <div className="flex items-center space-x-2 mt-2">
+                        {msg.isError && lastFailedPrompt && (
+                          <button
+                            onClick={handleRetry}
+                            className="flex items-center space-x-1 px-3 py-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors"
+                          >
+                            <RefreshCw className="w-3 h-3" />
+                            <span>Retry</span>
+                          </button>
+                        )}
+                        {!msg.isError && (
+                          <button
+                            onClick={() => handleCopy(msg.text, idx)}
+                            className="flex items-center space-x-1 px-2 py-1 text-xs text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                          >
+                            {copiedIndex === idx ? (
+                              <>
+                                <Check className="w-3 h-3 text-green-600" />
+                                <span className="text-green-600">Copied</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3 h-3" />
+                                <span>Copy</span>
+                              </>
+                            )}
+                          </button>
                         )}
                       </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+            
+            {/* Typing Indicator */}
+            {isBotTyping && (
+              <div className="flex justify-start">
+                <div className="flex">
+                  <div className="mr-3">
+                    <div className="w-8 h-8 bg-gray-900 rounded-lg flex items-center justify-center">
+                      <Bot className="w-4 h-4 text-white" />
                     </div>
-
-                    {/* Message Content */}
-                    <div className={`flex-1 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
-                      <div className={`inline-block px-6 py-4 rounded-2xl max-w-full shadow-sm ${
-                        msg.sender === "user"
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white"
-                          : "bg-white text-gray-900 border border-gray-200"
-                      }`}>
-                        <div
-                          className={`leading-relaxed ${
-                            msg.sender === "user" ? "text-white" : "text-gray-800"
-                          }`}
-                          dangerouslySetInnerHTML={{ __html: msg.text }}
-                        />
+                  </div>
+                  <div className="bg-gray-100 px-4 py-3 rounded-2xl rounded-bl-md">
+                    <div className="flex items-center space-x-2">
+                      <div className="flex space-x-1">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.15s' }}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.3s' }}></div>
                       </div>
-                      
-                      {/* Copy Button for Bot Messages */}
-                      {msg.sender === "bot" && msg.text && (
-                        <button
-                          onClick={() => handleCopy(msg.text, idx)}
-                          className="mt-3 p-2 hover:bg-gray-100 rounded-lg transition-colors flex items-center space-x-2 text-sm text-gray-500 hover:text-gray-700"
-                          title="Copy message"
-                        >
-                          {copiedIndex === idx ? (
-                            <>
-                              <Check className="w-4 h-4 text-green-600" />
-                              <span className="text-green-600">Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy className="w-4 h-4" />
-                              <span>Copy</span>
-                            </>
-                          )}
-                        </button>
+                      {retryCount > 0 && (
+                        <span className="text-xs text-gray-500 ml-2">Retry {retryCount}/2...</span>
                       )}
                     </div>
                   </div>
                 </div>
-              ))}
-              
-              {/* Typing Indicator */}
-              {isBotTyping && (
-                <div className="flex justify-start">
-                  <div className="flex">
-                    <div className="mr-4">
-                      <div className="w-10 h-10 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-md">
-                        <Bot className="w-5 h-5 text-white" />
-                      </div>
-                    </div>
-                    <div className="bg-white px-6 py-4 rounded-2xl shadow-sm border border-gray-200">
-                      <div className="flex items-center space-x-2">
-                        <div className="flex space-x-1">
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                          <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-                        </div>
-                        <span className="text-sm text-gray-500 ml-2">Thinking...</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
+            
             <div ref={messagesEndRef} />
           </div>
+        </div>
 
-   
-
-{/* Input Area */}
-<div className="border-t border-gray-200/50 bg-white/80 backdrop-blur-xl p-6">
-  <div className="max-w-4xl mx-auto">
-    <form onSubmit={handleSubmit} className="relative">
-      <div className="flex items-end space-x-4">
-        <div className="flex-1 relative">
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Type Here"
-            className="w-full px-6 py-4 pr-14 border border-gray-300 rounded-2xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none max-h-32 min-h-[56px] shadow-sm bg-white text-gray-900 placeholder-gray-500"
-            disabled={isBotTyping}
-            rows={1}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSubmit(e);
-              }
-            }}
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || isBotTyping}
-            className="absolute right-3 bottom-3 p-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-md hover:shadow-lg"
-          >
-            <Send className="w-4 h-4" />
-          </button>
+        {/* Input Area */}
+        <div className="border-t border-gray-200 bg-white p-4">
+          <div className="max-w-3xl mx-auto">
+            <form onSubmit={handleSubmit} className="relative">
+              <div className="flex items-end space-x-3">
+                <div className="flex-1 relative">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    placeholder={serverStatus === 'cold' ? "Server warming up... You can still type" : "Ask me anything..."}
+                    className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none max-h-32 min-h-[48px] text-gray-900 placeholder-gray-400 text-sm"
+                    disabled={isBotTyping}
+                    rows={1}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSubmit(e);
+                      }
+                    }}
+                  />
+                  <button
+                    type="submit"
+                    disabled={!input.trim() || isBotTyping}
+                    className="absolute right-2 bottom-2 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-blue-600"
+                  >
+                    <Send className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            </form>
+            <p className="text-xs text-gray-400 text-center mt-3">
+              Press Enter to send • Shift+Enter for new line
+            </p>
+          </div>
         </div>
       </div>
-    </form>
-    
-    {/* Footer Info */}
-    <div className="mt-4 text-center">
-      <p className="text-sm text-gray-500">
-        <span className="font-medium">💡 Tip:</span> Press Enter to send • Shift+Enter for new line • Ask detailed questions for better responses
-      </p>
-    </div>
-  </div>
-</div>
-        </div>
-      </div>
-
-      {/* Overlay for mobile sidebar */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
     </div>
   );
 };
