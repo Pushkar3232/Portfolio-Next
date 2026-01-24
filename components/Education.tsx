@@ -163,29 +163,29 @@ const Education: React.FC = () => {
   const latestYear = educationData.length > 0 ? educationData[0].year : new Date().getFullYear();
 
   return (
-    <section id="education" className="py-20 bg-gradient-to-b from-white to-gray-50">
+    <section id="education" className="py-12 sm:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
               Education & Certifications
             </h2>
-            <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-2">
               Continuous learning in technology and development
             </p>
           </div>
 
           {/* Education Section */}
-          <div className="mb-20">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center justify-center">
-              <GraduationCap className="w-7 h-7 mr-3 text-gray-900" />
+          <div className="mb-12 sm:mb-16 lg:mb-20">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 sm:mb-6 lg:mb-8 flex items-center justify-center">
+              <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 mr-2 sm:mr-3 text-gray-900" />
               Academic Background
             </h3>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
               {educationData.length === 0 ? (
-                <div className="md:col-span-2 lg:col-span-3 bg-white rounded-2xl p-8 shadow-sm border border-gray-200 text-center">
+                <div className="sm:col-span-2 lg:col-span-3 bg-white rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-200 text-center">
                   <GraduationCap className="w-12 h-12 text-gray-400 mx-auto mb-3" />
                   <p className="text-gray-500">No education entries yet</p>
                 </div>
@@ -193,27 +193,27 @@ const Education: React.FC = () => {
                 educationData.map((edu) => (
                   <div 
                     key={edu.id} 
-                    className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-300 group"
+                    className="bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-200 hover:shadow-lg hover:border-gray-300 transition-all duration-300 group"
                   >
                     <div className="flex flex-col h-full">
-                      <div className="flex items-start space-x-4 mb-4">
-                        <div className="w-14 h-14 bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                          <GraduationCap className="w-7 h-7 text-white" />
+                      <div className="flex items-start space-x-3 sm:space-x-4 mb-3 sm:mb-4">
+                        <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                          <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-white" />
                         </div>
                         <div className="flex-1">
-                          <h4 className="text-lg font-bold text-gray-900 leading-tight">
+                          <h4 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
                             {edu.degree}
                           </h4>
-                          <p className="text-gray-700 font-medium text-sm mt-1">
+                          <p className="text-gray-700 font-medium text-xs sm:text-sm mt-0.5 sm:mt-1">
                             {edu.institution}
                           </p>
                         </div>
                       </div>
-                      <div className="flex items-center text-gray-500 mb-3">
-                        <Calendar className="w-4 h-4 mr-2" />
-                        <span className="text-sm font-medium">{edu.status} • {edu.year}</span>
+                      <div className="flex items-center text-gray-500 mb-2 sm:mb-3">
+                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
+                        <span className="text-xs sm:text-sm font-medium">{edu.status} • {edu.year}</span>
                       </div>
-                      <p className="text-gray-600 text-sm leading-relaxed flex-grow">
+                      <p className="text-gray-600 text-xs sm:text-sm leading-relaxed flex-grow">
                         {edu.description}
                       </p>
                     </div>
@@ -224,9 +224,9 @@ const Education: React.FC = () => {
           </div>
 
           {/* Certifications Section - Bento Grid */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-gray-900 mb-8 flex items-center justify-center">
-              <Award className="w-7 h-7 mr-3 text-gray-900" />
+          <div className="mb-10 sm:mb-12 lg:mb-16">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 sm:mb-6 lg:mb-8 flex items-center justify-center">
+              <Award className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 mr-2 sm:mr-3 text-gray-900" />
               Professional Certifications
             </h3>
             
@@ -276,37 +276,37 @@ const Education: React.FC = () => {
           </div>
 
           {/* Stats Section */}
-          <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-violet-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <Trophy className="w-7 h-7 text-white" />
+          <div className="mt-10 sm:mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
+            <div className="text-center bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+              <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-blue-500 to-violet-500 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <Trophy className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-white" />
               </div>
-              <h4 className="text-3xl font-bold text-gray-900 mb-2">{certificates.length}+</h4>
-              <p className="text-gray-600">Professional Certifications</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{certificates.length}+</h4>
+              <p className="text-gray-600 text-xs sm:text-sm lg:text-base">Professional Certifications</p>
             </div>
-            <div className="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
-              <div className="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <IconBrain className="w-7 h-7 text-white" />
+            <div className="text-center bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+              <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-emerald-500 to-green-500 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <IconBrain className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-white" />
               </div>
-              <h4 className="text-3xl font-bold text-gray-900 mb-2">{aiMlCertCount > 0 ? 'AI/ML' : 'Tech'}</h4>
-              <p className="text-gray-600">Specialization Focus</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{aiMlCertCount > 0 ? 'AI/ML' : 'Tech'}</h4>
+              <p className="text-gray-600 text-xs sm:text-sm lg:text-base">Specialization Focus</p>
             </div>
-            <div className="text-center bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
-              <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center mx-auto mb-4">
-                <GraduationCap className="w-7 h-7 text-white" />
+            <div className="text-center bg-white rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300">
+              <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-white" />
               </div>
-              <h4 className="text-3xl font-bold text-gray-900 mb-2">{latestYear}</h4>
-              <p className="text-gray-600">Most Recent Year</p>
+              <h4 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">{latestYear}</h4>
+              <p className="text-gray-600 text-xs sm:text-sm lg:text-base">Most Recent Year</p>
             </div>
           </div>
 
           {/* Learning Philosophy */}
-          <div className="mt-16 text-center">
-            <div className="inline-block bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 shadow-xl max-w-3xl">
-              <h3 className="text-2xl font-bold text-white mb-4">
+          <div className="mt-10 sm:mt-12 lg:mt-16 text-center">
+            <div className="inline-block bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-xl max-w-3xl mx-4">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-white mb-3 sm:mb-4">
                 Learning Philosophy
               </h3>
-              <p className="text-gray-300 leading-relaxed">
+              <p className="text-gray-300 leading-relaxed text-xs sm:text-sm lg:text-base">
                 Staying ahead in technology requires continuous learning. My focus on AI/ML and leadership 
                 skills reflects my commitment to both technical excellence and professional growth.
               </p>

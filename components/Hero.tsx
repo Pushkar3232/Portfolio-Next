@@ -54,10 +54,10 @@ const Hero = () => {
         <div className="absolute top-1/3 right-10 w-2 h-20 bg-gradient-to-b from-gray-400 to-transparent opacity-20"></div>
       </div>
 
-      <div className="container mx-auto px-6 z-10">
+      <div className="container mx-auto px-4 sm:px-6 z-10">
         <div className={`max-w-6xl mx-auto transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
           
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             
             {/* Left Column - Content */}
             <div className="space-y-8">
@@ -65,9 +65,8 @@ const Hero = () => {
               
 
               {/* Main Heading */}
-              <br /><br /><br />
-              <div>
-                <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight">
+              <div className="pt-16 sm:pt-20 lg:pt-0">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
                   <span className="block">
                     Pushk<span className="text-blue-600">a</span>r
                   </span>
@@ -77,46 +76,46 @@ const Hero = () => {
                 </h1>
                 
                 {/* Dynamic Role */}
-                <div className="h-12 mb-6">
-                  <p className="text-xl lg:text-2xl text-gray-600 font-medium">
+                <div className="h-10 sm:h-12 mb-4 sm:mb-6">
+                  <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 font-medium">
                     {displayText}
                     <span className="animate-pulse text-blue-600">|</span>
                   </p>
                 </div>
                 
                 {/* Tagline */}
-                <p className="text-lg text-blue-600 font-semibold mb-6">
+                <p className="text-base sm:text-lg text-blue-600 font-semibold mb-4 sm:mb-6">
                   I Build Brains for Machines
                 </p>
               </div>
 
               {/* Description */}
-              <p className="text-gray-600 text-lg leading-relaxed max-w-lg">
+              <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-lg">
                 Hey, I am Pushkar. I want to simplify the world through software. 
                 My passion lies in solving real-world problems that people face every day.
               </p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <a
                   href="#projects"
-                  className="group px-8 py-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-300 flex items-center justify-center space-x-2"
+                  className="group px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
                   <span>View My Work</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 <a
                   href="/chatbot"
-                  className="px-8 py-4 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2"
-                >
+                  className="px-6 sm:px-8 py-3 sm:py-4 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
+>
                   
                   <span>Chat with AI</span>
                 </a>
               </div>
 
               {/* Social Links */}
-              <div className="flex items-center space-x-1">
-                <span className="text-gray-500 text-sm mr-4">Connect with me:</span>
+              <div className="flex items-center flex-wrap gap-1">
+                <span className="text-gray-500 text-xs sm:text-sm mr-2 sm:mr-4">Connect with me:</span>
                 {[
                   { icon: Github, href: "https://github.com/Pushkar3232", label: "GitHub" },
                   { icon: Linkedin, href: "https://linkedin.com/in/pushkarshinde6/", label: "LinkedIn" },
@@ -137,10 +136,10 @@ const Hero = () => {
             </div>
 
             {/* Right Column - Photo */}
-            <div className="flex justify-center lg:justify-end">
+            <div className="flex justify-center lg:justify-end order-first lg:order-last mb-6 lg:mb-0">
               <div className="relative">
                 {/* Photo Container */}
-                <div className="relative w-80 h-80 lg:w-96 lg:h-96">
+                <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
                   {/* Background Elements */}
                   <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-gray-100 rounded-2xl transform rotate-3"></div>
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-blue-50 rounded-2xl transform -rotate-3"></div>
