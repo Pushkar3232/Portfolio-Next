@@ -9,3 +9,98 @@
 ✓ Starting...
 ✓ Ready in 1556ms
  GET / 200 in 900ms (compile: 423ms, render: 477ms)
+ GET / 200 in 57ms (compile: 10ms, render: 47ms)
+ GET / 200 in 149ms (compile: 14ms, render: 135ms)
+ GET /chatbot 200 in 267ms (compile: 126ms, render: 140ms)
+ GET /chatbot 200 in 382ms (compile: 102ms, render: 280ms)
+ GET /chatbot 200 in 267ms (compile: 5ms, render: 262ms)
+ GET /chatbot 200 in 276ms (compile: 7ms, render: 269ms)
+ GET /chatbot 200 in 260ms (compile: 5ms, render: 255ms)
+ GET /chatbot 200 in 223ms (compile: 4ms, render: 219ms)
+ GET /chatbot 200 in 230ms (compile: 5ms, render: 224ms)
+ GET /chatbot 200 in 254ms (compile: 4ms, render: 250ms)
+ GET /chatbot 200 in 263ms (compile: 8ms, render: 255ms)
+ GET /chatbot 200 in 217ms (compile: 8ms, render: 209ms)
+ GET /chatbot 200 in 216ms (compile: 6ms, render: 211ms)
+ GET /chatbot 200 in 266ms (compile: 6ms, render: 260ms)
+ GET /chatbot 200 in 233ms (compile: 5ms, render: 228ms)
+ GET /chatbot 200 in 276ms (compile: 4ms, render: 271ms)
+ GET /chatbot 200 in 284ms (compile: 8ms, render: 276ms)
+ GET /chatbot 200 in 282ms (compile: 8ms, render: 274ms)
+ GET /chatbot 200 in 237ms (compile: 5ms, render: 231ms)
+ GET /chatbot 200 in 284ms (compile: 6ms, render: 278ms)
+ GET /chatbot 200 in 244ms (compile: 5ms, render: 238ms)
+ GET /chatbot 200 in 205ms (compile: 7ms, render: 198ms)
+ GET /chatbot 200 in 154ms (compile: 5ms, render: 149ms)
+ GET /chatbot 200 in 108ms (compile: 9ms, render: 100ms)
+ GET /chatbot 200 in 58ms (compile: 6ms, render: 52ms)
+ GET /chatbot 200 in 202ms (compile: 82ms, render: 120ms)
+ GET /chatbot 200 in 90ms (compile: 4ms, render: 86ms)
+ GET /chatbot 200 in 62ms (compile: 8ms, render: 54ms)
+ GET /chatbot 200 in 264ms (compile: 86ms, render: 178ms)
+ GET /chatbot 200 in 181ms (compile: 5ms, render: 176ms)
+ GET /chatbot 200 in 181ms (compile: 3ms, render: 177ms)
+ GET /chatbot 200 in 163ms (compile: 4ms, render: 160ms)
+ GET /chatbot 200 in 200ms (compile: 4ms, render: 196ms)
+ GET /chatbot 200 in 174ms (compile: 5ms, render: 169ms)
+ GET /chatbot 200 in 194ms (compile: 4ms, render: 190ms)
+ GET /chatbot 200 in 167ms (compile: 4ms, render: 163ms)
+ GET /chatbot 200 in 166ms (compile: 5ms, render: 161ms)
+ GET /chatbot 200 in 197ms (compile: 4ms, render: 193ms)
+ GET /chatbot 200 in 208ms (compile: 5ms, render: 203ms)
+ GET /chatbot 200 in 220ms (compile: 5ms, render: 215ms)
+ GET /chatbot 200 in 243ms (compile: 4ms, render: 238ms)
+ GET /chatbot 200 in 249ms (compile: 9ms, render: 240ms)
+ GET /chatbot 200 in 218ms (compile: 4ms, render: 214ms)
+ GET /chatbot 200 in 216ms (compile: 4ms, render: 212ms)
+ GET /chatbot 200 in 196ms (compile: 6ms, render: 190ms)
+ GET /chatbot 200 in 159ms (compile: 6ms, render: 153ms)
+ GET /chatbot 200 in 104ms (compile: 6ms, render: 99ms)
+ GET /chatbot 200 in 71ms (compile: 4ms, render: 66ms)
+ GET /chatbot 200 in 42ms (compile: 7ms, render: 35ms)
+✓ Compiled in 124ms
+ GET /api/chat/health 200 in 420ms (compile: 401ms, render: 19ms)
+✓ Compiled in 81ms
+✓ Compiled in 138ms
+✓ Compiled in 70ms
+  Reload env: .env.local
+ GET /chatbot 200 in 85ms (compile: 32ms, render: 52ms)
+  Reload env: .env.local
+ GET /chatbot 200 in 71ms (compile: 27ms, render: 44ms)
+ GET /chatbot 200 in 139ms (compile: 3ms, render: 136ms)
+ GET /api/chat/health 200 in 27ms (compile: 15ms, render: 11ms)
+ GET / 200 in 63ms (compile: 32ms, render: 30ms)
+ GET / 200 in 286ms (compile: 5ms, render: 281ms)
+ GET /favicon.svg 404 in 177ms (compile: 92ms, render: 86ms)
+  Reload env: .env.local
+ GET / 200 in 89ms (compile: 46ms, render: 43ms)
+ GET /chatbot 200 in 154ms (compile: 20ms, render: 135ms)
+ GET /api/chat/health 200 in 80ms (compile: 35ms, render: 45ms)
+⨯ Error: 403 "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/2efdb8d4-c514-4afe-9d9c-bb91bb172ccd."
+    at ignore-listed frames {
+  status: 403,
+  headers: Headers {
+    date: 'Sun, 08 Mar 2026 14:57:17 GMT',
+    'content-type': 'application/json',
+    'transfer-encoding': 'chunked',
+    connection: 'keep-alive',
+    'content-encoding': 'gzip',
+    vary: 'origin, access-control-request-method, access-control-request-headers',
+    'access-control-allow-origin': '*',
+    'access-control-expose-headers': '*',
+    'x-envoy-wasm-service': 'prod-ic-inference-api',
+    'x-envoy-wasm-route': 'ic-protected-inference-api',
+    'cf-cache-status': 'DYNAMIC',
+    'set-cookie': '__cf_bm=bkq5cyL_PoHmG1UlWx5O3N1lgyL6lDdtMrMZkTjXgX8-1772981837-1.0.1.1-Fb8awK0c2gCiwnm2UfsBC8f6Zx9TFIvJ78Pv.PwSgmNp0Cc6UXEE4UsFigRdOMnJRCmeH4byQ59S37l1thzh7J5zsznXGMpWMQ.lC23sWz8; path=/; expires=Sun, 08-Mar-26 15:27:17 GMT; domain=.x.ai; HttpOnly; Secure; SameSite=None',
+    'strict-transport-security': 'max-age=31536000',
+    server: 'cloudflare',
+    'cf-ray': '9d92b1024ef18730-BOM'
+  },
+  requestID: null,
+  error: "Your newly created team doesn't have any credits or licenses yet. You can purchase those on https://console.x.ai/team/2efdb8d4-c514-4afe-9d9c-bb91bb172ccd.",
+  code: undefined,
+  param: undefined,
+  type: undefined
+}
+ POST /api/chat 500 in 2.2s (compile: 1489ms, render: 699ms)
+[?25h
