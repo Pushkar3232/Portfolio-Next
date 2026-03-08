@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { getCache, setCache, DEFAULT_TTL } from '@/lib/cacheUtils';
 import { GraduationCap, Award, BookOpen, Calendar, ExternalLink, Trophy } from 'lucide-react';
 import { BentoGrid, BentoGridItem } from './ui/bento-grid';
 import { cn } from '@/lib/utils';
@@ -62,6 +63,22 @@ const Education: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Try to load from cache first
+    const cachedEducation = getCache<EducationData[]>('education');
+    const cachedCerts = getCache<Certificate[]>('certificates');
+
+    if (cachedEducation) {
+      setEducationData(cachedEducation);
+    }
+    if (cachedCerts) {
+      setCertificates(cachedCerts);
+    }
+
+    // If both are cached, set loading to false immediately
+    if (cachedEducation && cachedCerts) {
+      setLoading(false);
+    }
+
     // Fetch Education Data
     const educationQuery = query(
       collection(db, 'education'),
@@ -76,10 +93,15 @@ const Education: React.FC = () => {
           data.push({ id: doc.id, ...doc.data() } as EducationData);
         });
         setEducationData(data);
+        setCache('education', data, DEFAULT_TTL);
         console.log('Education data loaded:', data);
       },
       (error) => {
         console.error('Error fetching education:', error);
+        // Use cached data if available
+        if (!cachedEducation) {
+          setLoading(false);
+        }
       }
     );
 
@@ -114,11 +136,15 @@ const Education: React.FC = () => {
         });
         
         setCertificates(sortedData);
+        setCache('certificates', sortedData, DEFAULT_TTL);
         setLoading(false);
       },
       (error) => {
         console.error('Error fetching certificates:', error);
-        setLoading(false);
+        // Use cached data if available
+        if (!cachedCerts) {
+          setLoading(false);
+        }
       }
     );
 

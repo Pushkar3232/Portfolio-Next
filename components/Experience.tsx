@@ -8,6 +8,8 @@ import { db } from '../lib/firebase';
 import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer, staggerContainerFast, viewportOnce } from '@/lib/animations';
 import { GridBackground } from '@/components/ui/grid-background';
 import { GlowingEffect } from '@/components/ui/glowing-effect';
+import { useFirebaseDataWithCache } from '@/lib/useFirebaseCache';
+import { getCache, setCache, DEFAULT_TTL } from '@/lib/cacheUtils';
 
 interface ExperienceData {
   id: string;
@@ -26,8 +28,18 @@ interface ExperienceData {
 const Experience: React.FC = () => {
   const [experiences, setExperiences] = useState<ExperienceData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isCached, setIsCached] = useState(false);
 
   useEffect(() => {
+    // Try to load from cache first
+    const cachedExperiences = getCache<ExperienceData[]>('experiences');
+    if (cachedExperiences) {
+      setExperiences(cachedExperiences);
+      setIsCached(true);
+      setLoading(false);
+    }
+
+    // Set up real-time listener
     const q = query(
       collection(db, 'experiences'),
       where('isActive', '==', true),
@@ -45,12 +57,14 @@ const Experience: React.FC = () => {
           } as ExperienceData);
         });
         setExperiences(experiencesData);
+        setCache('experiences', experiencesData, DEFAULT_TTL);
+        setIsCached(false);
         setLoading(false);
       },
       (error) => {
         console.error('Error fetching experiences:', error);
         // If index error, try simpler query without orderBy
-        if (error.code === 'failed-precondition') {
+        if ((error as any).code === 'failed-precondition') {
           const simpleQuery = query(
             collection(db, 'experiences'),
             where('isActive', '==', true)
@@ -66,9 +80,15 @@ const Experience: React.FC = () => {
             // Sort on client side
             experiencesData.sort((a, b) => a.order - b.order);
             setExperiences(experiencesData);
+            setCache('experiences', experiencesData, DEFAULT_TTL);
             setLoading(false);
           });
         } else {
+          // If error and we have cached data, use it
+          if (cachedExperiences) {
+            setExperiences(cachedExperiences);
+            setIsCached(true);
+          }
           setLoading(false);
         }
       }
