@@ -3,8 +3,10 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Send, User, Bot, Copy, Check, RefreshCw, AlertTriangle, ArrowLeft } from "lucide-react";
+import { Send, User, Bot, Copy, Check, RefreshCw, AlertTriangle, ArrowLeft, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { GridBackground } from "@/components/ui/grid-background";
+import { fadeInUp, staggerContainer } from "@/lib/animations";
 
 interface Message {
   sender: "user" | "bot";
@@ -190,113 +192,78 @@ const ChatbotPage = () => {
   ];
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none dark:opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, var(--secondary) 0%, transparent 50%), 
-                           radial-gradient(circle at 75% 75%, var(--muted) 0%, transparent 50%)`,
-          backgroundSize: '100px 100px'
-        }}></div>
+    <div className="h-screen bg-background flex flex-col overflow-hidden relative">
+      {/* Grid Background Pattern */}
+      <GridBackground className="opacity-40 pointer-events-none" />
+
+      {/* Minimal Header - Back Button Only */}
+      <div className="px-3 md:px-6 py-3 flex items-center z-20 sticky top-0">
+        <Link
+          href="/"
+          className="p-2 -ml-2 hover:bg-secondary/50 rounded-lg transition-all duration-200 group"
+        >
+          <ArrowLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+        </Link>
       </div>
-
-      {/* Header */}
-      <header className="bg-background border-b border-border px-4 md:px-6 py-4 flex items-center justify-between relative z-10">
-        <motion.div 
-          className="flex items-center space-x-3"
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <Link
-            href="/"
-            className="flex items-center space-x-2 p-2 -ml-2 hover:bg-secondary rounded-lg transition-all duration-200 group"
-          >
-            <ArrowLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-            <span className="text-sm font-medium text-foreground group-hover:text-primary hidden sm:inline transition-colors">Back</span>
-          </Link>
-        </motion.div>
-        
-        <motion.div 
-          className="flex items-center space-x-3"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-            <Bot className="w-5 h-5 text-primary-foreground" />
-          </div>
-          <div className="hidden sm:block">
-            <h1 className="text-lg font-bold font-display text-foreground">Pushk<span className="text-primary">a</span>r AI</h1>
-            <div className="flex items-center space-x-2">
-              <motion.div 
-                className={`w-2 h-2 rounded-full ${
-                  serverStatus === 'online' ? 'bg-green-500' :
-                  serverStatus === 'checking' ? 'bg-yellow-500' :
-                  'bg-destructive'
-                }`}
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              ></motion.div>
-              <p className="text-xs text-muted-foreground">
-                {serverStatus === 'online' ? 'Ready' : 
-                 serverStatus === 'checking' ? 'Connecting...' : 'Offline'}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
-        <div className="w-20"></div>
-      </header>
 
       {/* Chat Area */}
       <div className="flex-1 overflow-hidden flex flex-col relative z-10">
-        <div className="flex-1 overflow-y-auto px-4 md:px-6 py-6">
-          <div className="max-w-2xl mx-auto space-y-4">
+        <div className="flex-1 overflow-y-auto px-3 sm:px-4 md:px-6 py-6 md:py-8">
+          <div className="max-w-2xl mx-auto space-y-5 ">
             {/* Welcome Screen */}
             <AnimatePresence>
               {messages.length === 1 && (
                 <motion.div 
-                  className="text-center py-8 md:py-12"
+                  className="text-center py-8 md:py-16"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 0.6 }}
+                  variants={staggerContainer}
                 >
                   <motion.div 
-                    className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto mb-6"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    className="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 rounded-2xl flex items-center justify-center mx-auto mb-6 md:mb-8"
+                    animate={{ y: [0, -12, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                    variants={fadeInUp}
                   >
-                    <Bot className="w-8 h-8 text-primary-foreground" />
+                    <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-primary/70" />
                   </motion.div>
-                  <h2 className="text-3xl md:text-4xl font-bold font-display text-foreground mb-2">
-                    Hi, I&apos;m Pushk<span className="text-primary">a</span>r&apos;s AI
-                  </h2>
-                  <p className="text-muted-foreground mb-8 max-w-md mx-auto">
-                    Ask me about his experience, skills, projects, or anything else!
-                  </p>
+                  <motion.h2 
+                    className="text-3xl sm:text-4xl md:text-5xl font-bold font-display text-foreground mb-2 md:mb-4 leading-tight"
+                    variants={fadeInUp}
+                  >
+                    Hey, I&apos;m Pushk<span className="text-primary">a</span>r&apos;s AI
+                  </motion.h2>
+                  <motion.p 
+                    className="text-base md:text-lg text-muted-foreground mb-8 md:mb-12 max-w-md mx-auto font-medium"
+                    variants={fadeInUp}
+                  >
+                    Ask me anything about his experience, skills, projects, or anything else!
+                  </motion.p>
                   
                   {/* Suggested Questions */}
                   <motion.div 
-                    className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl mx-auto"
+                    className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.2 }}
+                    transition={{ duration: 0.6, delay: 0.3 }}
+                    variants={staggerContainer}
                   >
                     {suggestedQuestions.map((question, index) => (
                       <motion.button
                         key={index}
                         onClick={() => setInput(question.text)}
-                        className="group p-4 text-left bg-card hover:bg-secondary border border-border rounded-xl transition-all duration-200 active:scale-95"
+                        className="group p-4 md:p-5 text-left bg-card/20 hover:bg-card/40 border border-border/40 hover:border-primary/50 rounded-xl md:rounded-2xl transition-all duration-300 active:scale-95 backdrop-blur-sm"
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                        whileHover={{ y: -2 }}
+                        transition={{ duration: 0.4, delay: 0.3 + index * 0.08 }}
+                        whileHover={{ y: -4, border: "1px solid hsl(var(--primary))" }}
+                        variants={fadeInUp}
                       >
-                        <div className="flex items-center space-x-3">
-                          <span className="text-xl group-hover:scale-110 transition-transform">{question.icon}</span>
-                          <p className="text-sm text-foreground group-hover:text-primary transition-colors">
+                        <div className="flex items-start space-x-3">
+                          <span className="text-2xl group-hover:scale-125 transition-transform duration-300">{question.icon}</span>
+                          <p className="text-sm md:text-base text-foreground group-hover:text-primary transition-colors font-medium">
                             {question.text}
                           </p>
                         </div>
@@ -320,21 +287,21 @@ const ChatbotPage = () => {
                 >
                   <div className={`flex max-w-[85%] md:max-w-[70%] ${msg.sender === "user" ? "flex-row-reverse" : "flex-row"}`}>
                     {/* Avatar */}
-                    <div className={`flex-shrink-0 ${msg.sender === "user" ? "ml-3" : "mr-3"}`}>
+                    <div className={`flex-shrink-0 ${msg.sender === "user" ? "ml-2 md:ml-3" : "mr-2 md:mr-3"}`}>
                       <motion.div 
-                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                        className={`w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                           msg.sender === "user" 
-                            ? "bg-primary" 
-                            : "bg-secondary"
+                            ? "bg-primary/30 border border-primary/40" 
+                            : "bg-secondary/20 border border-border/40"
                         }`}
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ duration: 0.3 }}
                       >
                         {msg.sender === "user" ? (
-                          <User className="w-4 h-4 text-primary-foreground" />
+                          <User className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary" />
                         ) : (
-                          <Bot className="w-4 h-4 text-foreground" />
+                          <Sparkles className="w-3.5 h-3.5 md:w-4 md:h-4 text-foreground" />
                         )}
                       </motion.div>
                     </div>
@@ -342,12 +309,12 @@ const ChatbotPage = () => {
                     {/* Message Content */}
                     <div className={`flex-1 ${msg.sender === "user" ? "text-right" : "text-left"}`}>
                       <motion.div 
-                        className={`inline-block px-4 py-3 rounded-2xl ${
+                        className={`inline-block px-4 py-2.5 md:px-4 md:py-3 rounded-2xl ${
                           msg.sender === "user"
-                            ? "bg-primary text-primary-foreground rounded-br-md"
+                            ? "bg-primary/70 text-primary-foreground rounded-br-md shadow-lg shadow-primary/20 backdrop-blur-md"
                             : msg.isError 
-                              ? "bg-destructive/10 text-destructive border border-destructive/30 rounded-bl-md"
-                              : "bg-secondary text-foreground rounded-bl-md"
+                              ? "bg-destructive/10 text-destructive border border-destructive/30 rounded-bl-md backdrop-blur-sm"
+                              : "bg-secondary/30 text-foreground rounded-bl-md border border-border/40 backdrop-blur-md"
                         }`}
                         initial={{ opacity: 0, scale: 0.9 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -361,7 +328,7 @@ const ChatbotPage = () => {
                         )}
                         {/* Show bouncing dots while streaming hasn't started yet */}
                         {msg.sender === "bot" && isBotTyping && idx === messages.length - 1 && msg.text === "" ? (
-                          <div className="flex space-x-1 py-1">
+                          <div className="flex space-x-1.5 py-1">
                             <motion.div 
                               className="w-2 h-2 bg-muted-foreground rounded-full"
                               animate={{ y: [0, -6, 0] }}
@@ -380,7 +347,7 @@ const ChatbotPage = () => {
                           </div>
                         ) : (
                           <div
-                            className="text-sm leading-relaxed"
+                            className="text-sm md:text-base leading-relaxed"
                             dangerouslySetInnerHTML={{ __html: msg.text }}
                           />
                         )}
@@ -408,7 +375,7 @@ const ChatbotPage = () => {
                             {!msg.isError && (
                               <button
                                 onClick={() => handleCopy(msg.text, idx)}
-                                className="flex items-center space-x-1 px-2 py-1 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-all duration-200"
+                                className="flex items-center space-x-1 px-2 py-1.5 text-xs text-muted-foreground hover:text-foreground hover:bg-secondary/30 rounded-lg transition-all duration-200"
                               >
                                 {copiedIndex === idx ? (
                                   <>
@@ -437,16 +404,16 @@ const ChatbotPage = () => {
         </div>
 
         {/* Input Area */}
-        <div className="border-t border-border bg-background p-4 backdrop-blur-sm">
+        <div className=" p-3 md:p-4">
           <div className="max-w-2xl mx-auto">
             <form onSubmit={handleSubmit} className="relative">
-              <div className="flex items-end space-x-3">
+              <div className="flex items-end space-x-2 md:space-x-3">
                 <div className="flex-1 relative">
                   <motion.textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     placeholder="Ask me anything about Pushkar..."
-                    className="w-full px-4 py-3 pr-12 border border-border bg-card text-foreground placeholder-muted-foreground rounded-xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none max-h-32 min-h-[48px] text-sm transition-all duration-200"
+                    className="w-full px-3 md:px-4 py-2.5 md:py-3 pr-10 md:pr-12 border border-border/50 bg-background/30 text-foreground placeholder-muted-foreground rounded-xl md:rounded-2xl focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent resize-none max-h-32 min-h-[44px] md:min-h-[48px] text-sm md:text-base transition-all duration-200 backdrop-blur-md"
                     disabled={isBotTyping}
                     rows={1}
                     onKeyDown={(e) => {
@@ -462,8 +429,8 @@ const ChatbotPage = () => {
                   <motion.button
                     type="submit"
                     disabled={!input.trim() || isBotTyping}
-                    className="absolute right-2 bottom-2 p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary"
-                    whileHover={{ scale: 1.1 }}
+                    className="absolute right-2 md:right-2 bottom-2 md:bottom-2.5 p-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-primary shadow-lg shadow-primary/20"
+                    whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <Send className="w-4 h-4" />
@@ -471,7 +438,7 @@ const ChatbotPage = () => {
                 </div>
               </div>
             </form>
-            <p className="text-xs text-muted-foreground text-center mt-3">
+            <p className="text-xs text-muted-foreground/70 text-center mt-2 md:mt-3 font-medium">
               Powered by Grok &middot; Shift+Enter for new line
             </p>
           </div>
