@@ -12,30 +12,29 @@ import Hackathon from '../components/Hackathon'
 import Projects from '../components/Projects'
 import Contact from '../components/Contact'
 import Footer from '../components/Footer'
-import { LoaderThree } from '@/components/ui/loader'
+import LoadingLines from '@/components/ui/loading-lines'
 
 export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate loading time
     const timer = setTimeout(() => {
       setLoading(false)
-    }, 2000) // Adjust timing as needed
+    }, 2000)
 
     return () => clearTimeout(timer)
   }, [])
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center">
-        <LoaderThree />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <LoadingLines />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+    <div className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
       <About />

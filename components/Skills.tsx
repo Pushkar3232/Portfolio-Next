@@ -4,6 +4,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Code, Database, Globe, Brain } from 'lucide-react';
 import { fadeInUp, scaleIn, staggerContainer, staggerContainerFast, viewportOnce } from '@/lib/animations';
+import { GridBackground } from '@/components/ui/grid-background';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 const Skills: React.FC = () => {
   const skillCategories = [
@@ -35,8 +37,9 @@ const Skills: React.FC = () => {
   ];
 
   return (
-    <section id="skills" className="py-12 sm:py-16 lg:py-20 bg-white">
-      <div className="container mx-auto px-4">
+    <section id="skills" className="relative py-12 sm:py-16 lg:py-20 bg-background overflow-hidden">
+      <GridBackground />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <motion.div
@@ -46,10 +49,10 @@ const Skills: React.FC = () => {
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
+            <h2 className="text-display text-foreground mb-3 sm:mb-4">
               Skills & Technologies
             </h2>
-            <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-2">
+            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2">
               Specialized in AI & GenAI with full-stack development expertise
             </p>
           </motion.div>
@@ -66,21 +69,24 @@ const Skills: React.FC = () => {
               <motion.div
                 key={categoryIndex}
                 variants={scaleIn}
-                className="bg-white rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg border border-gray-200"
+                className="relative bg-card rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg border border-border"
                 whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(0,0,0,0.1)', transition: { duration: 0.2 } }}
               >
-                <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-                  <div className="text-gray-700">
-                    {category.icon}
-                  </div>
-                  <h3 className="text-sm sm:text-base lg:text-lg font-bold text-gray-900">{category.category}</h3>
-                </div>
-                <div className="space-y-1.5 sm:space-y-2">
-                  {category.skills.map((skill, skillIndex) => (
-                    <div key={skillIndex} className="text-gray-600 font-medium text-xs sm:text-sm lg:text-base">
-                      {skill}
+                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+                <div className="relative z-10">
+                  <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
+                    <div className="text-foreground">
+                      {category.icon}
                     </div>
-                  ))}
+                    <h3 className="text-sm sm:text-base lg:text-lg font-bold text-foreground">{category.category}</h3>
+                  </div>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    {category.skills.map((skill, skillIndex) => (
+                      <div key={skillIndex} className="text-muted-foreground font-medium text-xs sm:text-sm lg:text-base">
+                        {skill}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -94,7 +100,7 @@ const Skills: React.FC = () => {
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 lg:mb-8">All Technologies</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6 lg:mb-8">All Technologies</h3>
             <motion.div
               className="flex flex-wrap justify-center gap-2 sm:gap-3"
               variants={staggerContainerFast}

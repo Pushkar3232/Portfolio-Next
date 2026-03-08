@@ -2,7 +2,7 @@
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center relative bg-white">
+    <div className="min-h-screen flex items-center justify-center relative bg-background">
       {/* Subtle Background Pattern */}
       <div className="absolute inset-0 opacity-30">
         <div className="absolute inset-0" style={{
@@ -14,47 +14,47 @@ export default function NotFound() {
 
       {/* Geometric Shapes */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-32 h-32 border border-gray-200 rounded-full opacity-20"></div>
-        <div className="absolute bottom-32 left-20 w-24 h-24 border border-blue-200 rounded-full opacity-30"></div>
-        <div className="absolute top-1/2 left-10 w-2 h-16 bg-gradient-to-b from-blue-500 to-transparent opacity-20"></div>
-        <div className="absolute top-1/3 right-10 w-2 h-20 bg-gradient-to-b from-gray-400 to-transparent opacity-20"></div>
+        <div className="absolute top-20 right-20 w-32 h-32 border border-border rounded-full opacity-20"></div>
+        <div className="absolute bottom-32 left-20 w-24 h-24 border border-primary/30 rounded-full opacity-30"></div>
+        <div className="absolute top-1/2 left-10 w-2 h-16 bg-gradient-to-b from-primary to-transparent opacity-20"></div>
+        <div className="absolute top-1/3 right-10 w-2 h-20 bg-gradient-to-b from-muted-foreground to-transparent opacity-20"></div>
       </div>
 
       <div className="text-center z-10 px-4">
         {/* 404 Number */}
         <div className="relative mb-8">
-          <h1 className="text-[120px] md:text-[180px] font-bold text-gray-100 leading-none select-none">
+          <h1 className="text-[120px] md:text-[180px] font-bold text-muted/50 leading-none select-none">
             404
           </h1>
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl md:text-8xl font-bold text-gray-900">
-              4<span className="text-blue-600">0</span>4
+            <span className="text-6xl md:text-8xl font-bold text-foreground">
+              4<span className="text-primary">0</span>4
             </span>
           </div>
         </div>
 
         {/* Message */}
         <div className="space-y-4 mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
+          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
             Page Not Found
           </h2>
-          <p className="text-gray-500 max-w-md mx-auto text-lg">
+          <p className="text-muted-foreground max-w-md mx-auto text-lg">
             The page you&apos;re looking for doesn&apos;t exist or has been moved.
           </p>
         </div>
 
         {/* Decorative Line */}
         <div className="flex justify-center items-center gap-2 mb-10">
-          <div className="w-12 h-0.5 bg-gray-200"></div>
-          <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
-          <div className="w-12 h-0.5 bg-gray-200"></div>
+          <div className="w-12 h-0.5 bg-border"></div>
+          <div className="w-2 h-2 bg-primary rounded-full"></div>
+          <div className="w-12 h-0.5 bg-border"></div>
         </div>
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a
             href="/"
-            className="inline-flex items-center justify-center px-8 py-3 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-lg transition-all duration-300 group"
+            className="inline-flex items-center justify-center px-8 py-3 bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg transition-all duration-300 group"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -86,7 +86,7 @@ export default function NotFound() {
           </a>
           <a
             href="/#contact"
-            className="inline-flex items-center justify-center px-8 py-3 bg-white border border-gray-300 hover:border-gray-400 text-gray-700 hover:text-gray-900 font-medium rounded-lg transition-all duration-300"
+            className="inline-flex items-center justify-center px-8 py-3 bg-card border border-border hover:border-primary/30 text-foreground font-medium rounded-lg transition-all duration-300"
           >
             <svg
               className="w-5 h-5 mr-2"
@@ -106,8 +106,8 @@ export default function NotFound() {
         </div>
 
         {/* Footer Text */}
-        <p className="mt-12 text-gray-400 text-sm">
-          © 2025 Pushk<span className="text-blue-600">a</span>r Sh<span className="text-blue-600">i</span>nde
+        <p className="mt-12 text-muted-foreground text-sm">
+          © 2025 Pushk<span className="text-primary">a</span>r Sh<span className="text-primary">i</span>nde
         </p>
       </div>
     </div>
