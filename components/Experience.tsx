@@ -1,9 +1,11 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { MapPin, Calendar, Users, Award, Target, Building, Sparkles } from 'lucide-react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer, staggerContainerFast, viewportOnce } from '@/lib/animations';
 
 interface ExperienceData {
   id: string;
@@ -116,18 +118,32 @@ const Experience: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <motion.div
+            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <div className="inline-flex items-center justify-center p-2 bg-blue-100 rounded-full mb-3 sm:mb-4">
               <Building className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
               Professional Experience
             </h2>
-          </div>
+          </motion.div>
 
           {/* Experience Cards */}
-          {experiences.map((experience) => (
-            <div key={experience.id} className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-gray-200 mb-8 sm:mb-10 lg:mb-12 overflow-hidden relative">
+          {experiences.map((experience, cardIndex) => (
+            <motion.div
+              key={experience.id}
+              className="bg-white rounded-xl sm:rounded-2xl lg:rounded-3xl p-4 sm:p-6 lg:p-8 shadow-xl border border-gray-200 mb-8 sm:mb-10 lg:mb-12 overflow-hidden relative"
+              variants={fadeInUp}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+              transition={{ delay: cardIndex * 0.1 }}
+            >
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-full transform translate-x-16 -translate-y-16"></div>
               <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-purple-50 to-transparent rounded-full transform -translate-x-12 translate-y-12"></div>
@@ -210,21 +226,28 @@ const Experience: React.FC = () => {
                         <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 mr-1.5 sm:mr-2 text-purple-600" />
                         Core Skills
                       </h4>
-                      <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                      <motion.div
+                        className="flex flex-wrap gap-1.5 sm:gap-2"
+                        variants={staggerContainerFast}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={viewportOnce}
+                      >
                         {experience.skills.map((skill, index) => (
-                          <span 
+                          <motion.span
                             key={index}
+                            variants={fadeInUp}
                             className="px-2.5 sm:px-3 lg:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-100 to-purple-100 text-gray-700 rounded-full text-xs sm:text-sm border border-gray-200 hover:shadow-md hover:scale-105 transition-all duration-200"
                           >
                             {skill}
-                          </span>
+                          </motion.span>
                         ))}
-                      </div>
+                      </motion.div>
                     </div>
                   )}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

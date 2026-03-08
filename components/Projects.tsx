@@ -1,6 +1,9 @@
 // components/Projects.tsx
+'use client';
 import React from 'react';
-import { Github, ExternalLink, Lock, Users, Zap, Image } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Github, ExternalLink, Lock, Users, Zap } from 'lucide-react';
+import { fadeInUp, scaleIn, staggerContainer, viewportOnce } from '@/lib/animations';
 
 const Projects: React.FC = () => {
   const projects = [
@@ -44,21 +47,35 @@ const Projects: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <motion.div
+            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
               Featured Projects
             </h2>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-2">
               Innovative solutions showcasing expertise in AI and web development
             </p>
-          </div>
+          </motion.div>
 
           {/* Projects Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
+          <motion.div
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             {projects.map((project, index) => (
-              <div 
+              <motion.div
                 key={index}
-                className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                variants={fadeInUp}
+                className="bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-200 overflow-hidden"
+                whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.12)', transition: { duration: 0.2 } }}
               >
                 {/* Project Image */}
                 <div className="relative h-36 sm:h-44 lg:h-48 bg-gray-100">
@@ -150,22 +167,30 @@ const Projects: React.FC = () => {
                     )}
                   </div>
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
 
           {/* View More Projects */}
-          <div className="text-center mt-8 sm:mt-10 lg:mt-12">
-            <a 
+          <motion.div
+            className="text-center mt-8 sm:mt-10 lg:mt-12"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
+            <motion.a
               href="https://github.com/Pushkar3232"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center space-x-2 px-5 sm:px-6 py-2.5 sm:py-3 bg-gray-900 hover:bg-gray-800 text-white rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
             >
               <Github className="w-4 h-4 sm:w-5 sm:h-5" />
               <span>View All Projects</span>
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </div>
       </div>
     </section>

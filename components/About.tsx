@@ -1,5 +1,8 @@
+'use client';
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Code, Brain, Zap, Users } from 'lucide-react';
+import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer, staggerContainerSlow, viewportOnce } from '@/lib/animations';
 
 const About: React.FC = () => {
   const highlights = [
@@ -30,18 +33,30 @@ const About: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <motion.div
+            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
               About Me
             </h2>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-2">
               Full-stack developer passionate about AI and mentoring
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 items-center">
             {/* Left Content */}
-            <div className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm">
+            <motion.div
+              className="bg-white rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-sm"
+              variants={fadeInLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-gray-900 mb-4 sm:mb-6">
                 Simplifying the World Through Software
               </h3>
@@ -56,23 +71,43 @@ const About: React.FC = () => {
               
               {/* Stats */}
               <div className="grid grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-200">
-                <div className="text-center">
+                <motion.div
+                  className="text-center"
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={viewportOnce}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+                >
                   <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">200+</div>
                   <div className="text-gray-600 text-xs sm:text-sm">Interns Mentored</div>
-                </div>
-                <div className="text-center">
+                </motion.div>
+                <motion.div
+                  className="text-center"
+                  initial={{ opacity: 0, scale: 0.7 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={viewportOnce}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
+                >
                   <div className="text-2xl sm:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">3+</div>
                   <div className="text-gray-600 text-xs sm:text-sm">Major Projects</div>
-                </div>
+                </motion.div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right Content - Highlights */}
-            <div className="space-y-3 sm:space-y-4">
+            <motion.div
+              className="space-y-3 sm:space-y-4"
+              variants={staggerContainerSlow}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               {highlights.map((highlight, index) => (
-                <div 
+                <motion.div
                   key={index}
+                  variants={fadeInRight}
                   className="bg-white p-4 sm:p-5 lg:p-6 rounded-lg sm:rounded-xl shadow-sm border border-gray-200 hover:shadow-md transition-shadow duration-300"
+                  whileHover={{ x: 6, transition: { duration: 0.2 } }}
                 >
                   <div className="flex items-start space-x-3 sm:space-x-4">
                     <div className="text-gray-900 p-1.5 sm:p-2 bg-gray-50 rounded-lg flex-shrink-0">
@@ -87,9 +122,9 @@ const About: React.FC = () => {
                       </p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -1,9 +1,11 @@
 // components/Contact.tsx
 "use client";
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Mail, Send, Github, Linkedin, CheckCircle, AlertCircle } from 'lucide-react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer, viewportOnce } from '@/lib/animations';
 
 interface FormData {
   name: string;
@@ -85,18 +87,29 @@ const Contact: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <motion.div
+            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4">
               Get In Touch
             </h2>
             <p className="text-gray-600 text-base sm:text-lg max-w-2xl mx-auto px-2">
               Ready to collaborate? Let's discuss your project
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
             {/* Contact Information */}
-            <div>
+            <motion.div
+              variants={fadeInLeft}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 sm:mb-6 lg:mb-8">Contact Information</h3>
               
               <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
@@ -138,10 +151,15 @@ const Contact: React.FC = () => {
                   </span>
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             {/* Contact Form */}
-            <div>
+            <motion.div
+              variants={fadeInRight}
+              initial="hidden"
+              whileInView="visible"
+              viewport={viewportOnce}
+            >
               <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-5 sm:mb-6 lg:mb-8">Send a Message</h3>
               
               <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 lg:space-y-6">
@@ -244,7 +262,7 @@ const Contact: React.FC = () => {
                   </div>
                 )}
               </form>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>

@@ -3,7 +3,9 @@
 "use client";
 
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Github, Linkedin, Mail, Heart, ArrowUp } from 'lucide-react';
+import { fadeInUp, viewportOnce } from '@/lib/animations';
 
 const Footer: React.FC = () => {
   const scrollToTop = () => {
@@ -61,18 +63,20 @@ const Footer: React.FC = () => {
               {/* Social Links */}
               <div className="flex space-x-3 sm:space-x-4">
                 {socialLinks.map((link, index) => (
-                  <a
+                  <motion.a
                     key={index}
                     href={link.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="p-1.5 sm:p-2 bg-gray-800 rounded-full hover:bg-gray-700 transition-colors duration-200 group"
                     aria-label={link.name}
+                    whileHover={{ scale: 1.2, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <div className="text-gray-400 group-hover:text-blue-400 transition-colors duration-200">
                       {link.icon}
                     </div>
-                  </a>
+                  </motion.a>
                 ))}
               </div>
             </div>

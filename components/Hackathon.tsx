@@ -1,9 +1,11 @@
 // components/Hackathon.tsx
 "use client";
 import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Trophy, Calendar, MapPin, Award, Users, Target, ExternalLink, FileText } from 'lucide-react';
 import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { fadeInUp, staggerContainer, viewportOnce } from '@/lib/animations';
 
 interface HackathonData {
   id: string;
@@ -100,7 +102,13 @@ const Hackathon: React.FC = () => {
       <div className="container mx-auto px-4">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
+          <motion.div
+            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            variants={fadeInUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             <div className="inline-flex items-center justify-center p-2 sm:p-3 bg-gradient-to-br from-yellow-100 to-orange-100 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 shadow-sm">
               <Trophy className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-yellow-600" />
             </div>
@@ -111,14 +119,22 @@ const Hackathon: React.FC = () => {
             <p className="text-sm sm:text-base lg:text-lg text-gray-600 max-w-2xl mx-auto px-2">
               Competitive coding challenges and collaborative projects that showcase innovation and problem-solving
             </p>
-          </div>
+          </motion.div>
 
           {/* Hackathon Cards */}
-          <div className={`grid gap-4 sm:gap-5 lg:gap-6 ${hackathons.length === 1 ? 'max-w-2xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-2'}`}>
+          <motion.div
+            className={`grid gap-4 sm:gap-5 lg:gap-6 ${hackathons.length === 1 ? 'max-w-2xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-2'}`}
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+          >
             {hackathons.map((hackathon) => (
-              <div
+              <motion.div
                 key={hackathon.id}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden border border-gray-100"
+                variants={fadeInUp}
+                className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100"
+                whileHover={{ y: -6, boxShadow: '0 16px 32px rgba(0,0,0,0.1)', transition: { duration: 0.2 } }}
               >
                 {/* Image Section */}
                 <div className="relative bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden rounded-t-xl group h-44 sm:h-48 lg:h-52">
@@ -251,9 +267,9 @@ const Hackathon: React.FC = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>

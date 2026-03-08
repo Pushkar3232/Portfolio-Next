@@ -2,16 +2,16 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { ChevronDown, Github, Linkedin, Mail, ArrowRight, Download } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ChevronDown, Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
+import { fadeInUp, staggerContainerSlow } from '@/lib/animations';
 
 const Hero = () => {
   const [displayText, setDisplayText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isVisible, setIsVisible] = useState(false);
   const roles = ['Full Stack Developer', 'ML Engineer', 'GenAI Engineer'];
 
   useEffect(() => {
-    setIsVisible(true);
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) => (prevIndex + 1) % roles.length);
     }, 3000);
@@ -55,17 +55,19 @@ const Hero = () => {
       </div>
 
       <div className="container mx-auto px-4 sm:px-6 z-10">
-        <div className={`max-w-6xl mx-auto transform transition-all duration-1000 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+        <div className="max-w-6xl mx-auto">
           
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
             
             {/* Left Column - Content */}
-            <div className="space-y-8">
-              
-              
-
+            <motion.div
+              className="space-y-8"
+              variants={staggerContainerSlow}
+              initial="hidden"
+              animate="visible"
+            >
               {/* Main Heading */}
-              <div className="pt-16 sm:pt-20 lg:pt-0">
+              <motion.div variants={fadeInUp} className="pt-16 sm:pt-20 lg:pt-0">
                 <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-3 sm:mb-4 leading-tight">
                   <span className="block">
                     Pushk<span className="text-blue-600">a</span>r
@@ -87,16 +89,16 @@ const Hero = () => {
                 <p className="text-base sm:text-lg text-blue-600 font-semibold mb-4 sm:mb-6">
                   I Build Brains for Machines
                 </p>
-              </div>
+              </motion.div>
 
               {/* Description */}
-              <p className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-lg">
+              <motion.p variants={fadeInUp} className="text-gray-600 text-base sm:text-lg leading-relaxed max-w-lg">
                 Hey, I am Pushkar. I want to simplify the world through software. 
                 My passion lies in solving real-world problems that people face every day.
-              </p>
+              </motion.p>
 
               {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <a
                   href="#projects"
                   className="group px-6 sm:px-8 py-3 sm:py-4 bg-gray-900 text-white rounded-lg font-medium hover:bg-gray-800 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
@@ -107,37 +109,47 @@ const Hero = () => {
                 <a
                   href="/chatbot"
                   className="px-6 sm:px-8 py-3 sm:py-4 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:border-gray-400 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
->
-                  
+                >
                   <span>Chat with AI</span>
                 </a>
-              </div>
+              </motion.div>
 
               {/* Social Links */}
-              <div className="flex items-center flex-wrap gap-1">
+              <motion.div variants={fadeInUp} className="flex items-center flex-wrap gap-1">
                 <span className="text-gray-500 text-xs sm:text-sm mr-2 sm:mr-4">Connect with me:</span>
                 {[
                   { icon: Github, href: "https://github.com/Pushkar3232", label: "GitHub" },
                   { icon: Linkedin, href: "https://linkedin.com/in/pushkarshinde6/", label: "LinkedIn" },
                   { icon: Mail, href: "mailto:pushkarshinde006@gmail.com", label: "Email" }
                 ].map((social, index) => (
-                  <a
+                  <motion.a
                     key={index}
                     href={social.href}
                     target={social.icon !== Mail ? "_blank" : undefined}
                     rel={social.icon !== Mail ? "noopener noreferrer" : undefined}
                     className="p-3 text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-all duration-300"
                     aria-label={social.label}
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <social.icon className="w-5 h-5" />
-                  </a>
+                  </motion.a>
                 ))}
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Right Column - Photo */}
-            <div className="flex justify-center lg:justify-end order-first lg:order-last mb-6 lg:mb-0">
-              <div className="relative">
+            <motion.div
+              className="flex justify-center lg:justify-end order-first lg:order-last mb-6 lg:mb-0"
+              initial={{ opacity: 0, x: 60, scale: 0.9 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
+            >
+              <motion.div
+                className="relative"
+                animate={{ y: [0, -14, 0] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              >
                 {/* Photo Container */}
                 <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
                   {/* Background Elements */}
@@ -146,27 +158,31 @@ const Hero = () => {
                   
                   {/* Photo Frame */}
                   <div className="relative w-full h-full bg-white rounded-2xl shadow-2xl overflow-hidden border-8 border-white">
-                    {/* Placeholder for Photo */}
                     <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
                       <div className="text-center">
-                        
                         <img 
-                      src="2ed.jpg" 
-                      alt="Pushkar Shinde" 
-                      className="w-full h-full object-cover"
-                    />
+                          src="2ed.jpg" 
+                          alt="Pushkar Shinde" 
+                          className="w-full h-full object-cover"
+                        />
                       </div>
                     </div>
-                    
-                    
                   </div>
                 </div>
 
                 {/* Floating Elements */}
-                <div className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full shadow-lg"></div>
-                <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-gray-900 rounded-full shadow-lg"></div>
-              </div>
-            </div>
+                <motion.div
+                  className="absolute -top-4 -right-4 w-8 h-8 bg-blue-500 rounded-full shadow-lg"
+                  animate={{ scale: [1, 1.25, 1] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.div
+                  className="absolute -bottom-4 -left-4 w-6 h-6 bg-gray-900 rounded-full shadow-lg"
+                  animate={{ scale: [1, 1.3, 1] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+                />
+              </motion.div>
+            </motion.div>
           </div>
         </div>
 
