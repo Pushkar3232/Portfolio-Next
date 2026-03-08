@@ -7,6 +7,7 @@ import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { fadeInUp, fadeInLeft, fadeInRight, staggerContainer, viewportOnce } from '@/lib/animations';
 import { GridBackground } from '@/components/ui/grid-background';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 interface FormData {
   name: string;
@@ -121,12 +122,13 @@ const Contact: React.FC = () => {
                     href={info.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-card rounded-lg sm:rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300 group"
+                    className="relative flex items-center space-x-3 sm:space-x-4 p-3 sm:p-4 bg-card rounded-lg sm:rounded-xl shadow-lg border border-border hover:shadow-xl transition-all duration-300 group overflow-hidden"
                   >
-                    <div className="text-muted-foreground group-hover:text-foreground transition-colors duration-200 flex-shrink-0">
+                    <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+                    <div className="relative z-10 text-muted-foreground group-hover:text-foreground transition-colors duration-200 flex-shrink-0">
                       {info.icon}
                     </div>
-                    <div className="min-w-0">
+                    <div className="relative z-10 min-w-0">
                       <h4 className="text-foreground font-semibold text-xs sm:text-sm md:text-base">{info.title}</h4>
                       <p className="text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 text-xs truncate">
                         {info.value}
@@ -137,20 +139,23 @@ const Contact: React.FC = () => {
               </div>
 
               {/* Availability Status */}
-              <div className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-5 lg:p-6 shadow-lg border border-border">
-                <h4 className="text-base sm:text-lg md:text-xl font-bold text-foreground mb-2 sm:mb-3 font-display">
-                  Project Availability
-                </h4>
-                <p className="text-muted-foreground mb-2 sm:mb-4 text-xs sm:text-sm">
-                  Available for freelance work and exciting opportunities.
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs border border-primary/20 font-medium">
-                    Available
-                  </span>
-                  <span className="px-2.5 sm:px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs sm:text-sm border border-border">
-                    Quick Response
-                  </span>
+              <div className="relative bg-card rounded-xl sm:rounded-2xl p-3 sm:p-5 lg:p-6 shadow-lg border border-border overflow-hidden">
+                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+                <div className="relative z-10">
+                  <h4 className="text-base sm:text-lg md:text-xl font-bold text-foreground mb-2 sm:mb-3 font-display">
+                    Project Availability
+                  </h4>
+                  <p className="text-muted-foreground mb-2 sm:mb-4 text-xs sm:text-sm">
+                    Available for freelance work and exciting opportunities.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs border border-primary/20 font-medium">
+                      Available
+                    </span>
+                    <span className="px-2.5 sm:px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs sm:text-sm border border-border">
+                      Quick Response
+                    </span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -164,7 +169,9 @@ const Contact: React.FC = () => {
             >
               <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-5 sm:mb-6 lg:mb-8 font-display">Send a Message</h3>
               
-              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5 lg:space-y-6">
+              <form onSubmit={handleSubmit} className="relative space-y-4 sm:space-y-5 lg:space-y-6 bg-card rounded-xl sm:rounded-2xl p-4 sm:p-6 lg:p-8 shadow-lg border border-border overflow-hidden">
+                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+                <div className="relative z-10">
                 <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 lg:gap-6">
                   <div>
                     <label htmlFor="name" className="block text-foreground font-medium mb-1.5 sm:mb-2 text-sm sm:text-base">
@@ -263,6 +270,7 @@ const Contact: React.FC = () => {
                     <span className="text-xs sm:text-sm">Something went wrong. Please try again later.</span>
                   </div>
                 )}
+                </div>
               </form>
             </motion.div>
           </div>

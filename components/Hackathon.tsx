@@ -7,6 +7,7 @@ import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestor
 import { db } from '../lib/firebase';
 import { fadeInUp, staggerContainer, viewportOnce } from '@/lib/animations';
 import { GridBackground } from '@/components/ui/grid-background';
+import { GlowingEffect } from '@/components/ui/glowing-effect';
 
 interface HackathonData {
   id: string;
@@ -135,9 +136,10 @@ const Hackathon: React.FC = () => {
               <motion.div
                 key={hackathon.id}
                 variants={fadeInUp}
-                className="bg-card rounded-lg sm:rounded-xl shadow-sm overflow-hidden border border-border"
+                className="relative bg-card rounded-lg sm:rounded-xl shadow-sm overflow-hidden border border-border"
                 whileHover={{ y: -6, boxShadow: '0 16px 32px rgba(0,0,0,0.1)', transition: { duration: 0.2 } }}
               >
+                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
                 {/* Image Section */}
                 <div className="relative bg-gradient-to-br from-muted to-secondary overflow-hidden group h-40 sm:h-44 md:h-48">
                   <img

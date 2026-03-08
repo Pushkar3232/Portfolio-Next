@@ -380,39 +380,51 @@ const Education: React.FC = () => {
 
           {/* Stats Section */}
           <div className="mt-10 sm:mt-12 lg:mt-16 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-            <div className="text-center bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300">
-              <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-primary to-primary/70 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <Trophy className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-primary-foreground" />
+            <div className="relative text-center bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300 overflow-hidden">
+              <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+              <div className="relative z-10">
+                <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-primary to-primary/70 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <Trophy className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-primary-foreground" />
+                </div>
+                <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{certificates.length}+</h4>
+                <p className="text-muted-foreground text-xs sm:text-sm lg:text-base">Professional Certifications</p>
               </div>
-              <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{certificates.length}+</h4>
-              <p className="text-muted-foreground text-xs sm:text-sm lg:text-base">Professional Certifications</p>
             </div>
-            <div className="text-center bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300">
-              <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-accent to-accent/70 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <IconBrain className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-accent-foreground" />
+            <div className="relative text-center bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300 overflow-hidden">
+              <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+              <div className="relative z-10">
+                <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-accent to-accent/70 rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <IconBrain className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-accent-foreground" />
+                </div>
+                <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{aiMlCertCount > 0 ? 'AI/ML' : 'Tech'}</h4>
+                <p className="text-muted-foreground text-xs sm:text-sm lg:text-base">Specialization Focus</p>
               </div>
-              <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{aiMlCertCount > 0 ? 'AI/ML' : 'Tech'}</h4>
-              <p className="text-muted-foreground text-xs sm:text-sm lg:text-base">Specialization Focus</p>
             </div>
-            <div className="text-center bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300">
-              <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-primary to-accent rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
-                <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-primary-foreground" />
+            <div className="relative text-center bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-md transition-shadow duration-300 overflow-hidden">
+              <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+              <div className="relative z-10">
+                <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-primary to-accent rounded-lg sm:rounded-xl flex items-center justify-center mx-auto mb-3 sm:mb-4">
+                  <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-primary-foreground" />
+                </div>
+                <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{latestYear}</h4>
+                <p className="text-muted-foreground text-xs sm:text-sm lg:text-base">Most Recent Year</p>
               </div>
-              <h4 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">{latestYear}</h4>
-              <p className="text-muted-foreground text-xs sm:text-sm lg:text-base">Most Recent Year</p>
             </div>
           </div>
 
           {/* Learning Philosophy */}
           <div className="mt-10 sm:mt-12 lg:mt-16 text-center">
-            <div className="inline-block bg-secondary rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-xl max-w-3xl mx-4">
-              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground mb-3 sm:mb-4">
-                Learning Philosophy
-              </h3>
-              <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm lg:text-base">
-                Staying ahead in technology requires continuous learning. My focus on AI/ML and leadership 
-                skills reflects my commitment to both technical excellence and professional growth.
-              </p>
+            <div className="relative inline-block bg-secondary rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-8 shadow-xl max-w-3xl mx-4 overflow-hidden">
+              <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+              <div className="relative z-10">
+                <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-foreground mb-3 sm:mb-4">
+                  Learning Philosophy
+                </h3>
+                <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm lg:text-base">
+                  Staying ahead in technology requires continuous learning. My focus on AI/ML and leadership 
+                  skills reflects my commitment to both technical excellence and professional growth.
+                </p>
+              </div>
             </div>
           </div>
         </div>

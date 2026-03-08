@@ -146,9 +146,3 @@ section {
 @utility animate-spin-reverse {
   animation: spin-reverse 20s linear infinite;
 }
-
-/* Skills section tooltip entrance */
-@keyframes skillTooltipIn {
-  from { opacity: 0; transform: translateY(-50%) translateX(-6px); }
-  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
-}
