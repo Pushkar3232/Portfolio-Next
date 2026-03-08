@@ -65,48 +65,62 @@ const Education: React.FC = () => {
     // Fetch Education Data
     const educationQuery = query(
       collection(db, 'education'),
-      orderBy('year', 'desc')
+      orderBy('year', 'asc')
     );
     
-    const unsubEducation = onSnapshot(educationQuery, (snapshot) => {
-      const data: EducationData[] = [];
-      snapshot.forEach((doc) => {
-        data.push({ id: doc.id, ...doc.data() } as EducationData);
-      });
-      setEducationData(data);
-    });
+    const unsubEducation = onSnapshot(
+      educationQuery,
+      (snapshot) => {
+        const data: EducationData[] = [];
+        snapshot.forEach((doc) => {
+          data.push({ id: doc.id, ...doc.data() } as EducationData);
+        });
+        setEducationData(data);
+        console.log('Education data loaded:', data);
+      },
+      (error) => {
+        console.error('Error fetching education:', error);
+      }
+    );
 
     // Fetch Certificates
     const certQuery = query(
       collection(db, 'certificates')
     );
     
-    const unsubCerts = onSnapshot(certQuery, (snapshot) => {
-      const data: Certificate[] = [];
-      snapshot.forEach((doc) => {
-        data.push({ id: doc.id, ...doc.data() } as Certificate);
-      });
-      
-      // Sort certificates by date (newest first)
-      // Handles formats like "22/2/2025", "07/03/2025" (DD/MM/YYYY)
-      const sortedData = data.sort((a, b) => {
-        const parseDate = (dateStr: string) => {
-          // Handle DD/MM/YYYY format
-          const parts = dateStr.split('/');
-          if (parts.length === 3) {
-            const day = parseInt(parts[0]);
-            const month = parseInt(parts[1]) - 1; // months are 0-indexed
-            const year = parseInt(parts[2]);
-            return new Date(year, month, day);
-          }
-          return new Date(0);
-        };
-        return parseDate(b.date).getTime() - parseDate(a.date).getTime();
-      });
-      
-      setCertificates(sortedData);
-      setLoading(false);
-    });
+    const unsubCerts = onSnapshot(
+      certQuery,
+      (snapshot) => {
+        const data: Certificate[] = [];
+        snapshot.forEach((doc) => {
+          data.push({ id: doc.id, ...doc.data() } as Certificate);
+        });
+        
+        // Sort certificates by date (newest first)
+        // Handles formats like "22/2/2025", "07/03/2025" (DD/MM/YYYY)
+        const sortedData = data.sort((a, b) => {
+          const parseDate = (dateStr: string) => {
+            // Handle DD/MM/YYYY format
+            const parts = dateStr.split('/');
+            if (parts.length === 3) {
+              const day = parseInt(parts[0]);
+              const month = parseInt(parts[1]) - 1; // months are 0-indexed
+              const year = parseInt(parts[2]);
+              return new Date(year, month, day);
+            }
+            return new Date(0);
+          };
+          return parseDate(b.date).getTime() - parseDate(a.date).getTime();
+        });
+        
+        setCertificates(sortedData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error fetching certificates:', error);
+        setLoading(false);
+      }
+    );
 
     return () => {
       unsubEducation();
@@ -148,13 +162,13 @@ const Education: React.FC = () => {
 
   if (loading) {
     return (
-      <section id="education" className="relative py-20 bg-card overflow-hidden">
+      <section id="education" className="relative py-12 sm:py-16 lg:py-20 bg-card overflow-hidden">
         <GridBackground />
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="flex flex-col items-center space-y-4">
-              <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-              <p className="text-muted-foreground font-medium">Loading education data...</p>
+        <div className="container mx-auto px-3 sm:px-6 relative z-10">
+          <div className="flex items-center justify-center min-h-[300px] sm:min-h-[400px]">
+            <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+              <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-4 border-primary border-t-transparent"></div>
+              <p className="text-muted-foreground font-medium text-sm sm:text-base">Loading education data...</p>
             </div>
           </div>
         </div>
@@ -166,79 +180,137 @@ const Education: React.FC = () => {
   const latestYear = educationData.length > 0 ? educationData[0].year : new Date().getFullYear();
 
   return (
-    <section id="education" className="relative py-12 sm:py-16 lg:py-20 bg-card overflow-hidden">
+    <section id="education" className="relative py-10 sm:py-14 lg:py-18 bg-card overflow-hidden">
       <GridBackground />
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-7xl mx-auto">
+      <div className="container mx-auto px-3 sm:px-6 relative z-10">
+        <div className="max-w-6xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-10 sm:mb-12 lg:mb-16">
-            <h2 className="text-display text-foreground mb-3 sm:mb-4">
+          <div className="text-center mb-8 sm:mb-10 lg:mb-14">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-2 sm:mb-4 font-bold">
               Education & Certifications
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2">
+            <p className="text-muted-foreground text-sm sm:text-base lg:text-lg max-w-2xl mx-auto px-2">
               Continuous learning in technology and development
             </p>
           </div>
 
-          {/* Education Section */}
-          <div className="mb-12 sm:mb-16 lg:mb-20">
-            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-5 sm:mb-6 lg:mb-8 flex items-center justify-center">
-              <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 mr-2 sm:mr-3 text-foreground" />
-              Academic Background
-            </h3>
-            
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-              {educationData.length === 0 ? (
-                <div className="sm:col-span-2 lg:col-span-3 bg-card rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-sm border border-border text-center">
-                  <GraduationCap className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground">No education entries yet</p>
-                </div>
-              ) : (
-                educationData.map((edu) => (
-                  <div 
-                    key={edu.id} 
-                    className="relative bg-background rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-sm border border-border hover:shadow-lg hover:border-foreground/20 transition-all duration-300 group"
-                  >
-                    <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
-                    <div className="relative z-10 flex flex-col h-full">
-                      <div className="flex items-start space-x-3 sm:space-x-4 mb-3 sm:mb-4">
-                        <div className="w-10 h-10 sm:w-12 lg:w-14 sm:h-12 lg:h-14 bg-gradient-to-br from-foreground to-muted rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
-                          <GraduationCap className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-background" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="text-base sm:text-lg font-bold text-foreground leading-tight">
-                            {edu.degree}
-                          </h4>
-                          <p className="text-foreground font-medium text-xs sm:text-sm mt-0.5 sm:mt-1">
-                            {edu.institution}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center text-muted-foreground mb-2 sm:mb-3">
-                        <Calendar className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1.5 sm:mr-2" />
-                        <span className="text-xs sm:text-sm font-medium">{edu.status} • {edu.year}</span>
-                      </div>
-                      <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed flex-grow">
-                        {edu.description}
-                      </p>
-                    </div>
-                  </div>
-                ))
-              )}
+          {/* Education Section - Timeline View */}
+          <div className="mb-10 sm:mb-12 lg:mb-16">
+            <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-2 sm:mb-3 flex items-center justify-center">
+                <GraduationCap className="w-5 h-5 sm:w-6 md:w-7 sm:h-6 md:h-7 mr-2 text-primary" />
+                Academic Background
+              </h3>
+              <p className="text-muted-foreground text-xs sm:text-sm">My educational journey and milestones</p>
             </div>
+            
+            {educationData.length === 0 ? (
+              <div className="bg-card rounded-lg sm:rounded-xl p-6 sm:p-8 shadow-sm border border-border text-center max-w-md mx-auto">
+                <GraduationCap className="w-10 h-10 sm:w-12 text-muted-foreground mx-auto mb-2 sm:mb-3" />
+                <p className="text-muted-foreground text-sm">No education entries yet</p>
+              </div>
+            ) : (
+              <div className="relative">
+                {/* Timeline connector line - vertical center */}
+                <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/10 via-primary/40 to-primary/10 transform -translate-x-1/2"></div>
+                
+                <div className="space-y-6 sm:space-y-8 lg:space-y-10">
+                  {educationData.map((edu, index) => {
+                    const isCurrentOrLatest = edu.status.toLowerCase().includes('current') || edu.status.toLowerCase().includes('pursuing');
+                    const isAlternate = index % 2 === 1;
+                    
+                    return (
+                      <div key={edu.id} className="relative">
+                        {/* Timeline dot */}
+                        <div className="hidden lg:flex absolute left-1/2 top-8 w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 border-4 border-background shadow-lg transform -translate-x-1/2 items-center justify-center z-10">
+                          <div className={`absolute inset-0 rounded-full animate-pulse ${isCurrentOrLatest ? 'bg-primary/50' : 'bg-primary/20'}`}></div>
+                        </div>
+                        
+                        {/* Content card */}
+                        <div className={`lg:w-1/2 ${isAlternate ? 'lg:ml-auto lg:pl-8' : 'lg:pr-8'}`}>
+                          <div 
+                            className={`relative group overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-7 shadow-sm hover:shadow-xl transition-all duration-500 border border-primary/20 hover:border-primary/50 bg-gradient-to-br
+                              ${isCurrentOrLatest 
+                                ? 'from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 hover:from-primary/15 hover:to-primary/20 dark:hover:from-primary/20 dark:hover:to-primary/15' 
+                                : 'from-muted/30 to-muted/20 dark:from-muted/20 dark:to-muted/10 hover:from-muted/50 hover:to-muted/30 dark:hover:from-muted/30 dark:hover:to-muted/20'
+                              }
+                            `}
+                          >
+                            {/* Glowing background effect */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                              <div className={`absolute -inset-1 bg-gradient-to-r ${isCurrentOrLatest ? 'from-primary/20 to-primary/10' : 'from-muted-foreground/10 to-muted-foreground/5'} rounded-xl blur`}></div>
+                            </div>
+                            
+                            <div className="relative z-10 space-y-4">
+                              {/* Header with status badge */}
+                              <div className="flex items-start justify-between gap-3">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-2">
+                                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:scale-x-110 group-hover:scale-y-110 
+                                      ${isCurrentOrLatest 
+                                        ? 'bg-gradient-to-br from-primary to-primary/80 shadow-lg shadow-primary/30' 
+                                        : 'bg-gradient-to-br from-muted-foreground/40 to-muted-foreground/50 shadow-lg shadow-muted-foreground/20'
+                                      }`}>
+                                      <GraduationCap className="w-5 h-5 sm:w-6 sm:h-6 text-primary-foreground" />
+                                    </div>
+                                    <div className="flex-1">
+                                      <h4 className="text-sm sm:text-base lg:text-lg font-bold text-foreground">
+                                        {edu.degree}
+                                      </h4>
+                                    </div>
+                                  </div>
+                                  <p className="text-foreground font-semibold text-xs sm:text-sm lg:text-base">
+                                    {edu.institution}
+                                  </p>
+                                </div>
+                                
+                                {/* Status badge */}
+                                {isCurrentOrLatest && (
+                                  <div className="inline-flex items-center px-3 py-1.5 rounded-full text-primary-foreground text-xs font-semibold bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/40 animate-pulse whitespace-nowrap">
+                                    <span className="inline-block w-2 h-2 rounded-full bg-primary-foreground mr-1.5 animate-pulse"></span>
+                                    Current
+                                  </div>
+                                )}
+                              </div>
+                              
+                              {/* Year and details */}
+                              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                                <div className="flex items-center text-muted-foreground text-xs sm:text-sm font-semibold">
+                                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-primary/60" />
+                                  <span>{edu.year}</span>
+                                </div>
+                                <div className="hidden sm:block w-1.5 h-1.5 rounded-full bg-muted-foreground/40"></div>
+                                <span className="text-muted-foreground text-xs sm:text-sm font-medium px-3 py-1 rounded-full bg-muted/40">
+                                  {edu.status}
+                                </span>
+                              </div>
+                              
+                              {/* Description */}
+                              <p className="text-muted-foreground text-xs sm:text-sm leading-relaxed bg-background/40 rounded-lg p-3 sm:p-4">
+                                {edu.description}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Certifications Section - Bento Grid */}
-          <div className="mb-10 sm:mb-12 lg:mb-16">
-            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-5 sm:mb-6 lg:mb-8 flex items-center justify-center">
-              <Award className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 mr-2 sm:mr-3 text-foreground" />
+          <div className="mb-8 sm:mb-10 lg:mb-12">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-4 sm:mb-5 lg:mb-6 flex items-center justify-center">
+              <Award className="w-4 h-4 sm:w-5 md:w-6 sm:h-5 md:h-6 mr-2 text-foreground" />
               Professional Certifications
             </h3>
             
             {certificates.length === 0 ? (
-              <div className="bg-card rounded-xl p-8 border border-border shadow-sm text-center max-w-md mx-auto">
-                <Award className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-                <p className="text-muted-foreground">No certificates yet</p>
+              <div className="bg-card rounded-lg sm:rounded-xl p-6 sm:p-8 border border-border shadow-sm text-center max-w-md mx-auto">
+                <Award className="w-10 h-10 sm:w-12 text-muted-foreground mx-auto mb-2 sm:mb-3" />
+                <p className="text-muted-foreground text-sm">No certificates yet</p>
               </div>
             ) : (
               <BentoGrid className="max-w-6xl mx-auto">

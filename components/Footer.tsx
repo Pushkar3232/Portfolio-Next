@@ -40,18 +40,18 @@ const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="bg-card border-t border-border">
-      <div className="container mx-auto px-4 py-8 sm:py-10 lg:py-12">
+    <footer className="bg-card border-t border-border pb-16 sm:pb-0">
+      <div className="container mx-auto px-3 sm:px-6 py-6 sm:py-8 lg:py-10">
         <div className="max-w-6xl mx-auto">
           {/* Main Footer Content */}
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mb-6 sm:mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 mb-5 sm:mb-6 lg:mb-8">
             {/* Brand Section */}
             <div className="sm:col-span-2">
               <div className="mb-4">
-                <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-1.5 sm:mb-2 font-display">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-1 font-display">
                   <span className="text-primary">P</span>ushkar Amar Shinde
                 </h3>
-                <p className="text-primary font-semibold mb-1.5 sm:mb-2 text-xs sm:text-sm">
+                <p className="text-primary font-semibold mb-1 sm:mb-2 text-xs sm:text-sm">
                   Full Stack Developer • ML Engineer • GenAI Engineer
                 </p>
                 <p className="text-muted-foreground leading-relaxed text-xs sm:text-sm">
@@ -61,7 +61,7 @@ const Footer: React.FC = () => {
               </div>
               
               {/* Social Links */}
-              <div className="flex space-x-3 sm:space-x-4">
+              <div className="flex space-x-2 sm:space-x-3">
                 {socialLinks.map((link, index) => (
                   <motion.a
                     key={index}
@@ -73,7 +73,7 @@ const Footer: React.FC = () => {
                     whileHover={{ scale: 1.2, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
                   >
-                    <div className="text-muted-foreground group-hover:text-primary transition-colors duration-200">
+                    <div className="text-muted-foreground group-hover:text-primary transition-colors duration-200 text-sm">
                       {link.icon}
                     </div>
                   </motion.a>
@@ -83,8 +83,8 @@ const Footer: React.FC = () => {
 
             {/* Quick Links */}
             <div>
-              <h4 className="text-base sm:text-lg font-semibold text-foreground mb-3 sm:mb-4">Quick Links</h4>
-              <ul className="space-y-1.5 sm:space-y-2">
+              <h4 className="text-sm sm:text-base font-semibold text-foreground mb-2 sm:mb-3 lg:mb-4">Quick Links</h4>
+              <ul className="space-y-1">
                 {quickLinks.map((link, index) => (
                   <li key={index}>
                     <a

@@ -16,6 +16,7 @@ interface SpinningLogosProps {
   activeIndex?: number;
   radius?: number;
   iconSize?: number;
+  showLabel?: boolean;
 }
 
 export const SpinningLogos: React.FC<SpinningLogosProps> = ({
@@ -25,8 +26,10 @@ export const SpinningLogos: React.FC<SpinningLogosProps> = ({
   activeIndex,
   radius = 130,
   iconSize = 56,
+  showLabel = false,
 }) => {
-  const ringPadding = 40;
+  // Extra padding to accommodate labels if shown
+  const ringPadding = showLabel ? 64 : 40;
   const toRadians = (degrees: number): number => (Math.PI / 180) * degrees;
 
   return (
@@ -43,25 +46,37 @@ export const SpinningLogos: React.FC<SpinningLogosProps> = ({
             const angle = (360 / logos.length) * index;
             const isActive = activeIndex === index;
             return (
-              <button
+              /* Wrapper div carries the position + counter-rotation so label stays upright */
+              <div
                 key={index}
-                onClick={() => onLogoClick?.(index)}
+                className="absolute flex flex-col items-center animate-spin-reverse"
                 style={{
                   top: `calc(50% - ${iconSize / 2}px + ${radius * Math.sin(toRadians(angle))}px)`,
                   left: `calc(50% - ${iconSize / 2}px + ${radius * Math.cos(toRadians(angle))}px)`,
-                  width: iconSize,
-                  height: iconSize,
                 }}
-                className={cn(
-                  "absolute flex items-center justify-center rounded-full shadow-md border-2 animate-spin-reverse cursor-pointer transition-all duration-300",
-                  "border-border dark:border-border",
-                  isActive ? "ring-2 ring-primary ring-offset-2 ring-offset-background scale-110" : "hover:scale-105",
-                  logo.className
-                )}
-                aria-label={logo.name}
               >
-                {logo.icon}
-              </button>
+                <button
+                  onClick={() => onLogoClick?.(index)}
+                  style={{ width: iconSize, height: iconSize }}
+                  className={cn(
+                    "flex items-center justify-center rounded-full shadow-md border-2 cursor-pointer transition-all duration-300",
+                    "border-border",
+                    isActive ? "ring-2 ring-primary ring-offset-2 ring-offset-background scale-110" : "hover:scale-105",
+                    logo.className
+                  )}
+                  aria-label={logo.name}
+                >
+                  {logo.icon}
+                </button>
+                {showLabel && (
+                  <span
+                    className="mt-1.5 text-[10px] font-semibold text-center whitespace-nowrap"
+                    style={{ color: 'var(--muted-foreground)', maxWidth: '72px' }}
+                  >
+                    {logo.name}
+                  </span>
+                )}
+              </div>
             );
           })}
         </div>

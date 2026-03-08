@@ -86,25 +86,25 @@ const Contact: React.FC = () => {
   return (
     <section id="contact" className="relative py-12 sm:py-16 lg:py-20 bg-secondary overflow-hidden">
       <GridBackground />
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-3 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <motion.div
-            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <h2 className="text-display text-foreground mb-3 sm:mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-2 sm:mb-4 font-bold">
               Get In Touch
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
               Ready to collaborate? Let's discuss your project
             </p>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
+          <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
             {/* Contact Information */}
             <motion.div
               variants={fadeInLeft}
@@ -112,9 +112,9 @@ const Contact: React.FC = () => {
               whileInView="visible"
               viewport={viewportOnce}
             >
-              <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-5 sm:mb-6 lg:mb-8 font-display">Contact Information</h3>
+              <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-foreground mb-4 sm:mb-6 font-display">Contact Information</h3>
               
-              <div className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+              <div className="space-y-2 sm:space-y-3 mb-5 sm:mb-6">
                 {contactInfo.map((info, index) => (
                   <a
                     key={index}
@@ -127,8 +127,8 @@ const Contact: React.FC = () => {
                       {info.icon}
                     </div>
                     <div className="min-w-0">
-                      <h4 className="text-foreground font-semibold text-sm sm:text-base">{info.title}</h4>
-                      <p className="text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 text-xs sm:text-sm truncate">
+                      <h4 className="text-foreground font-semibold text-xs sm:text-sm md:text-base">{info.title}</h4>
+                      <p className="text-muted-foreground group-hover:text-foreground/80 transition-colors duration-200 text-xs truncate">
                         {info.value}
                       </p>
                     </div>
@@ -137,15 +137,15 @@ const Contact: React.FC = () => {
               </div>
 
               {/* Availability Status */}
-              <div className="bg-card rounded-xl sm:rounded-2xl p-4 sm:p-5 lg:p-6 shadow-lg border border-border">
-                <h4 className="text-lg sm:text-xl font-bold text-foreground mb-2 sm:mb-3 font-display">
+              <div className="bg-card rounded-xl sm:rounded-2xl p-3 sm:p-5 lg:p-6 shadow-lg border border-border">
+                <h4 className="text-base sm:text-lg md:text-xl font-bold text-foreground mb-2 sm:mb-3 font-display">
                   Project Availability
                 </h4>
-                <p className="text-muted-foreground mb-3 sm:mb-4 text-sm sm:text-base">
+                <p className="text-muted-foreground mb-2 sm:mb-4 text-xs sm:text-sm">
                   Available for freelance work and exciting opportunities.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs sm:text-sm border border-primary/20">
+                  <span className="px-2.5 sm:px-3 py-1 bg-primary/10 text-primary rounded-full text-xs border border-primary/20 font-medium">
                     Available
                   </span>
                   <span className="px-2.5 sm:px-3 py-1 bg-accent text-accent-foreground rounded-full text-xs sm:text-sm border border-border">

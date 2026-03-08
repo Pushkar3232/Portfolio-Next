@@ -81,12 +81,12 @@ const Hackathon: React.FC = () => {
 
   if (loading) {
     return (
-      <section id="hackathon" className="py-20 bg-secondary">
-        <div className="container mx-auto px-4">
+      <section id="hackathon" className="py-12 sm:py-16 lg:py-20 bg-secondary">
+        <div className="container mx-auto px-3 sm:px-6">
           <div className="max-w-6xl mx-auto text-center">
             <div className="animate-pulse">
-              <div className="h-8 bg-muted rounded w-64 mx-auto mb-4"></div>
-              <div className="h-4 bg-muted rounded w-96 mx-auto"></div>
+              <div className="h-6 sm:h-8 bg-muted rounded w-48 sm:w-64 mx-auto mb-3 sm:mb-4"></div>
+              <div className="h-3 sm:h-4 bg-muted rounded w-64 sm:w-96 mx-auto"></div>
             </div>
           </div>
         </div>
@@ -99,33 +99,33 @@ const Hackathon: React.FC = () => {
   }
 
   return (
-    <section id="hackathon" className="relative py-12 sm:py-16 lg:py-20 bg-secondary overflow-hidden">
+    <section id="hackathon" className="relative py-10 sm:py-14 lg:py-18 bg-secondary overflow-hidden">
       <GridBackground />
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-3 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <motion.div
-            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            className="text-center mb-8 sm:mb-10 lg:mb-14"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <div className="inline-flex items-center justify-center p-2 sm:p-3 bg-primary/10 rounded-xl sm:rounded-2xl mb-3 sm:mb-4 shadow-sm">
-              <Trophy className="w-5 h-5 sm:w-6 lg:w-7 sm:h-6 lg:h-7 text-primary" />
+            <div className="inline-flex items-center justify-center p-2 bg-primary/10 rounded-lg sm:rounded-xl mb-2 sm:mb-3 shadow-sm">
+              <Trophy className="w-4 h-4 sm:w-5 md:w-6 sm:h-5 md:h-6 text-primary" />
             </div>
-            <h2 className="text-display text-foreground mb-3 sm:mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-2 sm:mb-4 font-bold">
               Hackathon Achievements
             </h2>
-            <div className="w-16 sm:w-20 lg:w-24 h-1 bg-gradient-to-r from-primary to-primary/60 mx-auto mb-4 sm:mb-6 rounded-full"></div>
-            <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
+            <div className="w-12 sm:w-16 lg:w-20 h-1 bg-gradient-to-r from-primary to-primary/60 mx-auto mb-3 sm:mb-5 rounded-full"></div>
+            <p className="text-xs sm:text-sm md:text-base text-muted-foreground max-w-2xl mx-auto px-2">
               Competitive coding challenges and collaborative projects that showcase innovation and problem-solving
             </p>
           </motion.div>
 
           {/* Hackathon Cards */}
           <motion.div
-            className={`grid gap-4 sm:gap-5 lg:gap-6 ${hackathons.length === 1 ? 'max-w-2xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-2'}`}
+            className={`grid gap-3 sm:gap-4 lg:gap-5 ${hackathons.length === 1 ? 'max-w-2xl mx-auto' : 'md:grid-cols-2 lg:grid-cols-2'}`}
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -135,106 +135,108 @@ const Hackathon: React.FC = () => {
               <motion.div
                 key={hackathon.id}
                 variants={fadeInUp}
-                className="bg-card rounded-xl shadow-sm overflow-hidden border border-border"
+                className="bg-card rounded-lg sm:rounded-xl shadow-sm overflow-hidden border border-border"
                 whileHover={{ y: -6, boxShadow: '0 16px 32px rgba(0,0,0,0.1)', transition: { duration: 0.2 } }}
               >
                 {/* Image Section */}
-                <div className="relative bg-gradient-to-br from-muted to-secondary overflow-hidden rounded-t-xl group h-44 sm:h-48 lg:h-52">
+                <div className="relative bg-gradient-to-br from-muted to-secondary overflow-hidden group h-40 sm:h-44 md:h-48">
                   <img
                     src={hackathon.imageUrl}
                     alt={hackathon.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    loading="lazy"
                   />
                   
                   {/* Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                   
                   {/* Achievement Badge */}
-                  <div className="absolute top-2 sm:top-2.5 right-2 sm:right-2.5 transform transition-all duration-300 group-hover:scale-105">
-                    <div className="flex items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1 sm:py-1.5 bg-primary text-primary-foreground rounded-full text-[10px] sm:text-xs font-bold shadow-md backdrop-blur-sm">
-                      <Award className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                  <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 transform transition-all duration-300 group-hover:scale-105">
+                    <div className="flex items-center gap-0.5 px-2 sm:px-2.5 py-1 bg-primary text-primary-foreground rounded-full text-[9px] sm:text-xs font-bold shadow-md backdrop-blur-sm">
+                      <Award className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       {hackathon.achievement}
                     </div>
                   </div>
                 </div>
 
                 {/* Content Section */}
-                <div className="p-3 sm:p-4 lg:p-5">
+                <div className="p-2.5 sm:p-3 md:p-4">
                   {/* Title & Organizer */}
-                  <div className="mb-2 sm:mb-3">
-                    <h3 className="text-base sm:text-lg font-bold text-foreground mb-1 sm:mb-1.5 line-clamp-2 leading-snug font-display">
+                  <div className="mb-2">
+                    <h3 className="text-sm sm:text-base font-bold text-foreground mb-0.5 line-clamp-2 leading-snug font-display">
                       {hackathon.title}
                     </h3>
-                    <div className="flex items-center text-primary font-medium text-[10px] sm:text-xs">
-                      <div className="w-1 h-1 bg-primary rounded-full mr-1.5 sm:mr-2"></div>
+                    <div className="flex items-center text-primary font-medium text-[9px] sm:text-xs">
+                      <div className="w-1 h-1 bg-primary rounded-full mr-1"></div>
                       <span className="truncate">{hackathon.organizer}</span>
                     </div>
                   </div>
 
                   {/* Meta Info */}
-                  <div className="grid grid-cols-3 gap-1 sm:gap-1.5 mb-2 sm:mb-3">
-                    <div className="flex flex-col items-center justify-center text-center p-1.5 sm:p-2 bg-primary/10 rounded-md">
-                      <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary mb-0.5" />
-                      <span className="text-[9px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.date}</span>
+                  <div className="grid grid-cols-3 gap-0.5 sm:gap-1 mb-2">
+                    <div className="flex flex-col items-center justify-center text-center p-1 sm:p-1.5 bg-primary/10 rounded-sm sm:rounded-md">
+                      <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary mb-0.5" />
+                      <span className="text-[8px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.date}</span>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-center p-1.5 sm:p-2 bg-accent rounded-md">
-                      <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary mb-0.5" />
-                      <span className="text-[9px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.location}</span>
+                    <div className="flex flex-col items-center justify-center text-center p-1 sm:p-1.5 bg-accent rounded-sm sm:rounded-md">
+                      <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary mb-0.5" />
+                      <span className="text-[8px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.location}</span>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-center p-1.5 sm:p-2 bg-accent rounded-md">
-                      <Users className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-primary mb-0.5" />
-                      <span className="text-[9px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.teamSize}</span>
+                    <div className="flex flex-col items-center justify-center text-center p-1 sm:p-1.5 bg-accent rounded-sm sm:rounded-md">
+                      <Users className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary mb-0.5" />
+                      <span className="text-[8px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.teamSize}</span>
                     </div>
                   </div>
 
                   {/* Team Info */}
                   {hackathon.teamName && (
-                    <div className="bg-accent rounded-lg p-2 sm:p-3 mb-2 sm:mb-3 border border-border">
-                      <div className="flex items-center gap-2 sm:gap-2.5">
+                    <div className="bg-accent rounded-lg p-1.5 sm:p-2 mb-2 border border-border">
+                      <div className="flex items-center gap-1.5 sm:gap-2">
                         {hackathon.teamLogo && (
                           <div className="flex-shrink-0">
-                            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-card rounded-lg p-1 sm:p-1.5 shadow-sm flex items-center justify-center">
+                            <div className="w-9 h-9 sm:w-10 sm:h-10 bg-card rounded-md p-0.5 sm:p-1 shadow-sm flex items-center justify-center">
                               <img
                                 src={hackathon.teamLogo}
                                 alt={hackathon.teamName}
                                 className="w-full h-full object-contain"
+                                loading="lazy"
                               />
                             </div>
                           </div>
                         )}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-1 mb-0.5">
-                            <Target className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary flex-shrink-0" />
-                            <span className="text-[9px] sm:text-xs text-primary font-semibold uppercase">Team</span>
+                          <div className="flex items-center gap-0.5 mb-0.5">
+                            <Target className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-primary flex-shrink-0" />
+                            <span className="text-[8px] sm:text-xs text-primary font-semibold uppercase">Team</span>
                           </div>
-                          <p className="text-[10px] sm:text-xs font-bold text-foreground truncate">{hackathon.teamName}</p>
+                          <p className="text-[9px] sm:text-xs font-bold text-foreground truncate">{hackathon.teamName}</p>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {/* Description */}
-                  <p className="text-muted-foreground text-[10px] sm:text-xs leading-relaxed mb-2 sm:mb-3 line-clamp-2">
+                  <p className="text-muted-foreground text-[9px] sm:text-xs leading-relaxed mb-2 line-clamp-2">
                     {hackathon.description}
                   </p>
 
                   {/* Technologies */}
-                  <div className="mb-3 sm:mb-4">
-                    <div className="flex items-center gap-1 mb-1.5 sm:mb-2">
-                      <Target className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-foreground" />
-                      <span className="text-[9px] sm:text-xs font-bold text-foreground uppercase">Tech</span>
+                  <div className="mb-2 sm:mb-2.5">
+                    <div className="flex items-center gap-0.5 mb-1">
+                      <Target className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-foreground" />
+                      <span className="text-[8px] sm:text-xs font-bold text-foreground uppercase">Tech</span>
                     </div>
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-0.5 sm:gap-1">
                       {hackathon.technologies.slice(0, 4).map((tech, idx) => (
                         <span
                           key={idx}
-                          className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-secondary text-secondary-foreground rounded text-[9px] sm:text-xs font-medium border border-border"
+                          className="px-1 sm:px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded text-[8px] sm:text-xs font-medium border border-border"
                         >
                           {tech}
                         </span>
                       ))}
                       {hackathon.technologies.length > 4 && (
-                        <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-secondary text-secondary-foreground rounded text-[9px] sm:text-xs font-medium border border-border">
+                        <span className="px-1 sm:px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded text-[8px] sm:text-xs font-medium border border-border">
                           +{hackathon.technologies.length - 4}
                         </span>
                       )}
@@ -243,7 +245,7 @@ const Hackathon: React.FC = () => {
 
                   {/* Project and Certificate Links */}
                   {(hackathon.projectUrl || hackathon.certificateUrl) && (
-                    <div className={`flex gap-1.5 sm:gap-2 pt-2 sm:pt-3 border-t border-border ${!hackathon.projectUrl || !hackathon.certificateUrl ? 'justify-center' : ''}`}>
+                    <div className={`flex gap-1 sm:gap-1.5 pt-1.5 sm:pt-2 border-t border-border ${!hackathon.projectUrl || !hackathon.certificateUrl ? 'justify-center' : ''}`}>
                       {hackathon.projectUrl && (
                         <a
                           href={hackathon.projectUrl}

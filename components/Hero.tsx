@@ -37,24 +37,24 @@ const Hero = () => {
   }, [currentIndex]);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative bg-background overflow-hidden">
+    <section id="home" className="min-h-screen flex items-center justify-center relative bg-background overflow-hidden pt-16 sm:pt-0">
       <GridBackground />
 
-      <div className="container mx-auto px-4 sm:px-6 relative z-10">
+      <div className="container mx-auto px-3 sm:px-6 relative z-10 w-full">
         <div className="max-w-6xl mx-auto">
           
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-16 items-center">
             
             {/* Left Column - Content */}
             <motion.div
-              className="space-y-8"
+              className="space-y-5 sm:space-y-8"
               variants={staggerContainerSlow}
               initial="hidden"
               animate="visible"
             >
               {/* Main Heading */}
-              <motion.div variants={fadeInUp} className="pt-16 sm:pt-20 lg:pt-0">
-                <h1 className="text-hero text-foreground mb-3 sm:mb-4 leading-tight">
+              <motion.div variants={fadeInUp} className="pt-8 sm:pt-0">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-foreground mb-2 sm:mb-4 leading-tight font-bold">
                   <span className="block">
                     Pushk<span className="text-primary">a</span>r
                   </span>
@@ -64,37 +64,37 @@ const Hero = () => {
                 </h1>
                 
                 {/* Dynamic Role */}
-                <div className="h-10 sm:h-12 mb-4 sm:mb-6">
-                  <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground font-medium font-display">
+                <div className="h-8 sm:h-12 mb-3 sm:mb-6">
+                  <p className="text-base sm:text-xl lg:text-2xl text-muted-foreground font-medium font-display">
                     {displayText}
                     <span className="animate-pulse text-primary">|</span>
                   </p>
                 </div>
                 
                 {/* Tagline */}
-                <p className="text-base sm:text-lg text-primary font-semibold mb-4 sm:mb-6 font-display">
+                <p className="text-sm sm:text-lg text-primary font-semibold mb-3 sm:mb-6 font-display">
                   I Build Brains for Machines
                 </p>
               </motion.div>
 
               {/* Description */}
-              <motion.p variants={fadeInUp} className="text-muted-foreground text-base sm:text-lg leading-relaxed max-w-lg">
+              <motion.p variants={fadeInUp} className="text-muted-foreground text-sm sm:text-base md:text-lg leading-relaxed max-w-lg">
                 Hey, I am Pushkar. I want to simplify the world through software. 
                 My passion lies in solving real-world problems that people face every day.
               </motion.p>
 
               {/* CTA Buttons */}
-              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                 <a
                   href="#projects"
-                  className="group px-6 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
+                  className="group px-5 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
                   <span>View My Work</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
                 <a
                   href="/chatbot"
-                  className="px-6 sm:px-8 py-3 sm:py-4 border-2 border-border text-foreground rounded-lg font-medium hover:border-primary hover:bg-accent transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
+                  className="px-5 sm:px-8 py-3 sm:py-4 border-2 border-border text-foreground rounded-lg font-medium hover:border-primary hover:bg-accent transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
                   <span>Chat with AI</span>
                 </a>
@@ -113,7 +113,7 @@ const Hero = () => {
                     href={social.href}
                     target={social.icon !== Mail ? "_blank" : undefined}
                     rel={social.icon !== Mail ? "noopener noreferrer" : undefined}
-                    className="p-3 text-muted-foreground hover:text-primary hover:bg-accent rounded-lg transition-all duration-300"
+                    className="p-2.5 sm:p-3 text-muted-foreground hover:text-primary hover:bg-accent rounded-lg transition-all duration-300"
                     aria-label={social.label}
                     whileHover={{ scale: 1.15, rotate: 5 }}
                     whileTap={{ scale: 0.9 }}
@@ -126,7 +126,7 @@ const Hero = () => {
 
             {/* Right Column - Photo */}
             <motion.div
-              className="flex justify-center lg:justify-end order-first lg:order-last mb-6 lg:mb-0"
+              className="flex justify-center lg:justify-end order-first lg:order-last mb-4 sm:mb-0"
               initial={{ opacity: 0, x: 60, scale: 0.9 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.4 }}
@@ -137,19 +137,20 @@ const Hero = () => {
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               >
                 {/* Photo Container */}
-                <div className="relative w-56 h-56 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
+                <div className="relative w-48 h-48 sm:w-72 sm:h-72 md:w-80 md:h-80 lg:w-96 lg:h-96">
                   {/* Background Elements */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-secondary rounded-2xl transform rotate-3"></div>
                   <div className="absolute inset-0 bg-gradient-to-br from-secondary to-primary/10 rounded-2xl transform -rotate-3"></div>
                   
                   {/* Photo Frame */}
-                  <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl overflow-hidden border-8 border-card">
+                  <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl overflow-hidden border-4 sm:border-8 border-card">
                     <div className="w-full h-full bg-gradient-to-br from-muted to-secondary flex items-center justify-center">
                       <div className="text-center">
                         <img 
                           src="2ed.jpg" 
                           alt="Pushkar Shinde" 
                           className="w-full h-full object-cover"
+                          loading="lazy"
                         />
                       </div>
                     </div>
@@ -173,7 +174,7 @@ const Hero = () => {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <div className="absolute bottom-20 sm:bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
           <div className="p-2 bg-card rounded-full shadow-lg border border-border">
             <ChevronDown className="w-5 h-5 text-muted-foreground" />
           </div>

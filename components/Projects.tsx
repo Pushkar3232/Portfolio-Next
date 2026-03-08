@@ -47,27 +47,27 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="relative py-12 sm:py-16 lg:py-20 bg-background overflow-hidden">
       <GridBackground />
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-3 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
           {/* Section Header */}
           <motion.div
-            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            className="text-center mb-8 sm:mb-12 lg:mb-16"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <h2 className="text-display text-foreground mb-3 sm:mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-2 sm:mb-4 font-bold">
               Featured Projects
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
               Innovative solutions showcasing expertise in AI and web development
             </p>
           </motion.div>
 
           {/* Projects Grid */}
           <motion.div
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -83,7 +83,7 @@ const Projects: React.FC = () => {
                 <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
                 
                 {/* Project Image */}
-                <div className="relative h-36 sm:h-44 lg:h-48 bg-muted">
+                <div className="relative h-32 sm:h-40 lg:h-48 bg-muted">
                   <img 
                     src={project.image} 
                     alt={project.title}
@@ -91,27 +91,27 @@ const Projects: React.FC = () => {
                     loading="lazy"
                   />
                   
-                  <div className="absolute top-3 sm:top-4 left-3 sm:left-4 text-white drop-shadow-lg">
+                  <div className="absolute top-2 sm:top-4 left-2 sm:left-4 text-white drop-shadow-lg text-sm sm:text-base">
                     {project.icon}
                   </div>
-                  <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
-                    <div className="flex space-x-1.5 sm:space-x-2">
+                  <div className="absolute top-2 sm:top-4 right-2 sm:right-4">
+                    <div className="flex space-x-1">
                       <a 
                         href={project.githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-1.5 sm:p-2 bg-card/90 hover:bg-card rounded-full shadow transition-colors duration-200"
+                        className="p-1.5 bg-card/90 hover:bg-card rounded-full shadow transition-colors duration-200"
                       >
-                        <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground" />
+                        <Github className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
                       </a>
                       {project.liveUrl && (
                         <a 
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-1.5 sm:p-2 bg-card/90 hover:bg-card rounded-full shadow transition-colors duration-200"
+                          className="p-1.5 bg-card/90 hover:bg-card rounded-full shadow transition-colors duration-200"
                         >
-                          <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground" />
+                          <ExternalLink className="w-3 h-3 sm:w-4 sm:h-4 text-muted-foreground" />
                         </a>
                       )}
                     </div>
@@ -119,27 +119,27 @@ const Projects: React.FC = () => {
                 </div>
 
                 {/* Project Content */}
-                <div className="p-4 sm:p-5 lg:p-6">
-                  <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1.5 sm:mb-2 font-display">
+                <div className="p-3 sm:p-4 lg:p-5">
+                  <h3 className="text-base sm:text-lg md:text-xl font-bold text-foreground mb-1 sm:mb-2 font-display">
                     {project.title}
                   </h3>
-                  <p className="text-muted-foreground mb-3 sm:mb-4 text-sm">
+                  <p className="text-muted-foreground mb-2 sm:mb-3 text-xs sm:text-sm">
                     {project.description}
                   </p>
                   
                   {/* Technologies */}
-                  <div className="mb-4 sm:mb-6">
-                    <div className="flex flex-wrap gap-1.5 sm:gap-2">
+                  <div className="mb-3 sm:mb-4">
+                    <div className="flex flex-wrap gap-1">
                       {project.technologies.slice(0, 3).map((tech, techIndex) => (
                         <span 
                           key={techIndex}
-                          className="px-2 sm:px-3 py-0.5 sm:py-1 bg-secondary text-secondary-foreground rounded-full text-xs sm:text-sm border border-border"
+                          className="px-1.5 sm:px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs border border-border"
                         >
                           {tech}
                         </span>
                       ))}
                       {project.technologies.length > 3 && (
-                        <span className="px-2 sm:px-3 py-0.5 sm:py-1 bg-secondary text-secondary-foreground rounded-full text-xs sm:text-sm border border-border">
+                        <span className="px-1.5 sm:px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs border border-border">
                           +{project.technologies.length - 3}
                         </span>
                       )}
@@ -147,12 +147,12 @@ const Projects: React.FC = () => {
                   </div>
 
                   {/* Project Links */}
-                  <div className="flex space-x-2 sm:space-x-3">
+                  <div className="flex gap-1.5 sm:gap-2">
                     <a 
                       href={project.githubUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex-1 py-2 px-3 sm:px-4 border border-border hover:bg-muted text-foreground rounded-lg text-center text-xs sm:text-sm transition-colors duration-200"
+                      className="flex-1 py-2 px-2 sm:px-3 border border-border hover:bg-muted text-foreground rounded-lg text-center text-xs transition-colors duration-200"
                     >
                       Code
                     </a>
@@ -161,13 +161,13 @@ const Projects: React.FC = () => {
                         href={project.liveUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex-1 py-2 px-3 sm:px-4 bg-foreground hover:bg-foreground/90 text-background rounded-lg text-center text-xs sm:text-sm transition-colors duration-200"
+                        className="flex-1 py-2 px-2 sm:px-3 bg-foreground hover:bg-foreground/90 text-background rounded-lg text-center text-xs transition-colors duration-200"
                       >
-                        Live Demo
+                        Live
                       </a>
                     ) : (
-                      <div className="flex-1 py-2 px-3 sm:px-4 bg-muted text-muted-foreground rounded-lg text-center text-xs sm:text-sm border border-border">
-                        {project.title === 'Private AI' ? 'No Live Demo' : 'Private Access'}
+                      <div className="flex-1 py-2 px-2 sm:px-3 bg-muted text-muted-foreground rounded-lg text-center text-xs border border-border">
+                        {project.title === 'Private AI' ? 'No Demo' : 'Private'}
                       </div>
                     )}
                   </div>

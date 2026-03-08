@@ -1,126 +1,155 @@
 // components/Skills.tsx
 'use client';
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Code, Database, Globe, Brain } from 'lucide-react';
-import { fadeInUp, scaleIn, staggerContainer, staggerContainerFast, viewportOnce } from '@/lib/animations';
+import { fadeInUp, viewportOnce } from '@/lib/animations';
 import { GridBackground } from '@/components/ui/grid-background';
-import { GlowingEffect } from '@/components/ui/glowing-effect';
+import { SkillCarousel, type SkillItem } from '@/components/ui/3d-carousel';
+
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+interface SkillCategory {
+  category: string;
+  icon: React.ReactNode;
+  color: string;
+  skills: SkillItem[];
+}
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+const skillCategories: SkillCategory[] = [
+  {
+    category: 'Programming',
+    icon: <Code className="w-4 h-4" />,
+    color: '#6366f1',
+    skills: [
+      { name: 'Python',     logo: 'https://cdn.simpleicons.org/python' },
+      { name: 'TypeScript', logo: 'https://cdn.simpleicons.org/typescript' },
+      { name: 'JavaScript', logo: 'https://cdn.simpleicons.org/javascript' },
+      { name: 'Java',       logo: 'https://cdn.simpleicons.org/openjdk' },
+      { name: 'HTML',       logo: 'https://cdn.simpleicons.org/html5' },
+      { name: 'CSS',        logo: 'https://cdn.simpleicons.org/css3' },
+      { name: 'XML',        logo: null },
+    ],
+  },
+  {
+    category: 'Web & Mobile',
+    icon: <Globe className="w-4 h-4" />,
+    color: '#0ea5e9',
+    skills: [
+      { name: 'React',       logo: 'https://cdn.simpleicons.org/react' },
+      { name: 'Next.js',     logo: 'https://cdn.simpleicons.org/nextdotjs' },
+      { name: 'TailwindCSS', logo: 'https://cdn.simpleicons.org/tailwindcss' },
+      { name: 'Flutter',     logo: 'https://cdn.simpleicons.org/flutter' },
+      { name: 'PWA',         logo: null },
+    ],
+  },
+  {
+    category: 'Backend & Database',
+    icon: <Database className="w-4 h-4" />,
+    color: '#f97316',
+    skills: [
+      { name: 'FastAPI',  logo: 'https://cdn.simpleicons.org/fastapi' },
+      { name: 'Django',   logo: 'https://cdn.simpleicons.org/django' },
+      { name: 'Flask',    logo: 'https://cdn.simpleicons.org/flask' },
+      { name: 'MongoDB',  logo: 'https://cdn.simpleicons.org/mongodb' },
+      { name: 'Firebase', logo: 'https://cdn.simpleicons.org/firebase' },
+      { name: 'Supabase', logo: 'https://cdn.simpleicons.org/supabase' },
+      { name: 'SQL',      logo: null },
+    ],
+  },
+  {
+    category: 'AI/ML & DevOps',
+    icon: <Brain className="w-4 h-4" />,
+    color: '#a855f7',
+    skills: [
+      { name: 'LangChain',      logo: 'https://cdn.simpleicons.org/langchain' },
+      { name: 'HuggingFace',    logo: 'https://cdn.simpleicons.org/huggingface' },
+      { name: 'Docker',         logo: 'https://cdn.simpleicons.org/docker' },
+      { name: 'AWS',            logo: 'https://cdn.simpleicons.org/amazonwebservices' },
+      { name: 'Vercel',         logo: 'https://cdn.simpleicons.org/vercel' },
+      { name: 'GitHub Actions', logo: 'https://cdn.simpleicons.org/githubactions' },
+      { name: 'RAG',            logo: null },
+    ],
+  },
+];
+
+// ─── Main Component ───────────────────────────────────────────────────────────
 
 const Skills: React.FC = () => {
-  const skillCategories = [
-    {
-      category: 'Programming',
-      icon: <Code className="w-6 h-6" />,
-      skills: ['Python', 'TypeScript', 'JavaScript']
-    },
-    {
-      category: 'Web Development',
-      icon: <Globe className="w-6 h-6" />,
-      skills: ['React', 'Next.js', 'TailwindCSS']
-    },
-    {
-      category: 'Backend & Database',
-      icon: <Database className="w-6 h-6" />,
-      skills: ['FastAPI', 'Firebase', 'MongoDB']
-    },
-    {
-      category: 'AI & Machine Learning',
-      icon: <Brain className="w-6 h-6" />,
-      skills: ['Langchain', 'Vector DB', 'GenAI']
-    }
-  ];
-
-  const allTechnologies = [
-    'Python', 'React', 'TypeScript', 'Firebase', 'MongoDB', 'FastAPI', 
-    'Langchain', 'TailwindCSS', 'Vector DB', 'Next.js', 'GenAI'
-  ];
+  const [activeIndex, setActiveIndex] = useState(0);
+  const active = skillCategories[activeIndex];
 
   return (
-    <section id="skills" className="relative py-12 sm:py-16 lg:py-20 bg-background overflow-hidden">
+    <section id="skills" className="relative py-10 sm:py-12 lg:py-16 bg-background overflow-hidden">
       <GridBackground />
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-3 sm:px-6 relative z-10">
         <div className="max-w-6xl mx-auto">
+
           {/* Section Header */}
           <motion.div
-            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            className="text-center mb-8 sm:mb-10 lg:mb-12"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <h2 className="text-display text-foreground mb-3 sm:mb-4">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl text-foreground mb-2 sm:mb-4 font-bold">
               Skills & Technologies
             </h2>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-2xl mx-auto px-2">
+            <p className="text-muted-foreground text-sm sm:text-base md:text-lg max-w-2xl mx-auto px-2">
               Specialized in AI & GenAI with full-stack development expertise
             </p>
           </motion.div>
 
-          {/* Skills Grid */}
+          {/* Category Tabs */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-10 sm:mb-12 lg:mb-16"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={viewportOnce}
-          >
-            {skillCategories.map((category, categoryIndex) => (
-              <motion.div
-                key={categoryIndex}
-                variants={scaleIn}
-                className="relative bg-card rounded-lg sm:rounded-xl p-4 sm:p-5 lg:p-6 shadow-lg border border-border"
-                whileHover={{ y: -6, boxShadow: '0 20px 40px rgba(0,0,0,0.1)', transition: { duration: 0.2 } }}
-              >
-                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
-                <div className="relative z-10">
-                  <div className="flex items-center space-x-2 sm:space-x-3 mb-3 sm:mb-4">
-                    <div className="text-foreground">
-                      {category.icon}
-                    </div>
-                    <h3 className="text-sm sm:text-base lg:text-lg font-bold text-foreground">{category.category}</h3>
-                  </div>
-                  <div className="space-y-1.5 sm:space-y-2">
-                    {category.skills.map((skill, skillIndex) => (
-                      <div key={skillIndex} className="text-muted-foreground font-medium text-xs sm:text-sm lg:text-base">
-                        {skill}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-
-          {/* Technologies Cloud */}
-          <motion.div
-            className="text-center mb-10 sm:mb-12 lg:mb-16"
+            className="flex justify-center gap-1.5 sm:gap-2 lg:gap-3 mb-6 sm:mb-8 flex-wrap px-1"
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
             viewport={viewportOnce}
           >
-            <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-4 sm:mb-6 lg:mb-8">All Technologies</h3>
-            <motion.div
-              className="flex flex-wrap justify-center gap-2 sm:gap-3"
-              variants={staggerContainerFast}
-              initial="hidden"
-              whileInView="visible"
-              viewport={viewportOnce}
-            >
-              {allTechnologies.map((tech, index) => (
-                <motion.span
-                  key={index}
-                  variants={scaleIn}
-                  className="px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-100 text-gray-700 rounded-full border border-gray-200 hover:bg-gray-200 transition-colors duration-200 text-xs sm:text-sm cursor-default"
-                  whileHover={{ scale: 1.1, backgroundColor: '#e5e7eb' }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {tech}
-                </motion.span>
-              ))}
-            </motion.div>
+            {skillCategories.map((cat, i) => (
+              <button
+                key={cat.category}
+                onClick={() => setActiveIndex(i)}
+                className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border transition-all duration-200"
+                style={{
+                  borderColor: activeIndex === i ? cat.color : 'var(--border)',
+                  color: activeIndex === i ? cat.color : 'var(--muted-foreground)',
+                  background: activeIndex === i
+                    ? `color-mix(in srgb, ${cat.color} 12%, transparent)`
+                    : 'transparent',
+                  boxShadow: activeIndex === i
+                    ? `0 0 0 3px color-mix(in srgb, ${cat.color} 15%, transparent)`
+                    : 'none',
+                }}
+              >
+                {cat.icon}
+                <span className="hidden sm:inline">{cat.category}</span>
+                <span className="sm:hidden text-xs">{cat.category.split(' ')[0]}</span>
+              </button>
+            ))}
           </motion.div>
+
+          {/* 3D Carousel — full width, switches per category */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeIndex}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -24 }}
+              transition={{ duration: 0.28 }}
+            >
+              <SkillCarousel
+                skills={active.skills}
+                accentColor={active.color}
+              />
+            </motion.div>
+          </AnimatePresence>
+
         </div>
       </div>
     </section>
