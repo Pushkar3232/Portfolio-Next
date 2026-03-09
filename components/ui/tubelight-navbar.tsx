@@ -21,6 +21,7 @@ interface NavBarProps {
 export function NavBar({ items, className }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [isMobile, setIsMobile] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
@@ -32,6 +33,32 @@ export function NavBar({ items, className }: NavBarProps) {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+  // Track scroll position to update active section and navbar appearance
+  useEffect(() => {
+    const sectionItems = items.filter((item) => item.url.startsWith("#"))
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY
+      setScrolled(scrollY > 20)
+
+      const windowHeight = window.innerHeight
+      let newActive = sectionItems[0]?.name ?? activeTab
+
+      for (const item of sectionItems) {
+        const el = document.getElementById(item.url.substring(1))
+        if (el && el.offsetTop - windowHeight / 3 <= scrollY) {
+          newActive = item.name
+        }
+      }
+
+      setActiveTab((prev) => (prev === newActive ? prev : newActive))
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    handleScroll()
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [items])
+
   return (
     <div
       className={cn(
@@ -39,7 +66,14 @@ export function NavBar({ items, className }: NavBarProps) {
         className,
       )}
     >
-      <div className="flex items-center gap-0.5 sm:gap-3 bg-background/5 border border-border backdrop-blur-lg py-2 sm:py-1 px-2 sm:px-1 rounded-full shadow-lg">
+      <div
+        className={cn(
+          "flex items-center gap-0.5 sm:gap-3 border border-border backdrop-blur-lg py-2 sm:py-1 px-2 sm:px-1 rounded-full shadow-lg transition-all duration-300",
+          scrolled
+            ? "bg-background/80 shadow-xl border-border/80"
+            : "bg-background/5 shadow-lg",
+        )}
+      >
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.name
