@@ -1,6 +1,7 @@
 // components/Projects.tsx
 'use client';
 import React from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Github, ExternalLink, Lock, Users, Zap } from 'lucide-react';
 import { fadeInUp, scaleIn, staggerContainer, viewportOnce } from '@/lib/animations';
@@ -80,13 +81,15 @@ const Projects: React.FC = () => {
                 className="relative bg-card rounded-lg sm:rounded-xl shadow-lg border border-border overflow-hidden"
                 whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(0,0,0,0.12)', transition: { duration: 0.2 } }}
               >
-                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+                <GlowingEffect spread={40} glow={true} disabled={true} proximity={64} inactiveZone={0.01} borderWidth={2} />
                 
                 {/* Project Image */}
                 <div className="relative h-32 sm:h-40 lg:h-48 bg-muted">
-                  <img 
-                    src={project.image} 
+                  <Image
+                    src={`/${project.image}`}
                     alt={project.title}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="w-full h-full object-cover"
                     loading="lazy"
                   />

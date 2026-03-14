@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronDown, Github, Linkedin, Mail, ArrowRight } from 'lucide-react';
 import { fadeInUp, staggerContainerSlow } from '@/lib/animations';
@@ -37,7 +38,7 @@ const Hero = () => {
   }, [currentIndex]);
 
   return (
-    <section id="home" className="min-h-screen flex items-center justify-center relative bg-background overflow-hidden pt-16 sm:pt-0">
+    <section id="home" className="min-h-screen flex items-center justify-center relative bg-background overflow-hidden pt-20 sm:pt-24 lg:pt-0">
       <GridBackground />
 
       <div className="container mx-auto px-3 sm:px-6 relative z-10 w-full">
@@ -146,11 +147,13 @@ const Hero = () => {
                   <div className="relative w-full h-full bg-card rounded-2xl shadow-2xl overflow-hidden border-4 sm:border-8 border-card">
                     <div className="w-full h-full bg-gradient-to-br from-muted to-secondary flex items-center justify-center">
                       <div className="text-center">
-                        <img 
-                          src="2ed.jpg" 
-                          alt="Pushkar Shinde" 
+                        <Image
+                          src="/2ed.jpg"
+                          alt="Pushkar Shinde"
+                          fill
+                          sizes="(max-width: 640px) 192px, (max-width: 768px) 320px, (max-width: 1024px) 384px, 448px"
                           className="w-full h-full object-cover"
-                          loading="lazy"
+                          priority
                         />
                       </div>
                     </div>

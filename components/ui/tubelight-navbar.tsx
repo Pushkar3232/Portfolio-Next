@@ -20,18 +20,7 @@ interface NavBarProps {
 
 export function NavBar({ items, className }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name)
-  const [isMobile, setIsMobile] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
 
   // Track scroll position to update active section and navbar appearance
   useEffect(() => {
@@ -42,33 +31,38 @@ export function NavBar({ items, className }: NavBarProps) {
       setScrolled(scrollY > 20)
 
       const windowHeight = window.innerHeight
-      let newActive = sectionItems[0]?.name ?? activeTab
+      let newActive = activeTab
 
+      // Find the section that is currently most visible in viewport
       for (const item of sectionItems) {
         const el = document.getElementById(item.url.substring(1))
-        if (el && el.offsetTop - windowHeight / 3 <= scrollY) {
-          newActive = item.name
+        if (el) {
+          const rect = el.getBoundingClientRect()
+          // If section is in or near viewport (within -200px to 200px of viewport center), mark as active
+          if (rect.top <= windowHeight / 2 && rect.bottom >= windowHeight / 2 - 200) {
+            newActive = item.name
+          }
         }
       }
 
-      setActiveTab((prev) => (prev === newActive ? prev : newActive))
+      setActiveTab(newActive)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [items])
+  }, [items, activeTab])
 
   return (
     <div
       className={cn(
-        "fixed bottom-4 sm:top-6 left-1/2 -translate-x-1/2 z-50 w-11/12 sm:w-auto",
+        "fixed bottom-3 sm:bottom-auto sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-0.75rem)] sm:w-auto",
         className,
       )}
     >
       <div
         className={cn(
-          "flex items-center gap-0.5 sm:gap-3 border border-border backdrop-blur-lg py-2 sm:py-1 px-2 sm:px-1 rounded-full shadow-lg transition-all duration-300",
+          "flex items-center justify-center gap-1 sm:gap-3 border border-border backdrop-blur-lg py-2 sm:py-1.5 px-2 sm:px-1 rounded-full shadow-lg transition-all duration-300",
           scrolled
             ? "bg-background/80 shadow-xl border-border/80"
             : "bg-background/5 shadow-lg",
@@ -84,7 +78,7 @@ export function NavBar({ items, className }: NavBarProps) {
               href={item.url}
               onClick={() => setActiveTab(item.name)}
               className={cn(
-                "relative cursor-pointer text-sm font-semibold px-3 sm:px-6 py-2.5 sm:py-2 rounded-full transition-colors",
+                "relative cursor-pointer text-sm font-semibold px-2.5 sm:px-6 py-2.5 sm:py-2 rounded-full transition-colors shrink-0",
                 "text-foreground/80 hover:text-primary",
                 isActive && "bg-muted text-primary",
               )}

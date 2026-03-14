@@ -170,7 +170,7 @@ const Experience: React.FC = () => {
               viewport={viewportOnce}
               transition={{ delay: cardIndex * 0.1 }}
             >
-              <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+              <GlowingEffect spread={40} glow={true} disabled={true} proximity={64} inactiveZone={0.01} borderWidth={2} />
               <div className="relative z-10">
               {/* Decorative elements */}
               <div className="absolute top-0 right-0 w-24 sm:w-32 h-24 sm:h-32 bg-gradient-to-br from-primary/5 to-transparent rounded-full transform translate-x-12 sm:translate-x-16 -translate-y-12 sm:-translate-y-16"></div>
@@ -191,7 +191,7 @@ const Experience: React.FC = () => {
                             loading="lazy"
                           />
                         ) : (
-                          <div className="w-full h-48 sm:h-56 lg:h-64 flex items-center justify-center">
+                          <div className="w-full h-48 sm:h-56 md:h-60 lg:h-64 flex items-center justify-center">
                             <Building className="w-12 h-12 sm:w-16 sm:h-16 text-muted-foreground" />
                           </div>
                         )}

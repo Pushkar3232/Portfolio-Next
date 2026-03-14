@@ -139,7 +139,7 @@ const Hackathon: React.FC = () => {
                 className="relative bg-card rounded-lg sm:rounded-xl shadow-sm overflow-hidden border border-border"
                 whileHover={{ y: -6, boxShadow: '0 16px 32px rgba(0,0,0,0.1)', transition: { duration: 0.2 } }}
               >
-                <GlowingEffect spread={40} glow={true} disabled={false} proximity={64} inactiveZone={0.01} borderWidth={2} />
+                <GlowingEffect spread={40} glow={true} disabled={true} proximity={64} inactiveZone={0.01} borderWidth={2} />
                 {/* Image Section */}
                 <div className="relative bg-gradient-to-br from-muted to-secondary overflow-hidden group h-40 sm:h-44 md:h-48">
                   <img
@@ -154,7 +154,7 @@ const Hackathon: React.FC = () => {
                   
                   {/* Achievement Badge */}
                   <div className="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 transform transition-all duration-300 group-hover:scale-105">
-                    <div className="flex items-center gap-0.5 px-2 sm:px-2.5 py-1 bg-primary text-primary-foreground rounded-full text-[9px] sm:text-xs font-bold shadow-md backdrop-blur-sm">
+                    <div className="flex items-center gap-0.5 px-2 sm:px-2.5 py-1 bg-primary text-primary-foreground rounded-full text-xs font-bold shadow-md backdrop-blur-sm">
                       <Award className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                       {hackathon.achievement}
                     </div>
@@ -168,7 +168,7 @@ const Hackathon: React.FC = () => {
                     <h3 className="text-sm sm:text-base font-bold text-foreground mb-0.5 line-clamp-2 leading-snug font-display">
                       {hackathon.title}
                     </h3>
-                    <div className="flex items-center text-primary font-medium text-[9px] sm:text-xs">
+                    <div className="flex items-center text-primary font-medium text-xs">
                       <div className="w-1 h-1 bg-primary rounded-full mr-1"></div>
                       <span className="truncate">{hackathon.organizer}</span>
                     </div>
@@ -178,15 +178,15 @@ const Hackathon: React.FC = () => {
                   <div className="grid grid-cols-3 gap-0.5 sm:gap-1 mb-2">
                     <div className="flex flex-col items-center justify-center text-center p-1 sm:p-1.5 bg-primary/10 rounded-sm sm:rounded-md">
                       <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary mb-0.5" />
-                      <span className="text-[8px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.date}</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.date}</span>
                     </div>
                     <div className="flex flex-col items-center justify-center text-center p-1 sm:p-1.5 bg-accent rounded-sm sm:rounded-md">
                       <MapPin className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary mb-0.5" />
-                      <span className="text-[8px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.location}</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.location}</span>
                     </div>
                     <div className="flex flex-col items-center justify-center text-center p-1 sm:p-1.5 bg-accent rounded-sm sm:rounded-md">
                       <Users className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-primary mb-0.5" />
-                      <span className="text-[8px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.teamSize}</span>
+                      <span className="text-[10px] sm:text-xs font-medium text-foreground leading-tight">{hackathon.teamSize}</span>
                     </div>
                   </div>
 
@@ -209,16 +209,16 @@ const Hackathon: React.FC = () => {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-0.5 mb-0.5">
                             <Target className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-primary flex-shrink-0" />
-                            <span className="text-[8px] sm:text-xs text-primary font-semibold uppercase">Team</span>
+                            <span className="text-[10px] sm:text-xs text-primary font-semibold uppercase">Team</span>
                           </div>
-                          <p className="text-[9px] sm:text-xs font-bold text-foreground truncate">{hackathon.teamName}</p>
+                          <p className="text-xs font-bold text-foreground truncate">{hackathon.teamName}</p>
                         </div>
                       </div>
                     </div>
                   )}
 
                   {/* Description */}
-                  <p className="text-muted-foreground text-[9px] sm:text-xs leading-relaxed mb-2 line-clamp-2">
+                  <p className="text-muted-foreground text-xs leading-relaxed mb-2 line-clamp-2">
                     {hackathon.description}
                   </p>
 
@@ -226,19 +226,19 @@ const Hackathon: React.FC = () => {
                   <div className="mb-2 sm:mb-2.5">
                     <div className="flex items-center gap-0.5 mb-1">
                       <Target className="w-2 h-2 sm:w-2.5 sm:h-2.5 text-foreground" />
-                      <span className="text-[8px] sm:text-xs font-bold text-foreground uppercase">Tech</span>
+                      <span className="text-[10px] sm:text-xs font-bold text-foreground uppercase">Tech</span>
                     </div>
                     <div className="flex flex-wrap gap-0.5 sm:gap-1">
                       {hackathon.technologies.slice(0, 4).map((tech, idx) => (
                         <span
                           key={idx}
-                          className="px-1 sm:px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded text-[8px] sm:text-xs font-medium border border-border"
+                          className="px-1 sm:px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded text-[10px] sm:text-xs font-medium border border-border"
                         >
                           {tech}
                         </span>
                       ))}
                       {hackathon.technologies.length > 4 && (
-                        <span className="px-1 sm:px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded text-[8px] sm:text-xs font-medium border border-border">
+                        <span className="px-1 sm:px-1.5 py-0.5 bg-secondary text-secondary-foreground rounded text-[10px] sm:text-xs font-medium border border-border">
                           +{hackathon.technologies.length - 4}
                         </span>
                       )}

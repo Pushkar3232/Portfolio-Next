@@ -68,7 +68,7 @@ const ShuffleGrid = ({ items, className }: ShuffleGridProps) => {
 
   return (
     <div
-      className={cn("grid gap-2 sm:gap-3 h-[300px] sm:h-[350px] lg:h-[400px]", className)}
+      className={cn("grid gap-2 sm:gap-3 h-[300px] sm:h-[350px] md:h-[375px] lg:h-[400px]", className)}
       style={{
         gridTemplateColumns: `repeat(${cols}, 1fr)`,
         gridTemplateRows: `repeat(${cols}, 1fr)`,

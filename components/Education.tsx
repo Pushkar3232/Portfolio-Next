@@ -41,7 +41,7 @@ interface Certificate {
 // Certificate image header component
 const CertificateImage = ({ image, title }: { image: string; title: string }) => {
   return (
-    <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+    <div className="w-full aspect-[4/3] rounded-xl overflow-hidden bg-muted">
       {image ? (
         <img
           src={image}
@@ -49,8 +49,8 @@ const CertificateImage = ({ image, title }: { image: string; title: string }) =>
           className="w-full h-full object-cover transition-transform duration-300 group-hover/bento:scale-105"
         />
       ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
-          <IconCertificate className="w-10 h-10 text-gray-400" />
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/70 to-muted/50">
+          <IconCertificate className="w-10 h-10 text-muted-foreground" />
         </div>
       )}
     </div>
@@ -238,7 +238,7 @@ const Education: React.FC = () => {
             ) : (
               <div className="relative">
                 {/* Timeline connector line - vertical center */}
-                <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/10 via-primary/40 to-primary/10 transform -translate-x-1/2"></div>
+                <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-primary/10 via-primary/40 to-primary/10 transform -translate-x-1/2"></div>
                 
                 <div className="space-y-6 sm:space-y-8 lg:space-y-10">
                   {educationData.map((edu, index) => {
@@ -248,25 +248,20 @@ const Education: React.FC = () => {
                     return (
                       <div key={edu.id} className="relative">
                         {/* Timeline dot */}
-                        <div className="hidden lg:flex absolute left-1/2 top-8 w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 border-4 border-background shadow-lg transform -translate-x-1/2 items-center justify-center z-10">
+                        <div className="hidden md:flex absolute left-1/2 top-8 w-7 h-7 rounded-full bg-gradient-to-br from-primary to-primary/80 border-4 border-background shadow-lg transform -translate-x-1/2 items-center justify-center z-10">
                           <div className={`absolute inset-0 rounded-full animate-pulse ${isCurrentOrLatest ? 'bg-primary/50' : 'bg-primary/20'}`}></div>
                         </div>
                         
                         {/* Content card */}
-                        <div className={`lg:w-1/2 ${isAlternate ? 'lg:ml-auto lg:pl-8' : 'lg:pr-8'}`}>
+                        <div className={`md:w-1/2 ${isAlternate ? 'md:ml-auto md:pl-6 lg:pl-8' : 'md:pr-6 lg:pr-8'}`}>
                           <div 
-                            className={`relative group overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-7 shadow-sm hover:shadow-xl transition-all duration-500 border border-primary/20 hover:border-primary/50 bg-gradient-to-br
+                            className={`relative group overflow-hidden rounded-xl sm:rounded-2xl p-5 sm:p-6 lg:p-7 shadow-sm hover:shadow-xl transition-all duration-500 border border-primary/20 hover:border-primary/50
                               ${isCurrentOrLatest 
-                                ? 'from-primary/5 to-primary/10 dark:from-primary/10 dark:to-primary/5 hover:from-primary/15 hover:to-primary/20 dark:hover:from-primary/20 dark:hover:to-primary/15' 
-                                : 'from-muted/30 to-muted/20 dark:from-muted/20 dark:to-muted/10 hover:from-muted/50 hover:to-muted/30 dark:hover:from-muted/30 dark:hover:to-muted/20'
+                                ? 'bg-primary/25' 
+                                : 'bg-secondary/40'
                               }
                             `}
                           >
-                            {/* Glowing background effect */}
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                              <div className={`absolute -inset-1 bg-gradient-to-r ${isCurrentOrLatest ? 'from-primary/20 to-primary/10' : 'from-muted-foreground/10 to-muted-foreground/5'} rounded-xl blur`}></div>
-                            </div>
-                            
                             <div className="relative z-10 space-y-4">
                               {/* Header with status badge */}
                               <div className="flex items-start justify-between gap-3">

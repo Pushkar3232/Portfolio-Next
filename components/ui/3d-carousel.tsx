@@ -80,7 +80,8 @@ const Carousel = memo(
     onDragEnd: (velocityX: number) => void
   }) => {
     const isScreenSizeSm = useMediaQuery("(max-width: 640px)")
-    const cylinderWidth = isScreenSizeSm ? 1100 : 1800
+    const isScreenSizeMd = useMediaQuery("(max-width: 1024px)")
+    const cylinderWidth = isScreenSizeSm ? 1100 : isScreenSizeMd ? 1400 : 1800
     const faceCount = cards.length
     const faceWidth = cylinderWidth / faceCount
     const radius = cylinderWidth / (2 * Math.PI)
@@ -231,7 +232,7 @@ function PhotoCarouselBase({
             layoutId={`img-container-${activeImg}`}
             layout="position"
             onClick={handleClose}
-            className="fixed inset-0 bg-black/10 flex items-center justify-center z-50 m-5 md:m-36 lg:mx-[19rem] rounded-3xl"
+            className="fixed inset-0 bg-black/10 flex items-center justify-center z-50 m-5 sm:m-8 md:m-16 lg:mx-40 xl:mx-56 rounded-3xl"
             style={{ willChange: "opacity" }}
             transition={transitionOverlay}
           >
