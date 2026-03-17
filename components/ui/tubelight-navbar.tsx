@@ -56,17 +56,18 @@ export function NavBar({ items, className }: NavBarProps) {
   return (
     <div
       className={cn(
-        "fixed bottom-3 sm:bottom-auto sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-0.75rem)] sm:w-auto",
+        "fixed bottom-3 sm:bottom-auto sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-0.75rem)] max-w-[calc(100%-1.5rem)] sm:max-w-none sm:w-auto",
         className,
       )}
     >
       <div
         className={cn(
-          "flex items-center justify-center gap-1 sm:gap-3 border border-border backdrop-blur-lg py-2 sm:py-1.5 px-2 sm:px-1 rounded-full shadow-lg transition-all duration-300",
+          "flex items-center justify-center gap-1 sm:gap-3 border border-border backdrop-blur-lg py-2 sm:py-1.5 px-2 sm:px-1 rounded-full shadow-lg transition-all duration-300 overflow-x-auto touch-pan-x snap-x snap-mandatory",
           scrolled
             ? "bg-background/80 shadow-xl border-border/80"
             : "bg-background/5 shadow-lg",
         )}
+        style={{ WebkitOverflowScrolling: "touch" }}
       >
         {items.map((item) => {
           const Icon = item.icon
@@ -78,10 +79,11 @@ export function NavBar({ items, className }: NavBarProps) {
               href={item.url}
               onClick={() => setActiveTab(item.name)}
               className={cn(
-                "relative cursor-pointer text-sm font-semibold px-2.5 sm:px-6 py-2.5 sm:py-2 rounded-full transition-colors shrink-0",
+                "relative cursor-pointer text-sm font-semibold px-2.5 sm:px-6 py-2.5 sm:py-2 rounded-full transition-colors shrink-0 min-w-[3.5rem] flex items-center justify-center snap-center",
                 "text-foreground/80 hover:text-primary",
                 isActive && "bg-muted text-primary",
               )}
+              aria-label={item.name}
             >
               <span className="hidden sm:inline">{item.name}</span>
               <span className="sm:hidden flex items-center justify-center">

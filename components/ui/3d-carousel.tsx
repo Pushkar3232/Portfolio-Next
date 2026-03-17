@@ -168,16 +168,34 @@ Carousel.displayName = "Carousel"
 function PhotoCarouselBase({
   cards,
   carouselKey,
+  isSkillCarousel = false,
 }: {
   cards: Array<{ url: string; name: string }>
   carouselKey?: string
+  isSkillCarousel?: boolean
 }) {
+  const isScreenSizeSm = useMediaQuery("(max-width: 640px)")
   const [activeImg, setActiveImg] = useState<string | null>(null)
   const [isCarouselActive, setIsCarouselActive] = useState(true)
   const controls = useAnimation()
   const rotation = useMotionValue(0)
   const isDragging = useRef(false)
   const isSpring = useRef(false)
+
+  // For skill carousel on mobile, don't pad the cards
+  const processedCards = useMemo(() => {
+    if (isSkillCarousel && isScreenSizeSm) {
+      return cards
+    }
+    // For desktop or non-skill carousels, pad to MIN_CARDS
+    if (isSkillCarousel && !isScreenSizeSm) {
+      const MIN_CARDS = 12
+      const padded: Array<{ url: string; name: string }> = []
+      while (padded.length < MIN_CARDS) padded.push(...cards)
+      return padded.slice(0, Math.max(MIN_CARDS, cards.length))
+    }
+    return cards
+  }, [cards, isScreenSizeSm, isSkillCarousel])
 
   // Auto-rotate via rAF — pauses during drag, spring-settle, and overlay
   useEffect(() => {
@@ -192,7 +210,7 @@ function PhotoCarouselBase({
     return () => cancelAnimationFrame(rafId)
   }, [rotation, isCarouselActive])
 
-  const handleClick = (imgUrl: string) => {
+  const handleClick = (imgUrl: string, _index?: number) => {
     setActiveImg(imgUrl)
     setIsCarouselActive(false)
     controls.stop()
@@ -253,18 +271,53 @@ function PhotoCarouselBase({
           </motion.div>
         )}
       </AnimatePresence>
-      <div className="relative h-[500px] w-full overflow-hidden">
-        <Carousel
-          key={carouselKey}
-          handleClick={handleClick}
-          controls={controls}
-          cards={cards}
-          isCarouselActive={isCarouselActive}
-          rotation={rotation}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        />
-      </div>
+      
+      {/* Mobile grid layout */}
+      {isScreenSizeSm ? (
+        <div className="grid grid-cols-3 gap-3 w-full px-2">
+          {processedCards.map((card, i) => (
+            <motion.div
+              key={`card-${i}-${card.url}`}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3, delay: i * 0.05 }}
+              onClick={() => handleClick(card.url, i)}
+              className="aspect-square rounded-lg bg-white flex items-center justify-center p-3 cursor-pointer hover:shadow-lg transition-shadow"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <motion.img
+                src={card.url}
+                alt={card.name}
+                className="w-full h-full object-contain pointer-events-none"
+                initial={{ filter: "blur(4px)", opacity: 0 }}
+                whileInView={{ filter: "blur(0px)", opacity: 1 }}
+                transition={transition}
+                onError={(e) => {
+                  const el = e.currentTarget
+                  if (!el.src.startsWith("data:")) {
+                    const textLogo = makeTextLogo(el.alt)
+                    el.src = textLogo
+                  }
+                }}
+              />
+            </motion.div>
+          ))}
+        </div>
+      ) : (
+        /* 3D Carousel for larger screens */
+        <div className="relative h-[500px] w-full overflow-hidden">
+          <Carousel
+            key={carouselKey}
+            handleClick={handleClick}
+            controls={controls}
+            cards={processedCards}
+            isCarouselActive={isCarouselActive}
+            rotation={rotation}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          />
+        </div>
+      )}
     </motion.div>
   )
 }
@@ -276,24 +329,19 @@ export interface SkillCarouselProps {
   accentColor: string
 }
 
-const MIN_CARDS = 12
-
 export function SkillCarousel({ skills }: SkillCarouselProps) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const cards = useMemo(() => {
-    const padded: SkillItem[] = []
-    while (padded.length < MIN_CARDS) padded.push(...skills)
-    const sliced = padded.slice(0, Math.max(MIN_CARDS, skills.length))
-    return sliced.map((skill) => ({
+    return skills.map((skill) => ({
       url: skill.logo ?? makeTextLogo(skill.name),
       name: skill.name,
     }))
-  }, [skills.map((s) => s.name).join(",")])
+  }, [skills])
 
   return (
     <PhotoCarouselBase
       cards={cards}
       carouselKey={skills.map((s) => s.name).join("-")}
+      isSkillCarousel={true}
     />
   )
 }

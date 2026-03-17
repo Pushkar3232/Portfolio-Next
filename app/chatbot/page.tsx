@@ -5,6 +5,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import { Send, User, Copy, Check, RefreshCw, AlertTriangle, ArrowLeft, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { marked } from "marked";
 import { GridBackground } from "@/components/ui/grid-background";
 import { fadeInUp, staggerContainer } from "@/lib/animations";
 
@@ -21,52 +22,118 @@ interface ApiMessage {
 
 const URL_OR_EMAIL_REGEX = /(\bhttps?:\/\/[^\s<>{}"'|\\^`\[\]]+|\bwww\.[^\s<>{}"'|\\^`\[\]]+|\b[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}\b)/gi;
 
-const renderFormattedText = (text: string) => {
-  const lines = text.split("\n");
+const renderMarkdownWithLinks = (html: string, key: string) => {
+  // Client-side only rendering
+  if (typeof document === "undefined") {
+    return html;
+  }
 
-  return lines.map((line, lineIndex) => {
-    const parts: React.ReactNode[] = [];
-    let lastIndex = 0;
+  try {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    const elements: React.ReactNode[] = [];
 
-    line.replace(URL_OR_EMAIL_REGEX, (match, _group, offset) => {
-      if (offset > lastIndex) {
-        parts.push(line.slice(lastIndex, offset));
+    const processNode = (node: Node, nodeKey: string): React.ReactNode => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = node.textContent || "";
+        const parts: React.ReactNode[] = [];
+        let lastIndex = 0;
+
+        text.replace(URL_OR_EMAIL_REGEX, (match, _group, offset) => {
+          if (offset > lastIndex) {
+            parts.push(text.slice(lastIndex, offset));
+          }
+
+          const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(match);
+          const href = isEmail
+            ? `mailto:${match}`
+            : match.startsWith("http")
+              ? match
+              : `https://${match}`;
+
+          parts.push(
+            <a
+              key={`${nodeKey}-${offset}-${match}`}
+              href={href}
+              target={isEmail ? undefined : "_blank"}
+              rel={isEmail ? undefined : "noopener noreferrer"}
+              className="text-blue-600 hover:underline underline-offset-2 break-all"
+            >
+              {match}
+            </a>
+          );
+
+          lastIndex = offset + match.length;
+          return match;
+        });
+
+        if (lastIndex < text.length) {
+          parts.push(text.slice(lastIndex));
+        }
+
+        return parts.length > 0 ? parts : text;
       }
 
-      const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(match);
-      const href = isEmail
-        ? `mailto:${match}`
-        : match.startsWith("http")
-          ? match
-          : `https://${match}`;
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        const elem = node as Element;
+        const children: React.ReactNode[] = [];
 
-      parts.push(
-        <a
-          key={`${lineIndex}-${offset}-${match}`}
-          href={href}
-          target={isEmail ? undefined : "_blank"}
-          rel={isEmail ? undefined : "noopener noreferrer"}
-          className="text-blue-600 underline underline-offset-2 break-all"
-        >
-          {match}
-        </a>
-      );
+        Array.from(elem.childNodes).forEach((child, idx) => {
+          children.push(processNode(child, `${nodeKey}-${idx}`));
+        });
 
-      lastIndex = offset + match.length;
-      return match;
+        const className =
+          elem.tagName === "P"
+            ? "mb-2"
+            : elem.tagName === "LI"
+              ? "ml-4 mb-1"
+              : elem.tagName === "UL" || elem.tagName === "OL"
+                ? "mb-2"
+                : elem.tagName === "CODE"
+                  ? "bg-secondary/50 px-1.5 py-0.5 rounded text-xs font-mono"
+                  : elem.tagName === "PRE"
+                    ? "bg-secondary/30 p-3 rounded overflow-x-auto mb-2 text-xs font-mono border border-border/40"
+                    : elem.tagName === "BLOCKQUOTE"
+                      ? "border-l-4 border-primary/40 pl-4 italic text-muted-foreground mb-2"
+                      : elem.tagName === "H1"
+                        ? "text-xl font-bold mb-2 mt-2"
+                        : elem.tagName === "H2"
+                          ? "text-lg font-bold mb-2 mt-2"
+                          : elem.tagName === "H3"
+                            ? "text-base font-bold mb-2 mt-1"
+                            : "";
+
+        const Component = elem.tagName.toLowerCase() as React.ElementType;
+
+        return (
+          <Component key={`${nodeKey}-elem`} className={className}>
+            {children}
+          </Component>
+        );
+      }
+
+      return null;
+    };
+
+    Array.from(doc.body.childNodes).forEach((node, idx) => {
+      elements.push(processNode(node, `${key}-${idx}`));
     });
 
-    if (lastIndex < line.length) {
-      parts.push(line.slice(lastIndex));
-    }
+    return elements;
+  } catch (error) {
+    console.error("Error rendering markdown:", error);
+    return html;
+  }
+};
 
-    return (
-      <React.Fragment key={`line-${lineIndex}`}>
-        {parts.length > 0 ? parts : line}
-        {lineIndex < lines.length - 1 && <br />}
-      </React.Fragment>
-    );
-  });
+const renderFormattedText = (text: string) => {
+  try {
+    const html = marked(text) as string;
+    return renderMarkdownWithLinks(html, "markdown");
+  } catch (error) {
+    console.error("Error parsing markdown:", error);
+    return text;
+  }
 };
 
 const ChatbotPage = () => {
@@ -82,7 +149,12 @@ const ChatbotPage = () => {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [serverStatus, setServerStatus] = useState<"online" | "offline" | "checking">("checking");
   const [lastFailedPrompt, setLastFailedPrompt] = useState<string | null>(null);
+  const [hydrated, setHydrated] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
     checkServerStatus();
@@ -104,7 +176,10 @@ const ChatbotPage = () => {
     }
   };
 
-  const renderText = useCallback((text: string) => renderFormattedText(text), []);
+  const renderText = useCallback(
+    (text: string) => (hydrated ? renderFormattedText(text) : text),
+    [hydrated]
+  );
 
   const handleCopy = async (text: string, index: number) => {
     try {
