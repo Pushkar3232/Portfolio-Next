@@ -180,7 +180,7 @@ const Contact: React.FC = () => {
                       value={formData.name}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base"
+                      className="w-full min-h-11 px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base"
                       placeholder="Your name"
                     />
                   </div>
@@ -195,7 +195,7 @@ const Contact: React.FC = () => {
                       value={formData.email}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base"
+                      className="w-full min-h-11 px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base"
                       placeholder="your.email@example.com"
                     />
                   </div>
@@ -212,7 +212,7 @@ const Contact: React.FC = () => {
                     value={formData.subject}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base"
+                    className="w-full min-h-11 px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 text-sm sm:text-base"
                     placeholder="What's this about?"
                   />
                 </div>
@@ -228,7 +228,7 @@ const Contact: React.FC = () => {
                     onChange={handleInputChange}
                     required
                     rows={5}
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base"
+                    className="w-full min-h-32 px-3 sm:px-4 py-2.5 sm:py-3 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all duration-200 resize-none text-sm sm:text-base"
                     placeholder="Tell me about your project..."
                   />
                 </div>
@@ -237,7 +237,7 @@ const Contact: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full py-2.5 sm:py-3 px-5 sm:px-6 bg-foreground hover:bg-foreground/90 text-background rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm sm:text-base"
+                  className="w-full min-h-11 py-2.5 sm:py-3 px-5 sm:px-6 bg-foreground hover:bg-foreground/90 text-background rounded-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
                   {isSubmitting ? (
                     <>

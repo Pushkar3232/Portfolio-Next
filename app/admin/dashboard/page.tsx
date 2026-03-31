@@ -6,6 +6,7 @@ import { signOut } from 'firebase/auth';
 import { auth, db } from '../../../lib/firebase';
 import { useRouter } from 'next/navigation';
 import { useAuthState } from 'react-firebase-hooks/auth';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import AdminNavbar from '../../../components/AdminNavbar';
 import { 
@@ -23,6 +24,19 @@ import {
   MoreVertical,
   RefreshCw
 } from 'lucide-react';
+
+const AnalyticsChart = dynamic(() => import('../../../components/AnalyticsChart'), {
+  ssr: false,
+  loading: () => (
+    <section className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mb-8">
+      <div className="animate-pulse">
+        <div className="h-6 w-56 bg-gray-200 rounded mb-3"></div>
+        <div className="h-4 w-80 bg-gray-100 rounded mb-6"></div>
+        <div className="h-64 w-full bg-gray-100 rounded"></div>
+      </div>
+    </section>
+  ),
+});
 
 interface Message {
   id: string;
@@ -180,6 +194,9 @@ const AdminDashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Analytics */}
+        <AnalyticsChart />
 
         {/* Search and Filter Bar */}
         <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm mb-8">

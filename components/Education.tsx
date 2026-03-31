@@ -203,7 +203,7 @@ const Education: React.FC = () => {
   }
 
   const aiMlCertCount = certificates.filter(c => c.category === 'AI/ML').length;
-  const latestYear = educationData.length > 0 ? educationData[0].year : new Date().getFullYear();
+  const latestYear = educationData.length > 0 ? educationData[0].year : 'N/A';
 
   return (
     <section id="education" className="relative py-10 sm:py-14 lg:py-18 bg-card overflow-hidden">

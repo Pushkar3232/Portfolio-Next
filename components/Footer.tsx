@@ -122,7 +122,7 @@ const Footer: React.FC = () => {
                   Made with <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-500 mx-1" /> by Pushkar Amar Shinde
                 </p>
                 <p className="text-muted-foreground/60 text-[10px] sm:text-xs mt-0.5 sm:mt-1">
-                  © {new Date().getFullYear()} All rights reserved.
+                  © <span suppressHydrationWarning>{new Date().getFullYear()}</span> All rights reserved.
                 </p>
               </div>
 

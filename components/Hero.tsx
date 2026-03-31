@@ -87,17 +87,11 @@ const Hero = () => {
               {/* CTA Buttons */}
               <motion.div variants={fadeInUp} className="flex flex-col sm:flex-row gap-2 sm:gap-4">
                 <a
-                  href="#projects"
+                  href="/chatbot"
                   className="group px-5 sm:px-8 py-3 sm:py-4 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
                 >
-                  <span>View My Work</span>
-                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
-                </a>
-                <a
-                  href="/chatbot"
-                  className="px-5 sm:px-8 py-3 sm:py-4 border-2 border-border text-foreground rounded-lg font-medium hover:border-primary hover:bg-accent transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
-                >
                   <span>Chat with AI</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
               </motion.div>
 

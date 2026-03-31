@@ -2,6 +2,9 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { ThemeProvider } from '@/components/ThemeProvider'
+import Script from 'next/script'
+import AnalyticsTracker from '@/components/AnalyticsTracker'
+import { GA_MEASUREMENT_ID } from '@/lib/gtag'
 
 export const metadata: Metadata = {
   title: {
@@ -355,12 +358,26 @@ export default function RootLayout({
         />
       </head>
       <body>
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            window.gtag = gtag;
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           enableSystem
           disableTransitionOnChange
         >
+          <AnalyticsTracker />
           {children}
         </ThemeProvider>
       </body>

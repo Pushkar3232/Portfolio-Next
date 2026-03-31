@@ -19,55 +19,116 @@ interface NavBarProps {
 }
 
 export function NavBar({ items, className }: NavBarProps) {
+  const [isMounted, setIsMounted] = useState(false)
   const [activeTab, setActiveTab] = useState(items[0].name)
   const [scrolled, setScrolled] = useState(false)
 
-  // Track scroll position to update active section and navbar appearance
   useEffect(() => {
-    const sectionItems = items.filter((item) => item.url.startsWith("#"))
+    setIsMounted(true)
+  }, [])
 
+  // Track scroll only for desktop visual state.
+  useEffect(() => {
     const handleScroll = () => {
-      const scrollY = window.scrollY
-      setScrolled(scrollY > 20)
-
-      const windowHeight = window.innerHeight
-      let newActive = activeTab
-
-      // Find the section that is currently most visible in viewport
-      for (const item of sectionItems) {
-        const el = document.getElementById(item.url.substring(1))
-        if (el) {
-          const rect = el.getBoundingClientRect()
-          // If section is in or near viewport (within -200px to 200px of viewport center), mark as active
-          if (rect.top <= windowHeight / 2 && rect.bottom >= windowHeight / 2 - 200) {
-            newActive = item.name
-          }
-        }
-      }
-
-      setActiveTab(newActive)
+      setScrolled(window.scrollY > 20)
     }
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     handleScroll()
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [items, activeTab])
+  }, [])
+
+  // Use intersection observer to keep active state in sync with section visibility.
+  useEffect(() => {
+    const sectionItems = items.filter((item) => item.url.startsWith("#"))
+    const sectionMap = new Map<string, string>()
+
+    for (const item of sectionItems) {
+      sectionMap.set(item.url.substring(1), item.name)
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
+
+        if (visible.length > 0) {
+          const nextTab = sectionMap.get(visible[0].target.id)
+          if (nextTab) {
+            setActiveTab(nextTab)
+          }
+        }
+      },
+      {
+        threshold: [0.2, 0.35, 0.5, 0.65],
+        rootMargin: "-20% 0px -40% 0px",
+      },
+    )
+
+    sectionItems.forEach((item) => {
+      const sectionId = item.url.substring(1)
+      const element = document.getElementById(sectionId)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+
+    return () => observer.disconnect()
+  }, [items])
+
+  const mobileItems = items.slice(0, 8)
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
-    <div
-      className={cn(
-        "fixed bottom-3 sm:bottom-auto sm:top-6 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-0.75rem)] max-w-[calc(100%-1.5rem)] sm:max-w-none sm:w-auto",
-        className,
-      )}
-    >
+    <>
       <div
         className={cn(
-          "flex items-center justify-center gap-1 sm:gap-3 border border-border backdrop-blur-lg py-2 sm:py-1.5 px-2 sm:px-1 rounded-full shadow-lg transition-all duration-300 overflow-x-auto touch-pan-x snap-x snap-mandatory",
+          "fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[calc(100%-0.75rem)] max-w-[calc(100%-1.5rem)] sm:hidden",
+          className,
+        )}
+      >
+        <div className="grid grid-cols-4 gap-1.5 border border-border bg-background/95 backdrop-blur-lg rounded-2xl p-2 shadow-xl">
+          {mobileItems.map((item) => {
+            const Icon = item.icon
+            const isActive = activeTab === item.name
+
+            return (
+              <Link
+                key={item.name}
+                href={item.url}
+                onClick={() => setActiveTab(item.name)}
+                className={cn(
+                  "flex min-h-11 flex-col items-center justify-center rounded-xl px-1 py-1.5 text-[10px] font-medium leading-tight transition-colors",
+                  "text-foreground/80 hover:text-primary",
+                  isActive && "bg-muted text-primary",
+                )}
+                aria-label={item.name}
+              >
+                <Icon size={16} strokeWidth={2.3} />
+                <span className="mt-0.5 truncate max-w-full">{item.name}</span>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+
+      <div
+        className={cn(
+          "fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden sm:block",
+          className,
+        )}
+      >
+      <div
+        className={cn(
+          "flex items-center justify-center gap-3 border border-border backdrop-blur-lg py-1.5 px-1 rounded-full shadow-lg transition-all duration-300",
           scrolled
             ? "bg-background/80 shadow-xl border-border/80"
             : "bg-background/5 shadow-lg",
         )}
-        style={{ WebkitOverflowScrolling: "touch" }}
       >
         {items.map((item) => {
           const Icon = item.icon
@@ -79,16 +140,14 @@ export function NavBar({ items, className }: NavBarProps) {
               href={item.url}
               onClick={() => setActiveTab(item.name)}
               className={cn(
-                "relative cursor-pointer text-sm font-semibold px-2.5 sm:px-6 py-2.5 sm:py-2 rounded-full transition-colors shrink-0 min-w-[3.5rem] flex items-center justify-center snap-center",
+                "relative cursor-pointer text-sm font-semibold px-6 py-2 rounded-full transition-colors shrink-0 flex items-center justify-center gap-2",
                 "text-foreground/80 hover:text-primary",
                 isActive && "bg-muted text-primary",
               )}
               aria-label={item.name}
             >
-              <span className="hidden sm:inline">{item.name}</span>
-              <span className="sm:hidden flex items-center justify-center">
-                <Icon size={20} strokeWidth={2.5} />
-              </span>
+              <Icon size={16} strokeWidth={2.3} />
+              <span>{item.name}</span>
               {isActive && (
                 <motion.div
                   layoutId="lamp"
@@ -110,9 +169,10 @@ export function NavBar({ items, className }: NavBarProps) {
             </Link>
           )
         })}
-        <div className="w-px h-6 bg-border/50 mx-0.5 sm:mx-1" />
+        <div className="w-px h-6 bg-border/50 mx-1" />
         <AnimatedThemeToggle className="rounded-full" />
       </div>
-    </div>
+      </div>
+    </>
   )
 }

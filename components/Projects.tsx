@@ -84,7 +84,7 @@ const Projects: React.FC = () => {
                 <GlowingEffect spread={40} glow={true} disabled={true} proximity={64} inactiveZone={0.01} borderWidth={2} />
                 
                 {/* Project Image */}
-                <div className="relative h-32 sm:h-40 lg:h-48 bg-muted">
+                <div className="relative aspect-video lg:aspect-auto lg:h-48 bg-muted">
                   <Image
                     src={`/${project.image}`}
                     alt={project.title}
