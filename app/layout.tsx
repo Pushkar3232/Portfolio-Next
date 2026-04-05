@@ -1,6 +1,7 @@
 // app/layout.tsx
 import './globals.css'
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import Script from 'next/script'
 import AnalyticsTracker from '@/components/AnalyticsTracker'
@@ -377,7 +378,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <AnalyticsTracker />
+          <Suspense fallback={null}>
+            <AnalyticsTracker />
+          </Suspense>
           {children}
         </ThemeProvider>
       </body>
