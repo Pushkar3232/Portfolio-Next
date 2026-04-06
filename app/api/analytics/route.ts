@@ -68,7 +68,28 @@ export async function GET(request: Request) {
   try {
     const url = new URL(request.url);
     const range = parseRange(url.searchParams);
-    const client = createAnalyticsClient();
+    
+    let client;
+    try {
+      client = createAnalyticsClient();
+    } catch (error) {
+      return Response.json(
+        { 
+          error: "Analytics not configured. Please set GA_CLIENT_EMAIL and GA_PRIVATE_KEY environment variables.",
+          series: [],
+          summary: {
+            totalActiveUsers: 0,
+            totalNewUsers: 0,
+            totalSessions: 0,
+            totalPageViews: 0,
+            averageEngagementRate: 0,
+            peakActiveUsers: 0,
+            activeUserTrend: 0
+          }
+        },
+        { status: 200 }
+      );
+    }
 
     const [response] = await client.runReport({
       property: `properties/${PROPERTY_ID}`,

@@ -318,7 +318,12 @@ export default function AnalyticsChart() {
         <div className="xl:col-span-4 rounded-lg border border-gray-200 p-3">
           {loading && <p className="text-sm text-gray-500">Loading analytics...</p>}
 
-          {!loading && error && <p className="text-sm text-red-600">Could not load analytics: {error}</p>}
+          {!loading && error && (
+            <div className="text-sm text-amber-700 bg-amber-50 border border-amber-200 rounded p-3">
+              <p className="font-medium">Analytics not configured</p>
+              <p className="text-xs mt-1">Set <code className="bg-amber-100 px-1 rounded">GA_CLIENT_EMAIL</code> and <code className="bg-amber-100 px-1 rounded">GA_PRIVATE_KEY</code> environment variables to enable Google Analytics.</p>
+            </div>
+          )}
 
           {!loading && !error && chartData.length === 0 && (
             <p className="text-sm text-gray-500">No analytics data available yet.</p>
