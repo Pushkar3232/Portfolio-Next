@@ -1,115 +1,88 @@
-// app/not-found.tsx
+"use client";
+
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Home, Search } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { BackgroundCells } from "@/components/ui/background-ripple-effect";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex items-center justify-center relative bg-background">
-      {/* Subtle Background Pattern */}
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 25% 25%, #f1f5f9 0%, transparent 50%), 
-                           radial-gradient(circle at 75% 75%, #e2e8f0 0%, transparent 50%)`,
-          backgroundSize: '100px 100px'
-        }}></div>
-      </div>
+    <div className="min-h-screen w-full bg-background flex flex-col items-center justify-center relative overflow-hidden">
+      <BackgroundCells className="absolute inset-0 z-0 opacity-40 md:opacity-100" />
 
-      {/* Geometric Shapes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-20 w-32 h-32 border border-border rounded-full opacity-20"></div>
-        <div className="absolute bottom-32 left-20 w-24 h-24 border border-primary/30 rounded-full opacity-30"></div>
-        <div className="absolute top-1/2 left-10 w-2 h-16 bg-gradient-to-b from-primary to-transparent opacity-20"></div>
-        <div className="absolute top-1/3 right-10 w-2 h-20 bg-gradient-to-b from-muted-foreground to-transparent opacity-20"></div>
-      </div>
-
-      <div className="text-center z-10 px-4">
-        {/* 404 Number */}
-        <div className="relative mb-8">
-          <h1 className="text-[120px] md:text-[180px] font-bold text-muted/50 leading-none select-none">
+      <div className="relative z-10 flex flex-col items-center justify-center px-4 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="relative"
+        >
+          <h1 className="text-[150px] md:text-[220px] font-black leading-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-foreground via-foreground/50 to-background opacity-20 select-none">
             404
           </h1>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-6xl md:text-8xl font-bold text-foreground">
-              4<span className="text-primary">0</span>4
-            </span>
+          <div className="absolute inset-0 flex items-center justify-center pt-8">
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="flex flex-col items-center"
+            >
+              <div className="bg-primary/10 p-6 rounded-full mb-6 backdrop-blur-sm border border-primary/20">
+                <Search className="w-12 h-12 text-primary animate-pulse" />
+              </div>
+              <h2 className="text-4xl md:text-6xl font-bold tracking-tight text-foreground">
+                Lost in Code?
+              </h2>
+            </motion.div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Message */}
-        <div className="space-y-4 mb-10">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-            Page Not Found
-          </h2>
-          <p className="text-muted-foreground max-w-md mx-auto text-lg">
-            The page you&apos;re looking for doesn&apos;t exist or has been moved.
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.5 }}
+          className="max-w-md mt-12 space-y-6"
+        >
+          <p className="text-xl text-muted-foreground leading-relaxed">
+            The page you are looking for has vanished into digital dust. 
+            Perhaps it was never here at all.
           </p>
-        </div>
 
-        {/* Decorative Line */}
-        <div className="flex justify-center items-center gap-2 mb-10">
-          <div className="w-12 h-0.5 bg-border"></div>
-          <div className="w-2 h-2 bg-primary rounded-full"></div>
-          <div className="w-12 h-0.5 bg-border"></div>
-        </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Button asChild size="lg" className="rounded-full px-8 h-14 text-lg font-semibold group">
+              <Link href="/" className="flex items-center gap-2">
+                <Home className="w-5 h-5 transition-transform group-hover:-translate-y-1" />
+                Back to Home
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg" className="rounded-full px-8 h-14 text-lg backdrop-blur-sm">
+              <Link href="/#contact" className="flex items-center gap-2">
+                Report Issue
+              </Link>
+            </Button>
+          </div>
+        </motion.div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <a
-            href="/"
-            className="inline-flex items-center justify-center px-8 py-3 bg-foreground hover:bg-foreground/90 text-background font-medium rounded-lg transition-all duration-300 group"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            Back to Home
-            <svg
-              className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </a>
-          <a
-            href="/#contact"
-            className="inline-flex items-center justify-center px-8 py-3 bg-card border border-border hover:border-primary/30 text-foreground font-medium rounded-lg transition-all duration-300"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-              />
-            </svg>
-            Contact Me
-          </a>
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="mt-16 flex items-center gap-4"
+        >
+          <div className="h-px w-8 bg-border" />
+          <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+            Error Code: UNKNOWN_PATH
+          </p>
+          <div className="h-px w-8 bg-border" />
+        </motion.div>
+      </div>
 
-        {/* Footer Text */}
-        <p className="mt-12 text-muted-foreground text-sm">
-          © 2025 Pushk<span className="text-primary">a</span>r Sh<span className="text-primary">i</span>nde
-        </p>
+      {/* Decorative gradients */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 blur-[120px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/10 blur-[120px] rounded-full" />
       </div>
     </div>
-  )
+  );
 }
