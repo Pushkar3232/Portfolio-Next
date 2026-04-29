@@ -88,6 +88,66 @@ body {
   overflow-x: hidden;
 }
 
+/* Resume web view typography */
+.resume-markdown {
+  color: var(--foreground);
+  line-height: 1.75;
+}
+
+.resume-markdown h1 {
+  font-size: clamp(30px, 4vw, 42px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+
+.resume-markdown h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.resume-markdown h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-top: 1.2rem;
+  margin-bottom: 0.4rem;
+}
+
+.resume-markdown p {
+  margin: 0.45rem 0;
+}
+
+.resume-markdown ul {
+  margin: 0.5rem 0 1rem;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.resume-markdown li {
+  margin-bottom: 0.35rem;
+}
+
+.resume-markdown hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+
+.resume-markdown strong {
+  font-weight: 700;
+}
+
+.resume-markdown a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 /* Typography */
 .text-hero {
   font-family: var(--font-display);

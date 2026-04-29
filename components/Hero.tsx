@@ -93,6 +93,13 @@ const Hero = () => {
                   <span>Chat with AI</span>
                   <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
                 </a>
+                <a
+                  href="/resume"
+                  className="group px-5 sm:px-8 py-3 sm:py-4 border border-border bg-card text-foreground rounded-lg font-medium hover:border-primary hover:text-primary transition-all duration-300 flex items-center justify-center space-x-2 text-sm sm:text-base"
+                >
+                  <span>Resume</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </a>
               </motion.div>
 
               {/* Social Links */}
